@@ -14,6 +14,7 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
     public Transform cameraTransform;
     public GameObject player;
 
+    public float cameraTargetOffset = 1.2f;
     //same as tankCameraC, needed for transform.LookAt and transform.RotateAround
     public Camera tankCamera;
 
@@ -55,8 +56,7 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
     }
 
     public void SetCameraTarget()
-    {
-        float cameraTargetOffset = 1.0f;
+    {      
 
         target.position = new Vector3(player.transform.position.x, (player.transform.position.y + cameraTargetOffset), player.transform.position.z);
     }
