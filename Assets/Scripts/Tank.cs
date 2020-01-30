@@ -10,15 +10,15 @@ using UnityEngine;
 /* Modified By: */
 /************************************************************************/
 
-public class Tank : MonoBehaviour
+public class Tank : MonoBehaviour, ITakeDamage
 {
-    private int   healthMax     { get; set; }
-    private int   healthCurrent { get; set; }
-    private int   healthRegen   { get; set; }
+    private float healthMax     { get; set; }
+    private float healthCurrent { get; set; }
+    private float healthRegen   { get; set; }
     private float speedRotation { get; set; }
     private float speedMovement { get; set; }
     private float bulletSpeed   { get; set; }
-    private int   bulletDamage  { get; set; }
+    private float bulletDamage  { get; set; }
     private float bulletReload  { get; set; }
 
     private GameObject tankModel { get; set; }
@@ -81,4 +81,8 @@ public class Tank : MonoBehaviour
         }
     }
 
+    public void damageTaken(float damage)
+    {
+        healthCurrent -= damage;
+    }
 }
