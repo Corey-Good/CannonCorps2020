@@ -285,16 +285,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2874368118328013092, guid: 29ce7b0611d4aab4681eb0122b205fdb,
-        type: 3}
-      propertyPath: m_Name
-      value: Cartoon_Tank
-      objectReference: {fileID: 0}
-    - target: {fileID: 2874368118328013092, guid: 29ce7b0611d4aab4681eb0122b205fdb,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2874368118327717124, guid: 29ce7b0611d4aab4681eb0122b205fdb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -350,6 +340,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2874368118328013092, guid: 29ce7b0611d4aab4681eb0122b205fdb,
+        type: 3}
+      propertyPath: m_Name
+      value: Cartoon_Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 2874368118328013092, guid: 29ce7b0611d4aab4681eb0122b205fdb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29ce7b0611d4aab4681eb0122b205fdb, type: 3}
 --- !u!1001 &4837606147630716620
@@ -359,11 +359,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4837606148098317541, guid: a4e58e60c5e466641bf94f9e601c939c,
-        type: 3}
-      propertyPath: m_Name
-      value: Base Tank
-      objectReference: {fileID: 0}
     - target: {fileID: 4837606148098146501, guid: a4e58e60c5e466641bf94f9e601c939c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -417,6 +412,16 @@ PrefabInstance:
     - target: {fileID: 4837606148098146501, guid: a4e58e60c5e466641bf94f9e601c939c,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837606148098317541, guid: a4e58e60c5e466641bf94f9e601c939c,
+        type: 3}
+      propertyPath: m_Name
+      value: Base Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837606148098317541, guid: a4e58e60c5e466641bf94f9e601c939c,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4837606149075546084, guid: a4e58e60c5e466641bf94f9e601c939c,
