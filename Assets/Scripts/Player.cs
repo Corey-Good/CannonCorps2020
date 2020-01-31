@@ -11,17 +11,39 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private int playerID { get; set; }
-    private string playerName { get; set; }
-    private int killsCurrent { get; set; }
-    private int killsAlltime { get; set; }
-    private int killsInARow { get; set; }
-    private int scoreCurrent { get; set; }
-    private int scoreAlltime { get; set; }
-    private int deathsCurrent { get; set; }
-    private int deathsAlltime { get; set; }
-    private int deathsInARow { get; set; }
 
+    private int playerID;
+    public int PlayerID
+    {
+        get { return playerID; }
+        set { playerID = value; }
+    }
+    private string playerName;
+    private int killsCurrent;
+    private int killsAlltime;
+    private int killsInARow;
+    private int scoreCurrent;
+    private int scoreAlltime;
+    private int deathsCurrent;
+    private int deathsAlltime;
+    private int deathsInARow;
 
+    private static Player playerInstance;
+    private void Awake()
+    {
+        if (playerInstance == null)
+        {
+            playerInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void GivePoints(int points)
+    {
+        scoreCurrent += points;
+    }
 
 }
