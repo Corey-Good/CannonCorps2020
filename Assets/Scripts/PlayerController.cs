@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     states playerState;
     #endregion
 
+    public Animator fireAnimation;
+
 
     // Start is called before the first frame update
     void Start()
@@ -55,7 +57,12 @@ public class PlayerController : MonoBehaviour
         else
         {
             playerState = states.Stationary;
-        }        
+        }  
+        
+        if(Input.GetMouseButtonDown(0))
+        {
+            fireAnimation.SetTrigger("Fire");
+        }
     }
 
 
