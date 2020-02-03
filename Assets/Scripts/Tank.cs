@@ -12,77 +12,99 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour, ITakeDamage
 {
-    private float healthMax     { get; set; }
-    private float healthCurrent { get; set; }
-    private float healthRegen   { get; set; }
-    private float speedRotation { get; set; }
-    private float speedMovement { get; set; }
-    private float bulletSpeed   { get; set; }
-    private float bulletDamage  { get; set; }
-    private float bulletReload  { get; set; }
+    private float healthMax;
+    private float healthCurrent;
+    private float healthRegen;
+    private float speedRotation;
+    private float speedMovement;
+    private float bulletSpeed;
+    private float bulletDamage;
+    private float bulletReload;
+    private GameObject tankModel;
+    private GameObject tankProjectile;
+    private Color tankColor;
+    private static Tank tankInstance;
 
-    private GameObject tankModel { get; set; }
-    private GameObject tankProjectile { get; set; }
-
-    private Color tankColor { get; set; }
-
-    public Tank (GameObject tankModelChosen, Color tankColorChosen)
+    void Awake()
     {
-        switch(tankModelChosen.name)
+        if (tankInstance == null)
+        {
+            tankInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    public void CreateTank(string tankModelChosen, Color tankColorChosen)
+    {
+        switch (tankModelChosen)
         {
             case "cartoonTank":
-                tankColor     = tankColorChosen;
-                healthMax     = 100;
+                tankColor = tankColorChosen;
+                healthMax = 100;
                 healthCurrent = 100;
-                healthRegen   = 5;
+                healthRegen = 5;
                 speedRotation = 5;
                 speedMovement = 50;
-                bulletSpeed   = 50;
-                bulletDamage  = 20;
-                bulletReload  = 10;
+                bulletSpeed = 50;
+                bulletDamage = 20;
+                bulletReload = 10;
                 break;
 
             case "futureTank":
-                tankColor     = tankColorChosen;
-                healthMax     = 100;
+                tankColor = tankColorChosen;
+                healthMax = 100;
                 healthCurrent = 100;
-                healthRegen   = 5;
+                healthRegen = 5;
                 speedRotation = 5;
                 speedMovement = 50;
-                bulletSpeed   = 50;
-                bulletDamage  = 20;
-                bulletReload  = 10;
+                bulletSpeed = 50;
+                bulletDamage = 20;
+                bulletReload = 10;
                 break;
 
             case "catapult":
-                tankColor     = tankColorChosen;
-                healthMax     = 100;
+                tankColor = tankColorChosen;
+                healthMax = 100;
                 healthCurrent = 100;
-                healthRegen   = 5;
+                healthRegen = 5;
                 speedRotation = 5;
                 speedMovement = 50;
-                bulletSpeed   = 50;
-                bulletDamage  = 20;
-                bulletReload  = 10;
+                bulletSpeed = 50;
+                bulletDamage = 20;
+                bulletReload = 10;
                 break;
 
             case "boxTank":
-                tankColor     = tankColorChosen;
-                healthMax     = 100;
+                tankColor = tankColorChosen;
+                healthMax = 100;
                 healthCurrent = 100;
-                healthRegen   = 5;
+                healthRegen = 5;
                 speedRotation = 5;
                 speedMovement = 50;
-                bulletSpeed   = 50;
-                bulletDamage  = 20;
-                bulletReload  = 10;
+                bulletSpeed = 50;
+                bulletDamage = 20;
+                bulletReload = 10;
                 break;
-               
+
         }
     }
 
     public void damageTaken(float damage)
     {
-        healthCurrent -= damage;
+        if (healthCurrent > 0)
+        {
+            healthCurrent -= damage;
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
+
+    public void OnDestroy()
+    {
+        //play animation and sound
     }
 }

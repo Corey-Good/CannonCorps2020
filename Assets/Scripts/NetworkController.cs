@@ -23,8 +23,9 @@ public class NetworkController : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public override void OnConnectedToMaster()
     {
         //connectionStatus.text = "Now connected!!";
-        PhotonNetwork.NickName = "John Smith";
     }
+
+    
 
 }
 

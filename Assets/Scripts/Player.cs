@@ -11,17 +11,65 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private int playerID { get; set; }
-    private string playerName { get; set; }
-    private int killsCurrent { get; set; }
-    private int killsAlltime { get; set; }
-    private int killsInARow { get; set; }
-    private int scoreCurrent { get; set; }
-    private int scoreAlltime { get; set; }
-    private int deathsCurrent { get; set; }
-    private int deathsAlltime { get; set; }
-    private int deathsInARow { get; set; }
+    public delegate void PlayerReturnsToMenu(Player player);
+    public static event PlayerReturnsToMenu OnPlayerReturnsToMenu;
+    public string PlayerID { get; set; }
+    public string PlayerName { get; set; }
+    public int KillsCurrent { get; set; }
+    public int KillsAlltime { get; set; }
+    public int KillsInARow { get; set; }
+    public int ScoreCurrent { get; set; }
+    public int ScoreAlltime { get; set; }
+    public int DeathsCurrent { get; set; }
+    public int DeathsAlltime { get; set; }
+    public int DeathsInARow { get; set; }
 
+    private static Player playerInstance;
+    private void Awake()
+    {
+        this.PlayerID = CreatePlayerID(); // assign random, new player ID
+        // Could add some kind of logic to see if player wants to reuse player ID
+        // "Enter ID" and if ID matches then use that player
 
+        if (playerInstance == null)
+        {
+            playerInstance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private string CreatePlayerID()
+    {
+        string newPlayerID = Random.Range(1, 1000).ToString();
+
+        while (PlayerPrefs.HasKey(newPlayerID)) //If playerID is already taken in the highscore table, then create a new one
+        {
+            newPlayerID = Random.Range(1, 1000).ToString();
+        }
+
+        return newPlayerID;
+    }
+    public void GivePoints(int points)
+    {
+        ScoreCurrent += points;
+    }
+
+    private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
+    {
+
+        if (OnPlayerReturnsToMenu != null)
+        {
+            OnPlayerReturnsToMenu(this);
+        }
+        Debug.Log("Player ID" + this.PlayerID);
+        Debug.Log("Player Highscore" + PlayerPrefs.GetInt(this.PlayerID));
+        Debug.Log("Current Score" + this.ScoreCurrent.ToString());
+        this.ScoreCurrent = 0;
+        Debug.Log("Current Score" + this.ScoreCurrent.ToString());
+
+    }
 
 }

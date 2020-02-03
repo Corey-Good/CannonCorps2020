@@ -32,6 +32,12 @@ public class Bullet : MonoBehaviour
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
+        foreach (Collider collider in colliders)
+        {
+            Rigidbody target = collider.GetComponent<Rigidbody>();
+
+        }
+
         // Go through all the colliders...
         for (int i = 0; i < colliders.Length; i++)
         {
