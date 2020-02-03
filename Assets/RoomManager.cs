@@ -7,10 +7,8 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-    public Text connectionStatus;
     public Text playerCount;
     public Text MinPlayerNote;
-    public GameObject GameModeView;
     public GameObject LobbyView;
     public GameObject PlayerNames;
     public GameObject playerListingPrefab;
@@ -35,25 +33,25 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        connectionStatus.text = "A new player has joined";
+        //connectionStatus.text = "A new player has joined";
         UpdatePlayerList();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         base.OnCreateRoomFailed(returnCode, message);
-        connectionStatus.text = "Failed to create a room";
+        //connectionStatus.text = "Failed to create a room";
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        connectionStatus.text = "A Player has the left the room";
+        //connectionStatus.text = "A Player has the left the room";
         UpdatePlayerList();
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        connectionStatus.text = "A new player has joined";
+        //connectionStatus.text = "A new player has joined";
         UpdatePlayerList();
     }
 
@@ -88,7 +86,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void OpenLobbyView()
     {
-        GameModeView.SetActive(false);
+        //GameModeView.SetActive(false);
         LobbyView.SetActive(true);
         MinPlayerNote.text = "*Note, a game needs at least 8 players to begin.";
     }
@@ -141,7 +139,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             // Load the game 
 
-            connectionStatus.text = "Loading Sharks and Minnows!";
+            //connectionStatus.text = "Loading Sharks and Minnows!";
         }
         else if (currentGameMode == GameMode.TeamBattle)
         {
@@ -149,7 +147,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             // Load the game 
 
-            connectionStatus.text = "Loading Team Battle!";
+            //connectionStatus.text = "Loading Team Battle!";
         }
     }
 
@@ -157,6 +155,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
-        GameModeView.SetActive(true);
+        //GameModeView.SetActive(true);
     }
 }

@@ -16,13 +16,13 @@ public class NetworkController : MonoBehaviourPunCallbacks, ILobbyCallbacks
         {
             PhotonNetwork.ConnectUsingSettings();
 
-            connectionStatus.text = "Connecting . . .";
+            //connectionStatus.text = "Connecting . . .";
         }
     }
 
     public override void OnConnectedToMaster()
     {
-        connectionStatus.text = "Now connected!!";
+        //connectionStatus.text = "Now connected!!";
         PhotonNetwork.NickName = "John Smith";
     }
 
