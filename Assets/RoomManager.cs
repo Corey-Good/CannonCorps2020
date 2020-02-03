@@ -107,6 +107,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 Destroy(listing);
                 Debug.Log("Destroying a player listing");
             }
+            playerListings.Clear();
         }
 
         // List the current players in the room
@@ -150,5 +151,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             connectionStatus.text = "Loading Team Battle!";
         }
+    }
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+        LobbyView.SetActive(false);
+        GameModeView.SetActive(true);
     }
 }
