@@ -156,5 +156,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
         //GameModeView.SetActive(true);
+        // Remove the currently listed players
+        if (playerListings != null)
+        {
+            foreach (GameObject listing in playerListings)
+            {
+                Destroy(listing);
+                Debug.Log("Destroying a player listing");
+            }
+            playerListings.Clear();
+        }
     }
 }
