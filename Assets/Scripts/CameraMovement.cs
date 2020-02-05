@@ -30,13 +30,21 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
 
     public void FixedUpdate()
     {
-        ZoomCamera();
+        if (!PauseMenuAnimations.GameIsPaused)
+        {
+            ZoomCamera();
+        }
     }
 
     public void LateUpdate()
     {
         SetCameraTarget();
-        OrbitCamera();
+        
+        if (!PauseMenuAnimations.GameIsPaused)
+        {
+            OrbitCamera();
+        }
+
         LookAtCameraTarget();
     }
 
