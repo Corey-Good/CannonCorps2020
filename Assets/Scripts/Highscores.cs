@@ -11,35 +11,27 @@ public class Highscores : MonoBehaviour
     private Transform entryTemplate;
     private List<HighscoreEntry> highscoreEntryList;
     private List<Transform> highscoreEntryTransformList;
+    HighscoresJson loadedHighscoresJson;
 
-
-    private void OnEnable()
+    private void Awake()
     {
         entryContainer = transform.Find("highscoreEntryContainer");
         entryTemplate = entryContainer.Find("highscoreEntryTemplate");
         entryTemplate.gameObject.SetActive(false);
-
+    }
+    private void OnEnable()
+    {
         Player.OnPlayerReturnsToMenu += UpdatePermanentTable;
+    }
+    private void OnDisable()
+    {
+        Player.OnPlayerReturnsToMenu -= UpdatePermanentTable;
+    }
+    private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name? yes
+    {
+        AddHighscoreEntry(player.ScoreCurrent, player.PlayerName);
 
-        string loadJson = PlayerPrefs.GetString("highscoretable");
-        HighscoresJson loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(loadJson);
         highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-
-        // Sorting 
-        for (int i  = 0; i < highscoreEntryList.Count; i++)
-        {
-            for (int j = i + 1; j < highscoreEntryList.Count; j++)
-            {
-                if(highscoreEntryList[j].score > highscoreEntryList[i].score)
-                {
-                    // Swap
-                    HighscoreEntry tmp = highscoreEntryList[i];
-                    highscoreEntryList[i] = highscoreEntryList[j];
-                    highscoreEntryList[j] = tmp;
-
-                }
-            }
-        }
 
         highscoreEntryTransformList = new List<Transform>();
         foreach (HighscoreEntry highscoreEntry in highscoreEntryList)
@@ -51,15 +43,39 @@ public class Highscores : MonoBehaviour
     private void AddHighscoreEntry(int score, string name)
     {
         HighscoreEntry newHighscoreEntry = new HighscoreEntry { score = score, name = name };
-        string loadJson = PlayerPrefs.GetString("highscoretable");
-        HighscoresJson loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(loadJson);
+
+
+        loadedHighscoresJson = Load();
+
+        if (loadedHighscoresJson is null)
+        {
+            HighscoresJson firstSave = new HighscoresJson();
+            firstSave.highscoreEntryList.Add(new HighscoreEntry { score = 10, name = "test" });
+            Save(firstSave);
+            loadedHighscoresJson = Load();
+        }
 
         loadedHighscoresJson.highscoreEntryList.Add(newHighscoreEntry);
 
-        string json = JsonUtility.ToJson(loadedHighscoresJson);
-        PlayerPrefs.SetString("highscoretable", json);
+        Sort(loadedHighscoresJson.highscoreEntryList);
+
+        Save(loadedHighscoresJson);
+    }
+
+    private HighscoresJson Load()
+    {
+        
+        loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString("highscoretable"));
+        return loadedHighscoresJson;
+    }
+
+    private void Save(HighscoresJson loadedHighscoresJson)
+    {
+        PlayerPrefs.SetString("highscoretable", JsonUtility.ToJson(loadedHighscoresJson));
         PlayerPrefs.Save();
     }
+
+
 
     private void CreateHighscoreEntryTransform(HighscoreEntry highscoreEntry, Transform container, List<Transform> transformList)
     {
@@ -93,25 +109,38 @@ public class Highscores : MonoBehaviour
         transformList.Add(entryTransform);
     }
 
+    // class used to save the game
     private class HighscoresJson
     {
-        public List<HighscoreEntry> highscoreEntryList;
+        public List<HighscoreEntry> highscoreEntryList = new List<HighscoreEntry>();
     }
 
-    // Represents a single highscore entry
+    // class that just contains a score and a name
     [Serializable]
     private class HighscoreEntry
     {
-        public int score;
-        public string name;
-    }
-    private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name?
-    {
-        AddHighscoreEntry(player.ScoreCurrent, player.PlayerID);
+        public int score = 0;
+        public string name = "John";
     }
 
-    private void OnDisable()
+    // commented out until testing is complete
+
+    private void Sort(List<HighscoreEntry> highscoreEntryList)
     {
-        Player.OnPlayerReturnsToMenu -= UpdatePermanentTable;
+        // Sorting 
+        for (int i = 0; i < highscoreEntryList.Count; i++)
+        {
+            for (int j = i + 1; j < highscoreEntryList.Count; j++)
+            {
+                if (highscoreEntryList[j].score > highscoreEntryList[i].score)
+                {
+                    // Swap
+                    HighscoreEntry tmp = highscoreEntryList[i];
+                    highscoreEntryList[i] = highscoreEntryList[j];
+                    highscoreEntryList[j] = tmp;
+
+                }
+            }
+        }
     }
 }

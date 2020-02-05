@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 /************************************************************************/
 /* Author: Eddie Habal */
@@ -55,7 +56,11 @@ public class Player : MonoBehaviour
 
     private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
     {
-        this.PlayerName = "Annie Juan";
+        this.PlayerName = PhotonNetwork.NickName;
+        Debug.Log("this is the nickname:" + PlayerName);
+        this.ScoreCurrent = 90;
+        Debug.Log(PlayerPrefs.GetString("highscoretable"));
+        Debug.Log(PlayerPrefs.HasKey("highscoretable"));
         if (OnPlayerReturnsToMenu != null)
         {
             OnPlayerReturnsToMenu(this);
