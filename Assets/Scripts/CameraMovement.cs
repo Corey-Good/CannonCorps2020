@@ -13,13 +13,10 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
     public static float cameraRotateSpeed = 500.0f;
     public Transform cameraTransform;
     public GameObject player;
-
-    public float cameraTargetOffset = 1.2f;
-    //same as tankCameraC, needed for transform.LookAt and transform.RotateAround
+    private float cameraTargetOffset = 1.2f;
     public Camera tankCamera;
-
     public Transform target;
-    //same as tankCameraT, needed for camera.fieldOfView
+
     public void Awake()
     {
 

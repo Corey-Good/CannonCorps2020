@@ -25,7 +25,6 @@ public class NetworkController : MonoBehaviourPunCallbacks, ILobbyCallbacks
         //connectionStatus.text = "Now connected!!";
     }
 
-    
 
 }
 
