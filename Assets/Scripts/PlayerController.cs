@@ -10,6 +10,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    // States
+    // The player controller has states: InGame, InMenu, etc
+    // Depending on which state that the player is in, control is thrown to a different class/script
+
     #region Movement Keys
     KeyCode forwardMovement;
     KeyCode backwardMovement;
