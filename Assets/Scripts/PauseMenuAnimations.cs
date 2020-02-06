@@ -12,7 +12,7 @@ public class PauseMenuAnimations : MonoBehaviour
     public static bool GameIsPaused = false;
 
     public GameObject  pauseMenu;
-    public GameObject  settingsMenu;
+    public GameObject  optionsMenu;
     public GameObject  controlsMenu;
     public GameObject  infoMenu;
 
@@ -41,7 +41,7 @@ public class PauseMenuAnimations : MonoBehaviour
         GameIsPaused         = true  ;
 
         pauseMenu.   SetActive(true) ;
-        settingsMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         infoMenu    .SetActive(false);
     }
@@ -51,18 +51,18 @@ public class PauseMenuAnimations : MonoBehaviour
         GameIsPaused         = false ;
 
         pauseMenu.   SetActive(false);
-        settingsMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         infoMenu.    SetActive(false);
     }
 
-    public void Settings()
+    public void Options()
     {
         Cursor.visible       = true  ;
         GameIsPaused         = true  ;
 
         pauseMenu.   SetActive(false);
-        settingsMenu.SetActive(true) ;
+        optionsMenu.SetActive(true) ;
         controlsMenu.SetActive(false);
         infoMenu.    SetActive(false);
     }
@@ -72,7 +72,7 @@ public class PauseMenuAnimations : MonoBehaviour
         GameIsPaused         = true  ;
 
         pauseMenu.   SetActive(false);
-        settingsMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(true) ;
         infoMenu.    SetActive(false);
     }
@@ -83,7 +83,7 @@ public class PauseMenuAnimations : MonoBehaviour
         GameIsPaused         = true  ;
 
         pauseMenu.   SetActive(false);
-        settingsMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         infoMenu.    SetActive(true) ;
     }
