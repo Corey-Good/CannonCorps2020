@@ -16,17 +16,23 @@ public class PauseMenuAnimations : MonoBehaviour
     public GameObject  controlsMenu;
     public GameObject  infoMenu;
 
-    public void Update()
+    public void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
+        {
             if (GameIsPaused)
             {
+                Cursor.lockState = CursorLockMode.Locked;
+
                 Resume();
             }
             else
             {
+                Cursor.lockState = CursorLockMode.None;
+
                 Pause();
             }
+        }
     }
 
     public void Pause()
@@ -47,7 +53,7 @@ public class PauseMenuAnimations : MonoBehaviour
         pauseMenu.   SetActive(false);
         settingsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.SetActive    (false);
+        infoMenu.    SetActive(false);
     }
 
     public void Settings()
@@ -84,7 +90,7 @@ public class PauseMenuAnimations : MonoBehaviour
 
     public void Quit()
     {
-        GameIsPaused          = false;
+        GameIsPaused         = false;
     }
 
     public void OpenPauseMenu(GameObject Menu)

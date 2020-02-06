@@ -13,10 +13,10 @@ public class MainMenuAnimations : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseMenu();
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    CloseMenu();
+        //}
     }
     
     public void OpenMenu()
