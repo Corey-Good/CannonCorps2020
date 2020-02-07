@@ -7,36 +7,36 @@
 
 using UnityEngine;
 
-public class MenuAnimations : MonoBehaviour
+public class MainMenuAnimations : MonoBehaviour
 {
-    public GameObject Menu;
+    public GameObject mainMenu;
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseMenu();
-        }
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    CloseMenu();
+        //}
     }
     
     public void OpenMenu()
     {
-        Menu.SetActive(true);
+        mainMenu.SetActive(true);
 
-        Menu.transform.localScale = new Vector3(0, 0, 0);
+        mainMenu.transform.localScale = new Vector3(0, 0, 0);
 
-        LeanTween.scale(Menu, new Vector3(1, 1, 1), 0.5f);
+        LeanTween.scale(mainMenu, new Vector3(1, 1, 1), 0.5f);
     }
 
     public void CloseMenu()
     {
-        LeanTween.scale(Menu, new Vector3(0, 0, 0), 0.5f);
+        LeanTween.scale(mainMenu, new Vector3(0, 0, 0), 0.5f);
 
         Invoke("turnOffMenu", 0.5f);
     }
 
     public void turnOffMenu()
     {
-        Menu.SetActive(false);
+        mainMenu.SetActive(false);
     }
 }
