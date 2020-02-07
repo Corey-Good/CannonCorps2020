@@ -10,6 +10,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    // States
+    // The player controller has states: InGame, InMenu, etc
+    // Depending on which state that the player is in, control is thrown to a different class/script
+
     #region Movement Keys
     KeyCode forwardMovement;
     KeyCode backwardMovement;
@@ -50,6 +55,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
         {
             MovePlayer();
@@ -59,7 +65,7 @@ public class PlayerController : MonoBehaviour
             playerState = states.Stationary;
         }  
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
         {
             fireAnimation.SetTrigger("Fire");
         }
