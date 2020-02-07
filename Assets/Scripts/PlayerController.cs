@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
             playerState = states.Stationary;
         }  
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAniations.GameIsPaused))
+        if(Input.GetMouseButtonDown(0) && fireAnimation != null)
         {
             fireAnimation.SetTrigger("Fire");
         }
