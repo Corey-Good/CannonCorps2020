@@ -26,6 +26,14 @@ public class Player : MonoBehaviour
     public int DeathsInARow { get; set; }
 
     private static Player playerInstance;
+
+    public enum GameState
+    {
+        FFA, 
+        SM, 
+        TB
+    }
+    public GameState gameState;
     private void Awake()
     {
         this.PlayerID = CreatePlayerID(); // assign random, new player ID
