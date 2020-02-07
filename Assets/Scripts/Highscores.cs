@@ -73,7 +73,7 @@ public class Highscores : MonoBehaviour
 
     private HighscoresJson Load()
     {
-        Debug.Log("This is the key: " + PlayerPrefs.GetString("TB"));
+        //Debug.Log("This is the key: " + PlayerPrefs.GetString("TB"));
         loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString("TB"));
         return loadedHighscoresJson;
     }
