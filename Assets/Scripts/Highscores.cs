@@ -13,11 +13,18 @@ public class Highscores : MonoBehaviour
     public GameObject smScrollView;
     public GameObject tbScrollView;
     public GameObject playerScoreListing;
-    public List<GameObject> allListings = new List<GameObject>();
+    public List<GameObject>[] allListings = new List<GameObject>[3]
+        {
+            new List<GameObject>(),
+            new List<GameObject>(),
+            new List<GameObject>(),
+        };
     private Player playerInstance;
+    
 
     private void FirstTimeLoad(string tableKey)
     {
+       
         if (!PlayerPrefs.HasKey(tableKey))
         {
             HighscoresJson firstSave = new HighscoresJson();
@@ -32,7 +39,9 @@ public class Highscores : MonoBehaviour
     }
     private void Awake()
     {
-        //Get the player class to reference in this script
+        //PlayerPrefs.DeleteKey("FFA");
+        //PlayerPrefs.DeleteKey("SM");
+        //PlayerPrefs.DeleteKey("TB");
         FirstTimeLoad("FFA");
         FirstTimeLoad("SM");
         FirstTimeLoad("TB");
@@ -66,13 +75,6 @@ public class Highscores : MonoBehaviour
         Save(loadedHighscoresJson, tableKey);
     }
 
-    //private HighscoresJson Load(string tableKey)
-    //{
-    //    Debug.Log("This is the key: " + PlayerPrefs.GetString("TB"));
-    //    loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString("TB"));
-    //    return loadedHighscoresJson;
-    //}
-
     private HighscoresJson Load(string tableKey)
     {
         loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString(tableKey));
@@ -89,38 +91,42 @@ public class Highscores : MonoBehaviour
     {
         GameObject tableType = ffaScrollView;
         string rankString; //21TH is a problem
-        int count = 1;
+        int count = 0;
+        int gameMode = 0;
         #region SetTable
 
-            switch(tableKey)
-            {
-                case "FFA":
-                    tableType = ffaScrollView;
-                    break;
-                case "SM":
-                    tableType = smScrollView;
-                    break;
-                case "TB":
-                    tableType = tbScrollView;
-                    break;
-            }
-        
+        switch(tableKey)
+        {
+            case "FFA":
+                tableType = ffaScrollView;
+                gameMode = 0;
+                break;
+            case "SM":
+                tableType = smScrollView;
+                gameMode = 1;
+                break;
+            case "TB":
+                tableType = tbScrollView;
+                gameMode = 2;
+                break;
+        }
+
         #endregion
 
-        //if (allListings != null)
-        //{
-        //    foreach (GameObject listing in allListings)
-        //    {
-        //        Destroy(listing);
-        //    }
-        //    allListings.Clear();
-        //}
+        if (allListings[gameMode] != null)
+        {
+            foreach (GameObject listing in allListings[gameMode])
+            {
+                Destroy(listing);
+            }
+            allListings[gameMode].Clear();
+        }
         // Note this list will delete all listings off of all the tables------------------------
 
         foreach (HighscoreEntry entry in highscoreEntries)
         {
-            
-            switch (count++)
+            Debug.Log("THIS IS THE COUNT " + count);
+            switch (++count)
             {
                 default:
                     rankString = count + "TH"; break;
@@ -131,6 +137,7 @@ public class Highscores : MonoBehaviour
                 case 3:
                     rankString = "3RD"; break;
             }
+            
 
             int score = entry.score;
             string name = entry.name;
@@ -138,7 +145,7 @@ public class Highscores : MonoBehaviour
             // Create and add a player listing
             GameObject tempListing = Instantiate(playerScoreListing);
             tempListing.transform.SetParent(tableType.transform, false);
-            allListings.Add(tempListing);
+            allListings[gameMode].Add(tempListing);
 
             // Set the players name and score
             Text[] tempText = tempListing.GetComponentsInChildren<Text>();
