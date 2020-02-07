@@ -55,7 +55,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKey && !(PauseMenuAniations.GameIsPaused))
+
+        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
         {
             MovePlayer();
         }
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
             playerState = states.Stationary;
         }  
         
-        if(Input.GetMouseButtonDown(0) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
         {
             fireAnimation.SetTrigger("Fire");
         }
