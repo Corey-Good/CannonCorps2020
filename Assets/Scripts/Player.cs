@@ -64,6 +64,8 @@ public class Player : MonoBehaviour
 
     private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
     {
+        Debug.Log("GameState.FFA.ToString()" + GameState.FFA.ToString());
+        Debug.Log("gameState.ToString()" + gameState.ToString());
         this.PlayerName = PhotonNetwork.NickName;
         Debug.Log("this is the nickname:" + PlayerName);
         this.ScoreCurrent = 90;

@@ -16,22 +16,26 @@ public class Highscores : MonoBehaviour
     public List<GameObject> allListings = new List<GameObject>();
     private Player playerInstance;
 
+    private void FirstTimeLoad(string tableKey)
+    {
+        if (!PlayerPrefs.HasKey(tableKey))
+        {
+            HighscoresJson firstSave = new HighscoresJson();
+            firstSave.highscoreEntryList.Add(new HighscoreEntry { score = 10, name = "test" });
+            Save(firstSave, tableKey);
+            loadedHighscoresJson = Load(tableKey);
+        }
+
+        loadedHighscoresJson = Load(tableKey);
+        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
+        PopulateScoreListings(highscoreEntryList, tableKey);
+    }
     private void Awake()
     {
         //Get the player class to reference in this script
-        playerInstance = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-
-        loadedHighscoresJson = Load("FFA");
-        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, ffaScrollView);
-
-        loadedHighscoresJson = Load("SM");
-        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, smScrollView);
-
-        loadedHighscoresJson = Load("TB");
-        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, tbScrollView);
+        FirstTimeLoad("FFA");
+        FirstTimeLoad("SM");
+        FirstTimeLoad("TB");
 
     }
     private void OnEnable()
@@ -44,39 +48,30 @@ public class Highscores : MonoBehaviour
     }
     private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name? yes
     {
-        AddHighscoreEntry(player.ScoreCurrent, player.PlayerName);
+        AddHighscoreEntry(player.ScoreCurrent, player.PlayerName, player.gameState.ToString());
         highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList);
+        PopulateScoreListings(highscoreEntryList, player.gameState.ToString());
     }
 
-    private void AddHighscoreEntry(int score, string name)
+    private void AddHighscoreEntry(int score, string name, string tableKey)
     {
         HighscoreEntry newHighscoreEntry = new HighscoreEntry { score = score, name = name };
 
-        loadedHighscoresJson = Load();
-
-        if (loadedHighscoresJson is null)
-        {
-            HighscoresJson firstSave = new HighscoresJson();
-            firstSave.highscoreEntryList.Add(new HighscoreEntry { score = 10, name = "test" });
-            Save(firstSave);
-            loadedHighscoresJson = Load();
-        }
-        
+        loadedHighscoresJson = Load(tableKey);
 
         loadedHighscoresJson.highscoreEntryList.Add(newHighscoreEntry);
 
         Sort(loadedHighscoresJson.highscoreEntryList);
 
-        Save(loadedHighscoresJson);
+        Save(loadedHighscoresJson, tableKey);
     }
 
-    private HighscoresJson Load()
-    {
-        //Debug.Log("This is the key: " + PlayerPrefs.GetString("TB"));
-        loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString("TB"));
-        return loadedHighscoresJson;
-    }
+    //private HighscoresJson Load(string tableKey)
+    //{
+    //    Debug.Log("This is the key: " + PlayerPrefs.GetString("TB"));
+    //    loadedHighscoresJson = JsonUtility.FromJson<HighscoresJson>(PlayerPrefs.GetString("TB"));
+    //    return loadedHighscoresJson;
+    //}
 
     private HighscoresJson Load(string tableKey)
     {
@@ -84,33 +79,32 @@ public class Highscores : MonoBehaviour
         return loadedHighscoresJson;
     }
 
-    private void Save(HighscoresJson loadedHighscoresJson)
+    private void Save(HighscoresJson loadedHighscoresJson, string tableKey)
     {
-        PlayerPrefs.SetString("TB", JsonUtility.ToJson(loadedHighscoresJson));
+        PlayerPrefs.SetString(tableKey, JsonUtility.ToJson(loadedHighscoresJson));
         PlayerPrefs.Save();
     }
        
-    private void PopulateScoreListings(List<HighscoreEntry> highscoreEntries, GameObject tableType=null)
+    private void PopulateScoreListings(List<HighscoreEntry> highscoreEntries, string tableKey)
     {
-        
-        string rankString;
+        GameObject tableType = ffaScrollView;
+        string rankString; //21TH is a problem
         int count = 1;
         #region SetTable
-        if (tableType == null) 
-        { 
-            switch(playerInstance.gameState)
+
+            switch(tableKey)
             {
-                case Player.GameState.FFA:
+                case "FFA":
                     tableType = ffaScrollView;
                     break;
-                case Player.GameState.SM:
+                case "SM":
                     tableType = smScrollView;
                     break;
-                case Player.GameState.TB:
+                case "TB":
                     tableType = tbScrollView;
                     break;
             }
-        }
+        
         #endregion
 
         //if (allListings != null)
@@ -121,7 +115,7 @@ public class Highscores : MonoBehaviour
         //    }
         //    allListings.Clear();
         //}
-        // Note this list will delete all listings off of al the tables------------------------
+        // Note this list will delete all listings off of all the tables------------------------
 
         foreach (HighscoreEntry entry in highscoreEntries)
         {
@@ -164,8 +158,8 @@ public class Highscores : MonoBehaviour
     [Serializable]
     private class HighscoreEntry
     {
-        public int score = 0;
-        public string name = "John";
+        public int score;
+        public string name;
     }
 
     // commented out until testing is complete
