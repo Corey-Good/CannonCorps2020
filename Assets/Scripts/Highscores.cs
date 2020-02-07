@@ -113,14 +113,14 @@ public class Highscores : MonoBehaviour
         }
         #endregion
 
-        if (allListings != null)
-        {
-            foreach (GameObject listing in allListings)
-            {
-                Destroy(listing);
-            }
-            allListings.Clear();
-        }
+        //if (allListings != null)
+        //{
+        //    foreach (GameObject listing in allListings)
+        //    {
+        //        Destroy(listing);
+        //    }
+        //    allListings.Clear();
+        //}
         // Note this list will delete all listings off of al the tables------------------------
 
         foreach (HighscoreEntry entry in highscoreEntries)
