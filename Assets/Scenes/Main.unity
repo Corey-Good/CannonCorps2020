@@ -4996,7 +4996,7 @@ GameObject:
   - component: {fileID: 880135497}
   m_Layer: 0
   m_Name: TankClass
-  m_TagString: Untagged
+  m_TagString: TankClass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7600,7 +7600,7 @@ GameObject:
   - component: {fileID: 1417471201}
   m_Layer: 0
   m_Name: PlayerClass
-  m_TagString: Player
+  m_TagString: PlayerClass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7617,7 +7617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2e1e454320d2c0428a6435733207bc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameState: 0
+  gameState: 1
 --- !u!114 &1417471202
 MonoBehaviour:
   m_ObjectHideFlags: 0

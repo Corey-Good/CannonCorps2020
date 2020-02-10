@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
         
         if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
         {
-            fireAnimation.SetTrigger("Fire");
+            fireAnimation.SetTrigger("LaunchCatapult");
         }
     }
 
