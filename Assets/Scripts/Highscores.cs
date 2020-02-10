@@ -47,16 +47,6 @@ public class Highscores : MonoBehaviour
         FirstTimeLoad("FFA");
         FirstTimeLoad("SM");
         FirstTimeLoad("TB");
-
-    }
-    private void Awake()
-    {
-        //PlayerPrefs.DeleteKey("FFA");
-        //PlayerPrefs.DeleteKey("SM");
-        //PlayerPrefs.DeleteKey("TB");
-        FirstTimeLoad("FFA");
-        FirstTimeLoad("SM");
-        FirstTimeLoad("TB");
         UpdatePermanentTable(GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>());
 
     }
