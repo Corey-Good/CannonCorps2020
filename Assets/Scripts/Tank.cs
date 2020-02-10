@@ -12,18 +12,19 @@ using UnityEngine;
 
 public class Tank : MonoBehaviour, ITakeDamage
 {
-    private float healthMax;
-    private float healthCurrent;
-    private float healthRegen;
-    private float speedRotation;
-    private float speedMovement;
-    private float bulletSpeed;
-    private float bulletDamage;
-    private float bulletReload;
-    private GameObject tankModel;
-    private GameObject tankProjectile;
-    private Color tankColor;
-    private static Tank tankInstance;
+    public float healthMax { get; set; }
+    public float healthCurrent { get; set; }
+    public float healthRegen { get; set; } 
+    public float speedRotation { get; set; }
+    public float speedMovement { get; set; }
+    public float bulletSpeed { get; set; }
+    public float bulletDamage { get; set; }
+    public float bulletReload { get; set; }
+    public GameObject tankModel { get; set; }
+    public GameObject tankProjectile { get; set; }
+    public Color tankColor { get; set; }
+    public static Tank tankInstance { get; set; }
+
 
     void Awake()
     {
@@ -35,13 +36,14 @@ public class Tank : MonoBehaviour, ITakeDamage
         {
             Destroy(gameObject);
         }
+        CreateTank();
     }
-    public void CreateTank(string tankModelChosen, Color tankColorChosen)
+    public void CreateTank(string tankModelChosen = "cartoonTank")
     {
         switch (tankModelChosen)
         {
             case "cartoonTank":
-                tankColor = tankColorChosen;
+                //tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
@@ -53,7 +55,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 break;
 
             case "futureTank":
-                tankColor = tankColorChosen;
+                //tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
@@ -65,7 +67,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 break;
 
             case "catapult":
-                tankColor = tankColorChosen;
+               // tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
@@ -77,7 +79,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 break;
 
             case "boxTank":
-                tankColor = tankColorChosen;
+               // tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
@@ -93,7 +95,7 @@ public class Tank : MonoBehaviour, ITakeDamage
 
     public void damageTaken(float damage)
     {
-        if (healthCurrent > 0)
+        if (healthCurrent >= 0)
         {
             healthCurrent -= damage;
         }

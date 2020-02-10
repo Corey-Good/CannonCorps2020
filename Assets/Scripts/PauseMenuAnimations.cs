@@ -5,7 +5,10 @@
 /* Modified By:        Jaben Calas                                      */
 /************************************************************************/
 
+using Photon.Pun;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuAnimations : MonoBehaviour
 {
@@ -91,6 +94,7 @@ public class PauseMenuAnimations : MonoBehaviour
     public void Quit()
     {
         GameIsPaused         = false;
+        StartCoroutine(DisconnectAndLoad());
     }
 
     public void OpenPauseMenu(GameObject Menu)
@@ -107,5 +111,16 @@ public class PauseMenuAnimations : MonoBehaviour
         LeanTween.scale(Menu, new Vector3(0, 0, 0), 0.5f);
 
         Invoke("turnOffMenu", 0.5f);
+    }
+
+    private IEnumerator DisconnectAndLoad()
+    {
+        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.UnloadSceneAsync(2);
+        PhotonNetwork.LoadLevel(0);
     }
 }
