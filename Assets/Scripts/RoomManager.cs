@@ -35,6 +35,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         //connectionStatus.text = "A new player has joined";
         UpdatePlayerList();
+        if(currentGameMode == GameMode.FreeForAll)
+        {
+            LoadFreeForAll();
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -60,7 +64,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 20 };
         PhotonNetwork.JoinOrCreateRoom("FreeForAll " + roomCountFFA, roomOps, null);
         currentGameMode = GameMode.FreeForAll;
-        LoadFreeForAll();
     }
 
     public void SharksMinnowsButtonOnClick()

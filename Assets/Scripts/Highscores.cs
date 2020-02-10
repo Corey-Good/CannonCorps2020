@@ -36,7 +36,7 @@ public class Highscores : MonoBehaviour
 
         loadedHighscoresJson = Load(tableKey);
         highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, tableKey);
+        //PopulateScoreListings(highscoreEntryList, tableKey);
     }
     private void Awake()
     {
@@ -46,22 +46,25 @@ public class Highscores : MonoBehaviour
         FirstTimeLoad("FFA");
         FirstTimeLoad("SM");
         FirstTimeLoad("TB");
+        UpdatePermanentTable(GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>());
 
     }
-    private void OnEnable()
-    {
-        Player.OnPlayerReturnsToMenu += UpdatePermanentTable;
-    }
-    private void OnDisable()
-    {
-        Player.OnPlayerReturnsToMenu -= UpdatePermanentTable;
-    }
+    //private void OnEnable()
+    //{
+    //    Player.OnPlayerReturnsToMenu += UpdatePermanentTable;
+    //}
+    //private void OnDisable()
+    //{
+    //    Player.OnPlayerReturnsToMenu -= UpdatePermanentTable;
+    //}
     private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name? yes
     {
-        AddHighscoreEntry(player.ScoreCurrent, player.PlayerName, player.gameState.ToString());
-        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, player.gameState.ToString());
-        player.ResetPlayerStats();
+
+            AddHighscoreEntry(player.ScoreCurrent, player.PlayerName, player.gameState.ToString());
+            highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
+            PopulateScoreListings(highscoreEntryList, player.gameState.ToString());
+            player.ResetPlayerStats();
+        
     }
 
     private void AddHighscoreEntry(int score, string name, string tableKey)

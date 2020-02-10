@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     public int DeathsCurrent { get; set; }
     public int DeathsAlltime { get; set; }
     public int DeathsInARow { get; set; }
+    public bool inGame = false;
 
     private static Player playerInstance;
 
@@ -72,15 +73,10 @@ public class Player : MonoBehaviour
         DeathsCurrent  = 0;        
         DeathsInARow   = 0;
         KillsInARow    = 0;
+
+        Debug.Log("Stats have been reset");
     }
 
-    private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
-    {
-        this.PlayerName = PhotonNetwork.NickName;
-        if (OnPlayerReturnsToMenu != null)
-        {
-            OnPlayerReturnsToMenu(this);
-        }
-    }
+
 
 }

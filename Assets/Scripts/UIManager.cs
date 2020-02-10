@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
     {
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        playerScoreText.text = "0";
     }
 
     private void Start()
