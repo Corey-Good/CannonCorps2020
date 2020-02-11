@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    public delegate void EnterGame(string gameMode);
+    public static event EnterGame OnEnterGame;
     public Text playerCount;
     public Text MinPlayerNote;
     public GameObject LobbyView;
@@ -61,13 +63,22 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void FreeForAllButtonOnClick()
     {
+        if (OnEnterGame != null)
+        {
+            OnEnterGame("FFA");
+        }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 20 };
         PhotonNetwork.JoinOrCreateRoom("FreeForAll " + roomCountFFA, roomOps, null);
         currentGameMode = GameMode.FreeForAll;
+
     }
 
     public void SharksMinnowsButtonOnClick()
     {
+        if (OnEnterGame != null)
+        {
+            OnEnterGame("SM");
+        }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 15 };
         PhotonNetwork.JoinOrCreateRoom("SharksAndMinnows " + roomCountSM, roomOps, null);
         currentGameMode = GameMode.SharksAndMinnows;
@@ -76,6 +87,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void TeamBattleButtonOnClick()
     {
+        if (OnEnterGame != null)
+        {
+            OnEnterGame("TB");
+        }
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
         PhotonNetwork.JoinOrCreateRoom("TeamBattle " + roomCountTB, roomOps, null);
         currentGameMode = GameMode.TeamBattle;

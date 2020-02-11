@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuAnimations : MonoBehaviour
 {
+
     public static bool GameIsPaused = false;
 
     public GameObject  pauseMenu;
@@ -115,6 +116,7 @@ public class PauseMenuAnimations : MonoBehaviour
 
     private IEnumerator DisconnectAndLoad()
     {
+ 
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)

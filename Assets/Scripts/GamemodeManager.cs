@@ -16,7 +16,6 @@ public class GamemodeManager : MonoBehaviour
     {
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        player.inGame = true;
     }
 
     void Start()
