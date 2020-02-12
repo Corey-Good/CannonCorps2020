@@ -82,7 +82,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2177514302449444838}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &2177514302569143386
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 5540668966065814750}
   - component: {fileID: 8254057016562431584}
   m_Layer: 0
-  m_Name: catapult
+  m_Name: Catapult
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

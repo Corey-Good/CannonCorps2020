@@ -38,6 +38,8 @@ public class GenerateName : MonoBehaviour
     {
         GenerateAllNames();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        if(player.PlayerName != null)
+            playerName.text = player.PlayerName;
     }
 
     public void randomName()

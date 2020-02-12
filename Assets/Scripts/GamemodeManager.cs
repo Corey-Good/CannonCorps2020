@@ -21,7 +21,7 @@ public class GamemodeManager : MonoBehaviour
     void Start()
     {
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
-        PhotonNetwork.Instantiate("cartoonTank", spawnlocations[0].transform.position, spawnlocations[0].transform.rotation);
+        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[0].transform.position, spawnlocations[0].transform.rotation);
     }
 
     // Update is called once per frame
