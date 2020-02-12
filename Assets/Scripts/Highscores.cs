@@ -103,8 +103,7 @@ public class Highscores : MonoBehaviour
     private void PopulateScoreListings(List<HighscoreEntry> highscoreEntries, string tableKey)
     {
         GameObject tableType = ffaScrollView;
-        string rankString; //21TH is a problem
-        int count = 0;
+        int count = 1;
         int gameMode = 0;
         #region SetTable
 
@@ -138,20 +137,6 @@ public class Highscores : MonoBehaviour
 
         foreach (HighscoreEntry entry in highscoreEntries)
         {
-            switch (++count)
-            {
-                default:
-                    rankString = count + "TH"; break;
-                case 1:
-                    rankString = "1ST"; break;
-                case 2:
-                    rankString = "2ND"; break;
-                case 3:
-                    rankString = "3RD"; break;
-            }
-            
-
-
             int score = entry.score;
             string name = entry.name;
 
@@ -162,9 +147,9 @@ public class Highscores : MonoBehaviour
 
             // Set the players name and score
             Text[] tempText = tempListing.GetComponentsInChildren<Text>();
-            tempText[0].text = rankString + " " + name;
+            tempText[0].text = count.ToString() + ".  " + name;
             tempText[1].text = score.ToString();
-
+            count++;
             
         }
 

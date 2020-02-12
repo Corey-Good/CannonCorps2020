@@ -20,7 +20,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     public float bulletSpeed { get; set; }
     public float bulletDamage { get; set; }
     public float bulletReload { get; set; }
-    public GameObject tankModel { get; set; }
+    public string tankModel { get; set; }
     public GameObject tankProjectile { get; set; }
     public Color tankColor { get; set; }
     public static Tank tankInstance { get; set; }
@@ -38,7 +38,7 @@ public class Tank : MonoBehaviour, ITakeDamage
         }
         CreateTank();
     }
-    public void CreateTank(string tankModelChosen = "cartoonTank")
+    public void CreateTank(string tankModelChosen = "baseTank")
     {
         switch (tankModelChosen)
         {
@@ -52,6 +52,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 bulletReload = 10;
+                tankModel = "cartoonTank";
                 break;
 
             case "futureTank":
@@ -64,9 +65,10 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 bulletReload = 10;
+                tankModel = "futureTank";
                 break;
 
-            case "catapult":
+            case "Catapult":
                // tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
@@ -76,9 +78,10 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 bulletReload = 10;
+                tankModel = "Catapult";
                 break;
 
-            case "boxTank":
+            case "baseTank":
                // tankColor = tankColorChosen;
                 healthMax = 100;
                 healthCurrent = 100;
@@ -88,6 +91,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 bulletReload = 10;
+                tankModel = "baseTank";
                 break;
 
         }
