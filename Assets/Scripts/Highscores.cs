@@ -21,22 +21,20 @@ public class Highscores : MonoBehaviour
             new List<GameObject>(),
         };
     private Player playerInstance;
+    
 
 
     private void FirstTimeLoad(string tableKey)
     {
 
-        if (!PlayerPrefs.HasKey(tableKey))
+        if (PlayerPrefs.HasKey(tableKey))
         {
-            HighscoresJson firstSave = new HighscoresJson();
-            firstSave.highscoreEntryList.Add(new HighscoreEntry { score = 10, name = "test" });
-            Save(firstSave, tableKey);
             loadedHighscoresJson = Load(tableKey);
+            highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
+            PopulateScoreListings(highscoreEntryList, tableKey);
         }
 
-        loadedHighscoresJson = Load(tableKey);
-        highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-        PopulateScoreListings(highscoreEntryList, tableKey);
+
     }
     private void Awake()
     {
@@ -46,22 +44,36 @@ public class Highscores : MonoBehaviour
         FirstTimeLoad("FFA");
         FirstTimeLoad("SM");
         FirstTimeLoad("TB");
+        //UpdatePermanentTable(GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>());
+        playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
     }
     private void OnEnable()
     {
-        Player.OnPlayerReturnsToMenu += UpdatePermanentTable;
-    }
-    private void OnDisable()
-    {
-        Player.OnPlayerReturnsToMenu -= UpdatePermanentTable;
+        if(playerInstance.inGame)
+        {
+            UpdatePermanentTable(playerInstance);
+            playerInstance.inGame = false;
+            playerInstance.ResetPlayerStats();
+        }
+        
     }
     private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name? yes
     {
-        AddHighscoreEntry(player.ScoreCurrent, player.PlayerName, player.gameState.ToString());
+        if (!PlayerPrefs.HasKey(player.gameState.ToString()))
+        {
+            HighscoresJson firstSave = new HighscoresJson();
+            firstSave.highscoreEntryList.Add(new HighscoreEntry { score = player.ScoreCurrent, name = player.PlayerName });
+            Save(firstSave, player.gameState.ToString());
+            loadedHighscoresJson = Load(player.gameState.ToString());
+        }
+        else
+        {
+            AddHighscoreEntry(player.ScoreCurrent, player.PlayerName, player.gameState.ToString());
+        }   
         highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
         PopulateScoreListings(highscoreEntryList, player.gameState.ToString());
-        player.ResetPlayerStats();
+        
     }
 
     private void AddHighscoreEntry(int score, string name, string tableKey)
@@ -88,7 +100,6 @@ public class Highscores : MonoBehaviour
         PlayerPrefs.SetString(tableKey, JsonUtility.ToJson(loadedHighscoresJson));
         PlayerPrefs.Save();
     }
-
     private void PopulateScoreListings(List<HighscoreEntry> highscoreEntries, string tableKey)
     {
         GameObject tableType = ffaScrollView;
@@ -138,6 +149,7 @@ public class Highscores : MonoBehaviour
                 case 3:
                     rankString = "3RD"; break;
             }
+            
 
 
             int score = entry.score;
@@ -152,6 +164,8 @@ public class Highscores : MonoBehaviour
             Text[] tempText = tempListing.GetComponentsInChildren<Text>();
             tempText[0].text = rankString + " " + name;
             tempText[1].text = score.ToString();
+
+            
         }
 
     }

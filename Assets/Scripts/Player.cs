@@ -12,8 +12,8 @@ using Photon.Pun;
 
 public class Player : MonoBehaviour
 {
-    public delegate void PlayerReturnsToMenu(Player player);
-    public static event PlayerReturnsToMenu OnPlayerReturnsToMenu;
+    //public delegate void PlayerReturnsToMenu(Player player);
+    //public static event PlayerReturnsToMenu OnPlayerReturnsToMenu;
     public string PlayerID { get; set; }
     public string PlayerName { get; set; }
     public int KillsCurrent { get; set; }
@@ -24,9 +24,9 @@ public class Player : MonoBehaviour
     public int DeathsCurrent { get; set; }
     public int DeathsAlltime { get; set; }
     public int DeathsInARow { get; set; }
+    public bool inGame = false;
 
     private static Player playerInstance;
-
     public enum GameState
     {
         FFA, 
@@ -34,8 +34,39 @@ public class Player : MonoBehaviour
         TB
     }
     public GameState gameState;
+
+    private void OnDisable()
+    {
+        RoomManager.OnEnterGame -= UpdateHighscoreTable;
+        
+    }
+
+    private void OnEnable()
+    {
+        RoomManager.OnEnterGame += UpdateHighscoreTable;
+       
+    }
+
+    private void UpdateHighscoreTable(string returningGameMode)
+    {
+        inGame = true;
+        switch(returningGameMode)
+        {
+            case "FFA":
+                gameState = GameState.FFA;
+                break;
+            case "SM":
+                gameState = GameState.SM;
+                break;
+            case "TB":
+                gameState = GameState.TB;
+                break;
+        }
+    }
+
     private void Awake()
     {
+        
         this.PlayerID = CreatePlayerID(); // assign random, new player ID
         // Could add some kind of logic to see if player wants to reuse player ID
         // "Enter ID" and if ID matches then use that player
@@ -72,15 +103,10 @@ public class Player : MonoBehaviour
         DeathsCurrent  = 0;        
         DeathsInARow   = 0;
         KillsInARow    = 0;
+
+        Debug.Log("Stats have been reset");
     }
 
-    private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
-    {
-        this.PlayerName = PhotonNetwork.NickName;
-        if (OnPlayerReturnsToMenu != null)
-        {
-            OnPlayerReturnsToMenu(this);
-        }
-    }
+
 
 }
