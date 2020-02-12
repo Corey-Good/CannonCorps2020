@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }
+        }        
     }
 
     private string CreatePlayerID()
@@ -62,29 +62,25 @@ public class Player : MonoBehaviour
         return newPlayerID;
     }
 
+    public void ResetPlayerStats()
+    {
+        KillsAlltime  += KillsCurrent;
+        KillsCurrent   = 0;  
+        ScoreAlltime  += ScoreCurrent;
+        ScoreCurrent   = 0;
+        DeathsAlltime += DeathsCurrent;
+        DeathsCurrent  = 0;        
+        DeathsInARow   = 0;
+        KillsInARow    = 0;
+    }
+
     private void OnDisable() // Using OnDisable for testing purposes, should be called during player state change
     {
         this.PlayerName = PhotonNetwork.NickName;
-        Debug.Log("this is the nickname:" + PlayerName);
-        this.ScoreCurrent = 90;
-        Debug.Log(PlayerPrefs.GetString("highscoretable"));
-        Debug.Log(PlayerPrefs.HasKey("highscoretable"));
         if (OnPlayerReturnsToMenu != null)
         {
             OnPlayerReturnsToMenu(this);
         }
-
-        if(this.ScoreCurrent > this.ScoreAlltime)
-        {
-            this.ScoreAlltime = this.ScoreCurrent;
-        }
-        this.ScoreCurrent = 0;
-        //Debug.Log("Player ID" + this.PlayerID);
-        //Debug.Log("Player Highscore" + PlayerPrefs.GetInt(this.PlayerID));
-        //Debug.Log("Current Score" + this.ScoreCurrent.ToString());
-
-        //Debug.Log("Current Score" + this.ScoreCurrent.ToString());
-
     }
 
 }

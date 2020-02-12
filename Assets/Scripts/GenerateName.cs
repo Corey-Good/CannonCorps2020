@@ -15,6 +15,7 @@ using UnityEngine.UI;
 public class GenerateName : MonoBehaviour
 {
     public TextMeshProUGUI playerName;
+    private Player player;
 
     #region list of names
     string[]
@@ -36,6 +37,7 @@ public class GenerateName : MonoBehaviour
     private void Awake()
     {
         GenerateAllNames();
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
 
     public void randomName()
@@ -46,6 +48,7 @@ public class GenerateName : MonoBehaviour
         allNames.Remove(random_name);
 
         playerName.text = random_name;
+        player.PlayerName = playerName.text;
         PhotonNetwork.NickName = playerName.text;
     }
 
