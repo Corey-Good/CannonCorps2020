@@ -7,6 +7,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class KeyBindings : MonoBehaviour
 {
@@ -21,19 +22,19 @@ public class KeyBindings : MonoBehaviour
     private string        keyHit;
     private string        objectName;
 
-    public  Text          forwardButton;
-    public  Text          backwardButton;
-    public  Text          leftButton;
-    public  Text          rightButton;
-    public  Text          fireButton;
+    public TextMeshPro forwardButton;
+    public TextMeshPro backwardButton;
+    public TextMeshPro leftButton;
+    public TextMeshPro rightButton;
+    public TextMeshPro fireButton;
 
-    public  void OnClick(Text text)
+    public  void OnClick(TextMeshPro text)
     {
         text.text     = "Hit Key";
         lookingForKey = true;
         objectName    = text.name;
     }
-    public  void OnMouseClick(Text text)
+    public  void OnMouseClick(TextMeshPro text)
     {
         text.text     = "Click Mouse";
         lookingForKey = true;
