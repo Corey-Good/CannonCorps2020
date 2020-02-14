@@ -6,9 +6,10 @@
 /************************************************************************/
 
 //using Photon.Pun;
+using Photon.Pun;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
+public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
 {
     public static float cameraRotateSpeed = 500.0f;
     public Transform cameraTransform;
@@ -21,15 +22,19 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
     {
 
         Cursor.lockState = CursorLockMode.Locked;
-        /*if (!photonView.IsMine)
+        if (!photonView.IsMine)
         {
-            tankCamera.enabled = true;
+            tankCamera.enabled = false;
             return;
-        }  Note, keep this to disable all cameras if it does not belong to the player*/
+        }
     }
 
     public void FixedUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         if (!PauseMenuAnimations.GameIsPaused)
         {
             ZoomCamera();
@@ -38,6 +43,10 @@ public class CameraMovement : MonoBehaviour /*MonoBehaviourPun*/
 
     public void LateUpdate()
     {
+        if (!photonView.IsMine)
+        {
+            return;
+        }
         SetCameraTarget();
         
         if (!PauseMenuAnimations.GameIsPaused)
