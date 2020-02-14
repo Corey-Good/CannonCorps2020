@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
-/* Author:  Corey Good */
-/* Date Created: 02/12/20 */
-/* Last Modified Date: 02/12/20 */
-/* Modified By: Jaben Calas */
+/* Author:             Corey Good                                       */
+/* Date Created:       02/12/20                                         */
+/* Last Modified Date: 02/13/20                                         */
+/* Modified By:        Jaben Calas                                      */
 /************************************************************************/
 
 using UnityEngine;
@@ -11,34 +11,50 @@ using TMPro;
 
 public class KeyBindings : MonoBehaviour
 {
-    public  bool          lookingForKey   = false;
-    public  static int    clickIndex      = 0;
+    private  bool            lookingForKey   = false;
+    private  bool            lookingForClick = false;
 
-    public  static string forwardKey      = "W";
-    public  static string backwardKey     = "S";
-    public  static string leftKey         = "A";
-    public  static string rightKey        = "D";
+    public   static int      clickIndex      = 0;
+                             
+    public   static string   forwardKey      = "W";
+    public   static string   backwardKey     = "S";
+    public   static string   leftKey         = "A";
+    public   static string   rightKey        = "D";
+                             
+    private  string          keyHit;
+    private  string          objectName;
 
-    private string        keyHit;
-    private string        objectName;
+    public   TextMeshProUGUI forwardButton;
+    public   TextMeshProUGUI backwardButton;
+    public   TextMeshProUGUI leftButton;
+    public   TextMeshProUGUI rightButton;
+    public   TextMeshProUGUI fireButton;
 
-    public TextMeshPro forwardButton;
-    public TextMeshPro backwardButton;
-    public TextMeshPro leftButton;
-    public TextMeshPro rightButton;
-    public TextMeshPro fireButton;
-
-    public  void OnClick(TextMeshPro text)
+    private void Start()
     {
-        text.text     = "Hit Key";
-        lookingForKey = true;
-        objectName    = text.name;
+        forwardButton. text = forwardKey;
+        backwardButton.text = backwardKey;
+        leftButton.    text = leftKey;
+        rightButton.   text = rightKey;
+
+        if (clickIndex == 0)
+            fireButton.text = "LeftClick";
+        else if (clickIndex == 1)
+            fireButton.text = "RightClick";
     }
-    public  void OnMouseClick(TextMeshPro text)
+
+    public  void OnClick(TextMeshProUGUI text)
     {
-        text.text     = "Click Mouse";
-        lookingForKey = true;
-        objectName    = text.name;
+        text.text       = "Hit Key";
+        lookingForKey   = true;
+        objectName      = text.name;
+    }
+
+    public  void OnMouseClick(TextMeshProUGUI text)
+    {
+        text.text       = "Click Mouse";
+        lookingForClick = true;
+        objectName      = text.name;
     }
 
     public  void OnGUI()
@@ -51,8 +67,8 @@ public class KeyBindings : MonoBehaviour
             switch (objectName)
             {
                 case "ForwardText":
-                    forwardButton.text = keyHit;
-                    forwardKey         = forwardButton.text;
+                    forwardButton.text  = keyHit;
+                    forwardKey          = forwardButton.text;
                     break;
 
                 case "BackwardText":
@@ -61,19 +77,19 @@ public class KeyBindings : MonoBehaviour
                     break;
 
                 case "LeftText":
-                    leftButton.text = keyHit;
-                    leftKey         = leftButton.text;
+                    leftButton.text     = keyHit;
+                    leftKey             = leftButton.text;
                     break;
 
                 case "RightText":
-                    rightButton.text = keyHit;
-                    rightKey         = rightButton.text;
+                    rightButton.text    = keyHit;
+                    rightKey            = rightButton.text;
                     break;
             }
             lookingForKey = false;
         }
 
-        if (e.isMouse && lookingForKey)
+        if (e.isMouse && lookingForClick)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -85,21 +101,7 @@ public class KeyBindings : MonoBehaviour
                 clickIndex = 1;
                 fireButton.text = "RightClick";
             }
-            lookingForKey = false;
+            lookingForClick = false;
         }
-    }
-
-
-    private void Start()
-    {
-        forwardButton.text  = forwardKey;
-        backwardButton.text = backwardKey;
-        leftButton.text     = leftKey;
-        rightButton.text    = rightKey;
-
-        if (clickIndex == 0)
-            fireButton.text = "LeftClick";
-        else if (clickIndex == 1)
-            fireButton.text = "RightClick";
     }
 }
