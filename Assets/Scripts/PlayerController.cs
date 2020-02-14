@@ -11,10 +11,13 @@ using Photon.Pun;
 
 public class PlayerController : MonoBehaviourPun
 {
+    #region Variables
+    private Vector3   cursorPosition;
+    public  Animator  fireAnimation;
+    public  Camera    tankCamera;
+    public  GameObject tankHead;
 
-    // States
-    // The player controller has states: InGame, InMenu, etc
-    // Depending on which state that the player is in, control is thrown to a different class/script
+    #endregion
 
     #region Movement Keys
     KeyCode forwardMovement;
@@ -39,31 +42,34 @@ public class PlayerController : MonoBehaviourPun
     states playerState;
     #endregion
 
-    public Animator fireAnimation;
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
-        forwardMovement = KeyCode.W;
+        forwardMovement  = KeyCode.W;
         backwardMovement = KeyCode.S;
-        leftMovement = KeyCode.A;
-        rightMovement = KeyCode.D;
-        playerState = states.Stationary;
+        leftMovement     = KeyCode.A;
+        rightMovement    = KeyCode.D;
+        playerState      = states.Stationary;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(!photonView.IsMine)
-        {
-            return;
-        }
+        if(!photonView.IsMine) { return; }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
         {
             MovePlayer();
+
+            if(tankHead != null) 
+            { 
+                TurretRotation(); 
+            }
+            
         }
         else
         {
@@ -76,9 +82,7 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-
-
-    public void MovePlayer()
+    private void MovePlayer()
     {
         // Move play forwards and backwards, 
         if (Input.GetKey(forwardMovement))
@@ -103,6 +107,36 @@ public class PlayerController : MonoBehaviourPun
                 transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
             }
         }
+    }
+
+    private void TurretRotation()
+    {
+        //Debug.Log(Input.GetAxis("Mouse X"));
+        //Vector3 turretFinalLookDirection = new Vector3();
+        //Ray screenRay = tankCamera.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit hit;
+        //if (Physics.Raycast(screenRay, out hit))
+        //{
+        //    cursorPosition = hit.point;
+        //}
+        Debug.Log(Input.mousePosition);
+        //Vector3 turretLookDirection = cursorPosition - tankHead.position;
+        //turretLookDirection.y = 0.0f;
+
+
+        //turretFinalLookDirection = Vector3.RotateTowards(turretFinalLookDirection, turretLookDirection, 0.7f * Time.deltaTime, 10.0f);
+        //tankHead.rotation = Quaternion.LookRotation(turretFinalLookDirection);
+
+        //if (Input.GetKey(KeyCode.Q))
+        //{
+        //    //tankHead.LeanRotate(new Vector3(tankHead.rotation.x, tankHead.rotation.y - 5.0f, tankHead.rotation.z), 10.0f);
+        //    LeanTween.rotateAround(tankHead, Vector3.down, 15f, 1f).setEase(LeanTweenType.once);
+        //}
+        //if (Input.GetKey(KeyCode.E))
+        //{
+        //    //tankHead.LeanRotate(new Vector3(tankHead.rotation.x, tankHead.rotation.y - 5.0f, tankHead.rotation.z), 10.0f);
+        //    LeanTween.rotateAround(tankHead, Vector3.up, 15f, 1f).setEase(LeanTweenType.once);
+        //}
     }
 
 }
