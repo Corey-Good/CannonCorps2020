@@ -9,13 +9,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviourPun
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
     private Vector3   cursorPosition;
     public  Animator  fireAnimation;
     public  Camera    tankCamera;
     public  GameObject tankHead;
+    public  GameObject tankBase;
 
     #endregion
 
@@ -53,7 +54,6 @@ public class PlayerController : MonoBehaviourPun
         leftMovement     = KeyCode.A;
         rightMovement    = KeyCode.D;
         playerState      = states.Stationary;
-
     }
 
     // Update is called once per frame
@@ -63,13 +63,7 @@ public class PlayerController : MonoBehaviourPun
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
         {
-            MovePlayer();
-
-            if(tankHead != null) 
-            { 
-                TurretRotation(); 
-            }
-            
+            MovePlayer();            
         }
         else
         {
@@ -109,36 +103,20 @@ public class PlayerController : MonoBehaviourPun
         }
     }
 
-    private void TurretRotation()
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        //Debug.Log(Input.GetAxis("Mouse X"));
-        //Vector3 turretFinalLookDirection = new Vector3();
-        //Ray screenRay = tankCamera.ScreenPointToRay(Input.mousePosition);
-        //RaycastHit hit;
-        //if (Physics.Raycast(screenRay, out hit))
-        //{
-        //    cursorPosition = hit.point;
-        //}
-        Debug.Log(Input.mousePosition);
-        //Vector3 turretLookDirection = cursorPosition - tankHead.position;
-        //turretLookDirection.y = 0.0f;
+        if(stream.IsWriting)
+        {
+            stream.SendNext(tankHead.transform.position);
+            stream.SendNext(tankBase.transform.position);
+        }
+        else
+        {
+            tankHead.transform.position = (Vector3)stream.ReceiveNext();
+            tankBase.transform.position = (Vector3)stream.ReceiveNext();
+        }
 
-
-        //turretFinalLookDirection = Vector3.RotateTowards(turretFinalLookDirection, turretLookDirection, 0.7f * Time.deltaTime, 10.0f);
-        //tankHead.rotation = Quaternion.LookRotation(turretFinalLookDirection);
-
-        //if (Input.GetKey(KeyCode.Q))
-        //{
-        //    //tankHead.LeanRotate(new Vector3(tankHead.rotation.x, tankHead.rotation.y - 5.0f, tankHead.rotation.z), 10.0f);
-        //    LeanTween.rotateAround(tankHead, Vector3.down, 15f, 1f).setEase(LeanTweenType.once);
-        //}
-        //if (Input.GetKey(KeyCode.E))
-        //{
-        //    //tankHead.LeanRotate(new Vector3(tankHead.rotation.x, tankHead.rotation.y - 5.0f, tankHead.rotation.z), 10.0f);
-        //    LeanTween.rotateAround(tankHead, Vector3.up, 15f, 1f).setEase(LeanTweenType.once);
-        //}
     }
-
 }
 
 

@@ -364,9 +364,10 @@ GameObject:
   - component: {fileID: 645646487973343325}
   - component: {fileID: 645646487973343323}
   - component: {fileID: 645646487973343324}
-  - component: {fileID: 3717845612036961201}
-  - component: {fileID: 7845182460680570296}
-  - component: {fileID: 3820319588556755825}
+  - component: {fileID: 3772726824002750994}
+  - component: {fileID: 6240190702589857518}
+  - component: {fileID: 1259654330472355604}
+  - component: {fileID: 2108724439655265378}
   m_Layer: 0
   m_Name: baseTank
   m_TagString: Untagged
@@ -453,7 +454,22 @@ MonoBehaviour:
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 645646487575194092}
   tankHead: {fileID: 8539385610585499611}
---- !u!114 &3717845612036961201
+  tankBase: {fileID: 5749583255142438743}
+--- !u!114 &3772726824002750994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8922793154969520094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c199bb0dd9f9041b90a4772aff9048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankCamera: {fileID: 645646487575194092}
+  turretObject: {fileID: 8539385610585499611}
+--- !u!114 &6240190702589857518
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -471,12 +487,12 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 7845182460680570296}
-  - {fileID: 3820319588556755825}
+  - {fileID: 1259654330472355604}
+  - {fileID: 2108724439655265378}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &7845182460680570296
+--- !u!114 &1259654330472355604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -491,7 +507,7 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!114 &3820319588556755825
+--- !u!114 &2108724439655265378
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

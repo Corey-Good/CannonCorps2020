@@ -11,14 +11,14 @@ using UnityEngine;
 
 public class TurretRotation : MonoBehaviour
 {
-    public  Camera    tankCamera;
-
-    public  Transform turretObject;
+    public  GameObject turretObject;
 
     private Vector3   cursorPosition;
     private Vector3   turretFinalLookDirection;
 
     private float     turretLagSpeed = 0.7f;
+    float degrees = 0;
+    float input = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,20 +29,7 @@ public class TurretRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Input.GetAxis("Mouse X"));
-
-        Ray        screenRay = tankCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if (Physics.Raycast(screenRay, out hit))
-        {
-            cursorPosition = hit.point;
-        }
-
-        Vector3 turretLookDirection = cursorPosition - turretObject.position;
-        turretLookDirection.y       = 0.0f;
-
-        turretFinalLookDirection = Vector3.   RotateTowards(turretFinalLookDirection, turretLookDirection, turretLagSpeed * Time.deltaTime, 10.0f);
-        turretObject.rotation    = Quaternion.LookRotation (turretFinalLookDirection);
+        turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
     }
+
 }

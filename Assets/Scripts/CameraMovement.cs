@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
 {
-    public static float cameraRotateSpeed = 500.0f;
+    public static float cameraRotateSpeed = 300.0f;
     public Transform cameraTransform;
     public GameObject player;
     private float cameraTargetOffset = 1.2f;
