@@ -216,6 +216,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireAnimation: {fileID: 2177514303465030681}
+  tankCamera: {fileID: 2177514302449444839}
+  tankBody: {fileID: 2177514303472334813}
+  tankHead: {fileID: 2177514303472334811}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +253,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 8254057016562431584}
+  - {fileID: 2177514302624853051}
   - {fileID: 670323618193709697}
   viewIdField: 0
   InstantiationId: 0

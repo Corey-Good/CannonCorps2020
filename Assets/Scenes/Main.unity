@@ -7647,7 +7647,7 @@ PrefabInstance:
     - target: {fileID: -927199367670048503, guid: 460f39a0ae470d14eab9dd0e00d0d088,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 460f39a0ae470d14eab9dd0e00d0d088,
         type: 3}
@@ -7877,6 +7877,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1259709877}
   m_CullTransparentMesh: 0
+--- !u!1 &1264323566 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 460f39a0ae470d14eab9dd0e00d0d088,
+    type: 3}
+  m_PrefabInstance: {fileID: 1246367790}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1265798230
 GameObject:
   m_ObjectHideFlags: 0
@@ -9178,7 +9184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tankModels:
-  - {fileID: 8922793154969520094, guid: 4386c9db33e65b442b8f9a514a244fc3, type: 3}
+  - {fileID: 1264323566}
   - {fileID: 2133712337}
   - {fileID: 300520948}
   - {fileID: 1509911823}

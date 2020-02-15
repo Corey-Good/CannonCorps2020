@@ -15,7 +15,10 @@ public class TurretRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
+        if (!PauseMenuAnimations.GameIsPaused)
+        {
+            turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
+        }
     }
 
 }

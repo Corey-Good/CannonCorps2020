@@ -209,6 +209,7 @@ GameObject:
   - component: {fileID: 5601363998312697753}
   - component: {fileID: 7150220123756270400}
   - component: {fileID: 20485667654297509}
+  - component: {fileID: 6113459420375525031}
   m_Layer: 0
   m_Name: futureTank
   m_TagString: Untagged
@@ -293,7 +294,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 3443925785779075122}
-  tankHead: {fileID: 2645087714911452140}
+  tankBody: {fileID: 7880837375835147117}
+  tankHead: {fileID: 1785731828956023871}
 --- !u!114 &5601363998312697753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,7 +314,7 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 7150220123756270400}
+  - {fileID: 3443925785091289684}
   - {fileID: 20485667654297509}
   viewIdField: 0
   InstantiationId: 0
@@ -348,6 +350,19 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &6113459420375525031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6695345589345639273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c199bb0dd9f9041b90a4772aff9048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretObject: {fileID: 1785731828956023871}
 --- !u!1 &7880837375835147117
 GameObject:
   m_ObjectHideFlags: 0
