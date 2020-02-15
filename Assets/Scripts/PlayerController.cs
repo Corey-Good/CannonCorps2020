@@ -12,12 +12,17 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-    private Vector3   cursorPosition;
-    public  Animator  fireAnimation;
-    public  Camera    tankCamera;
-    public  GameObject tankHead;
-    public  GameObject tankBase;
+    private Vector3    headPosition;
+    private Vector3    bodyPosition;
+    private Quaternion headRotation;
+    private Quaternion bodyRotation;
+    private float      lagAdjustSpeed = 100f;
 
+    public  Animator   fireAnimation;
+    public  Camera     tankCamera;
+    public  GameObject tankBody;
+    public  GameObject tankHead;
+    
     #endregion
 
     #region Movement Keys
@@ -41,9 +46,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         Moving
     }
     states playerState;
-    #endregion
-
-    
+    #endregion    
 
 
     // Start is called before the first frame update
@@ -59,7 +62,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if(!photonView.IsMine) { return; }
+        
+        if (!photonView.IsMine) 
+        {
+            LagAdjust();
+            return; 
+        }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
         {
@@ -74,6 +82,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             fireAnimation.SetTrigger("LaunchCatapult");
         }
+
+
     }
 
     private void MovePlayer()
@@ -105,17 +115,92 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if(stream.IsWriting)
+        if (stream.IsWriting)
         {
+            stream.SendNext(tankBody.transform.position);
+            stream.SendNext(tankBody.transform.rotation);
             stream.SendNext(tankHead.transform.position);
-            stream.SendNext(tankBase.transform.position);
+            stream.SendNext(tankHead.transform.rotation);
         }
         else
         {
-            tankHead.transform.position = (Vector3)stream.ReceiveNext();
-            tankBase.transform.position = (Vector3)stream.ReceiveNext();
+            bodyPosition = (Vector3)stream.ReceiveNext();
+            bodyRotation = (Quaternion)stream.ReceiveNext();
+            headPosition = (Vector3)stream.ReceiveNext();
+            headRotation = (Quaternion)stream.ReceiveNext();
         }
 
+    }
+
+    public void LagAdjust()
+    {
+        #region CalculateLag
+        var bodyPositionLag = tankBody.transform.position - bodyPosition;
+        var bodyRotationLag = tankBody.transform.rotation.eulerAngles - bodyRotation.eulerAngles;
+        var headPositionLag = tankHead.transform.position - headPosition;
+        var headRotationLag = tankHead.transform.rotation.eulerAngles - headRotation.eulerAngles;
+        #endregion
+
+        #region AdjustBodyPosition
+            if (bodyPositionLag.magnitude > 5f)
+            {
+                tankBody.transform.position = bodyPosition;
+            }
+            else if(bodyPositionLag.magnitude < 0.11f)
+            {
+                // do nothing
+            }
+            else 
+            { 
+                tankBody.transform.position = Vector3.Lerp(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
+            }
+        #endregion
+
+        #region AdjustBodyRotation
+            if (bodyRotationLag.magnitude > 5.0f)
+            {
+                tankBody.transform.rotation = bodyRotation;
+            }
+            else if(bodyRotationLag.magnitude < 0.11f)
+            {
+                // do nothing
+            }
+            else
+            {
+                tankBody.transform.rotation = Quaternion.Lerp(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
+               // Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, 10f);
+            }
+        #endregion
+
+        #region AdjustHeadPosition
+            if (headPositionLag.magnitude > 5.0f)
+            {
+                tankHead.transform.position = headPosition;
+            }
+            else if(headPositionLag.magnitude < 0.11f)
+            {
+                // do nothing
+            }
+            else
+            {
+                tankHead.transform.position = Vector3.Lerp(tankHead.transform.position, headPosition, lagAdjustSpeed * Time.deltaTime);
+            }
+        #endregion
+
+        #region AdjustHeadRotation
+            if (headRotationLag.magnitude > 5.0f)
+            {
+                tankHead.transform.rotation = headRotation;
+            }
+            else if (headRotationLag.magnitude < 0.11f)
+            {
+                // do nothing
+            }
+            else
+            {
+                tankHead.transform.rotation = Quaternion.Lerp(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
+            }
+        #endregion
     }
 }
 

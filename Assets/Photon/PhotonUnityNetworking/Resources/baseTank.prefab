@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5588818435492033997}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &645646487575194091
 GameObject:
@@ -60,7 +60,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5588818435492033997}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &645646487575194092
 Camera:
@@ -141,7 +141,8 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0.2496463, y: 0.098082885, z: 0.95649916}
   m_LocalScale: {x: 1.1333139, y: 1, z: 0.6148314}
-  m_Children: []
+  m_Children:
+  - {fileID: 6130041715864648716}
   m_Father: {fileID: 5588818435492033997}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -216,12 +217,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7661816119701327180}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.7077647, z: 0.52162236}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.22027993, y: 0.9564991, z: -0.15952793}
+  m_LocalScale: {x: 0.8823681, y: 0.70776445, z: 0.8483986}
   m_Children: []
-  m_Father: {fileID: 5588818435492033997}
-  m_RootOrder: 2
+  m_Father: {fileID: 5019513941459727214}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7956942849300268025
 MeshFilter:
@@ -297,7 +298,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8539385610585499611}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.2598266, y: 0.77253664, z: 0.41842723}
+  m_LocalPosition: {x: 0.242, y: 0.77253664, z: 0.41842723}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5588818435492033997}
@@ -366,7 +367,6 @@ GameObject:
   - component: {fileID: 645646487973343324}
   - component: {fileID: 3772726824002750994}
   - component: {fileID: 6240190702589857518}
-  - component: {fileID: 1259654330472355604}
   - component: {fileID: 2108724439655265378}
   m_Layer: 0
   m_Name: baseTank
@@ -388,7 +388,6 @@ Transform:
   m_Children:
   - {fileID: 5019513941459727214}
   - {fileID: 2253089691009723760}
-  - {fileID: 6130041715864648716}
   - {fileID: 645646487575194094}
   - {fileID: 645646486455869348}
   m_Father: {fileID: 0}
@@ -453,8 +452,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 645646487575194092}
+  tankBody: {fileID: 5749583255142438743}
   tankHead: {fileID: 8539385610585499611}
-  tankBase: {fileID: 5749583255142438743}
 --- !u!114 &3772726824002750994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,7 +466,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c199bb0dd9f9041b90a4772aff9048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankCamera: {fileID: 645646487575194092}
   turretObject: {fileID: 8539385610585499611}
 --- !u!114 &6240190702589857518
 MonoBehaviour:
@@ -487,26 +485,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 1259654330472355604}
+  - {fileID: 645646487973343324}
   - {fileID: 2108724439655265378}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1259654330472355604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8922793154969520094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
 --- !u!114 &2108724439655265378
 MonoBehaviour:
   m_ObjectHideFlags: 0

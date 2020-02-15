@@ -4,7 +4,6 @@
 /* Last Modified Date:                                                    */
 /* Modified By:                                                         */
 /************************************************************************/
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,19 +11,6 @@ using UnityEngine;
 public class TurretRotation : MonoBehaviour
 {
     public  GameObject turretObject;
-
-    private Vector3   cursorPosition;
-    private Vector3   turretFinalLookDirection;
-
-    private float     turretLagSpeed = 0.7f;
-    float degrees = 0;
-    float input = 0f;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
