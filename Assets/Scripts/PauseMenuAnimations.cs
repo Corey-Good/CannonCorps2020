@@ -12,13 +12,12 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenuAnimations : MonoBehaviour
 {
-
     public static bool GameIsPaused = false;
 
-    public GameObject  pauseMenu;
-    public GameObject  optionsMenu;
-    public GameObject  controlsMenu;
-    public GameObject  infoMenu;
+    public GameObject pauseMenu;
+    public GameObject optionsMenu;
+    public GameObject controlsMenu;
+    public GameObject infoMenu;
 
     public void LateUpdate()
     {
@@ -41,60 +40,61 @@ public class PauseMenuAnimations : MonoBehaviour
 
     public void Pause()
     {
-        Cursor.visible       = true  ;
-        GameIsPaused         = true  ;
+        Cursor.visible = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(true) ;
+        pauseMenu.SetActive(true);
         optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu    .SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     public void Resume()
     {
-        GameIsPaused         = false ;
+        GameIsPaused = false;
 
-        pauseMenu.   SetActive(false);
+        pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     public void Options()
     {
-        Cursor.visible       = true  ;
-        GameIsPaused         = true  ;
+        Cursor.visible = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
-        optionsMenu.SetActive(true) ;
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(true);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
+
     public void Controls()
     {
-        Cursor.visible       = true  ;
-        GameIsPaused         = true  ;
+        Cursor.visible = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
+        pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
-        controlsMenu.SetActive(true) ;
-        infoMenu.    SetActive(false);
+        controlsMenu.SetActive(true);
+        infoMenu.SetActive(false);
     }
 
     public void Info()
     {
-        Cursor.visible       = true  ;
-        GameIsPaused         = true  ;
+        Cursor.visible = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
+        pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(true) ;
+        infoMenu.SetActive(true);
     }
 
     public void Quit()
     {
-        GameIsPaused         = false;
+        GameIsPaused = false;
         StartCoroutine(DisconnectAndLoad());
     }
 
@@ -116,7 +116,6 @@ public class PauseMenuAnimations : MonoBehaviour
 
     private IEnumerator DisconnectAndLoad()
     {
- 
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)

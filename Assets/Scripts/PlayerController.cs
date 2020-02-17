@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Vector3    bodyPosition;
     private Quaternion headRotation;
     private Quaternion bodyRotation;
-    private float      lagAdjustSpeed = 100f;
+    private float      lagAdjustSpeed = 7.5f;
 
     public  Animator   fireAnimation;
     public  Camera     tankCamera;

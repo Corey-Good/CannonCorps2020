@@ -1,4 +1,10 @@
 ﻿/************************************************************************/
+/* Author:  */
+/* Date Created: */
+/* Last Modified Date: */
+/* Modified By: */
+/************************************************************************/
+/************************************************************************/
 /* Author:            Jaben Calas*/
 /* Date Created:       1/27/2020 */
 /* Last Modified Date: 1/27/2020 */
@@ -11,16 +17,17 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
 {
-    public static float cameraRotateSpeed = 300.0f;
-    public Transform cameraTransform;
-    public GameObject player;
     private float cameraTargetOffset = 1.2f;
-    public Camera tankCamera;
-    public Transform target;
+
+    public static float cameraRotateSpeed = 300.0f;
+    
+    public Camera     tankCamera;
+    public Transform  target;
+    public Transform  cameraTransform;
+    public GameObject player;
 
     public void Awake()
     {
-
         Cursor.lockState = CursorLockMode.Locked;
         if (!photonView.IsMine)
         {
@@ -48,10 +55,10 @@ public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
             return;
         }
         SetCameraTarget();
-        
+
         if (!PauseMenuAnimations.GameIsPaused)
         {
-            OrbitCamera();
+            //OrbitCamera();
         }
 
         LookAtCameraTarget();
@@ -70,10 +77,10 @@ public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
     }
 
     public void SetCameraTarget()
-    {      
-
+    {
         target.position = new Vector3(player.transform.position.x, (player.transform.position.y + cameraTargetOffset), player.transform.position.z);
     }
+
     public void ZoomCamera()
     {
         float zoomFOV = tankCamera.fieldOfView;
