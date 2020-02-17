@@ -11,7 +11,6 @@ public class TurretRotation : MonoBehaviour
 {
     public GameObject turretObject;
 
-    // Update is called once per frame
     private void Update()
     {
         if (!PauseMenuAnimations.GameIsPaused)

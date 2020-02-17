@@ -1,10 +1,4 @@
 ﻿/************************************************************************/
-/* Author:  */
-/* Date Created: */
-/* Last Modified Date: */
-/* Modified By: */
-/************************************************************************/
-/************************************************************************/
 /* Author:            Jaben Calas*/
 /* Date Created:       1/27/2020 */
 /* Last Modified Date: 1/27/2020 */
@@ -55,25 +49,12 @@ public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
             return;
         }
         SetCameraTarget();
-
-        if (!PauseMenuAnimations.GameIsPaused)
-        {
-            //OrbitCamera();
-        }
-
         LookAtCameraTarget();
     }
 
     public void LookAtCameraTarget()
     {
         cameraTransform.transform.LookAt(target);
-    }
-
-    public void OrbitCamera()
-    {
-        float orbitSpeed = Input.GetAxis("Mouse X") * cameraRotateSpeed * Time.deltaTime;
-
-        cameraTransform.transform.RotateAround(player.transform.position, Vector3.up, orbitSpeed);
     }
 
     public void SetCameraTarget()

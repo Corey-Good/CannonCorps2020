@@ -134,7 +134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2230221407868787455}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.14113991, y: 24.074503, z: 30.323112}
+  m_LocalPosition: {x: -0.14113991, y: 26, z: 30.3}
   m_LocalScale: {x: 2.6838882, y: 10.992721, z: 2.6838877}
   m_Children: []
   m_Father: {fileID: 8309353711642522945}
@@ -384,7 +384,7 @@ Transform:
   m_GameObject: {fileID: 7913593773546420872}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.48, y: 0.252, z: -12.02}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_Children:
   - {fileID: 6029897513817280056}
   - {fileID: 5987785855483104269}
@@ -453,10 +453,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d955963883d164899402d8f227adc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 2230221407868787450}
-  player: {fileID: 7913593773546420872}
   tankCamera: {fileID: 2230221407868787452}
   target: {fileID: 2230221407669820628}
+  cameraTransform: {fileID: 2230221407868787450}
+  player: {fileID: 7913593773546420872}
 --- !u!114 &2230221406688881174
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,7 +488,7 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 2
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 2230221406688881174}

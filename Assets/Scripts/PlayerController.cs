@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Vector3    bodyPosition;
     private Quaternion headRotation;
     private Quaternion bodyRotation;
-    private float      lagAdjustSpeed = 7.5f;
+    private float      lagAdjustSpeed = 20f;
 
     public  Animator   fireAnimation;
     public  Camera     tankCamera;
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
             else 
             { 
-                tankBody.transform.position = Vector3.Lerp(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
+                Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
             }
         #endregion
 
@@ -167,28 +167,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                tankBody.transform.rotation = Quaternion.Lerp(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
-               // Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, 10f);
+                Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
             }
         #endregion
 
         #region AdjustHeadPosition
-            if (headPositionLag.magnitude > 5.0f)
-            {
-                tankHead.transform.position = headPosition;
-            }
-            else if(headPositionLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else
-            {
-                tankHead.transform.position = Vector3.Lerp(tankHead.transform.position, headPosition, lagAdjustSpeed * Time.deltaTime);
-            }
+        if (headPositionLag.magnitude > 5.0f)
+        {
+            tankHead.transform.position = headPosition;
+            Debug.Log("The Head is being teleported!!");
+        }
+        else if (headPositionLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Vector3.MoveTowards(tankHead.transform.position, headPosition, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
 
         #region AdjustHeadRotation
-            if (headRotationLag.magnitude > 5.0f)
+        if (headRotationLag.magnitude > 5.0f)
             {
                 tankHead.transform.rotation = headRotation;
             }
@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                tankHead.transform.rotation = Quaternion.Lerp(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
+                Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
             }
         #endregion
     }
