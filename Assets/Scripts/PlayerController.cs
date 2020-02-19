@@ -17,12 +17,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion headRotation;
     private Quaternion bodyRotation;
     private float      lagAdjustSpeed = 20f;
+    private float      timeElapsed = 0f;
+    private bool       bulletActive = false;
 
     public  Animator   fireAnimation;
     public  Camera     tankCamera;
     public  GameObject tankBody;
     public  GameObject tankHead;
-    
+
     #endregion
 
     #region Movement Keys
@@ -33,10 +35,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Movement Speeds
-    private float movementForce = 10.0f;
-    private float movementMultiplier = 1.0f;
-    private float rotateMultiplier = 8.0f;
-    private float rotateSpeed = 15.0f;
+    private float movementForce;
+    private float movementMultiplier;
+    private float rotateMultiplier;
+    private float rotateSpeed;
     #endregion
 
     #region States
@@ -48,6 +50,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     states playerState;
     #endregion    
 
+    private Tank tank;
+
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +61,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         leftMovement     = KeyCode.A;
         rightMovement    = KeyCode.D;
         playerState      = states.Stationary;
+        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+
+        movementForce = tank.speedMovement;
+        movementMultiplier = 1f;
+        rotateMultiplier = 8f;
+        rotateSpeed = tank.speedRotation;
     }
 
     // Update is called once per frame
@@ -83,6 +93,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             fireAnimation.SetTrigger("LaunchCatapult");
         }
 
+        FireBullet();
+
 
     }
 
@@ -100,19 +112,39 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             playerState = states.Moving;
         }
 
-        if(playerState == states.Moving)
+        if (Input.GetKey(rightMovement))
         {
-            if (Input.GetKey(rightMovement))
+            transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+        }
+        else if (Input.GetKey(leftMovement))
+        {
+            transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+        }
+
+    }
+
+    public void FireBullet()
+    {   
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            bulletActive = true;
+        }
+
+        if (bulletActive)
+        {
+            // Increase time and update the reloadBar progress
+            timeElapsed += Time.deltaTime;
+            tank.reloadProgress = timeElapsed / tank.reloadTime;
+
+            // When a bullet is reloaded, reset timer
+            if (timeElapsed >= tank.reloadTime)
             {
-                transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
-            }
-            else if (Input.GetKey(leftMovement))
-            {
-                transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+                timeElapsed = 0f;
+                bulletActive = false;
             }
         }
     }
-
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
