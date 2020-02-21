@@ -59,7 +59,9 @@ public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
 
     public void SetCameraTarget()
     {
-        target.position = new Vector3(player.transform.position.x, (player.transform.position.y + cameraTargetOffset), player.transform.position.z);
+        target.position = new Vector3(player.transform.position.x, 
+									 (player.transform.position.y + cameraTargetOffset), 
+									  player.transform.position.z);
     }
 
     public void ZoomCamera()

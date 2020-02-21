@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class GamemodeManager : MonoBehaviour
 {
     private Tank tank;
-    private Player player;
 
     public GameObject[] spawnlocations = new GameObject[5];
 
@@ -15,7 +14,6 @@ public class GamemodeManager : MonoBehaviour
     void Awake()
     {
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
 
     void Start()
@@ -30,21 +28,15 @@ public class GamemodeManager : MonoBehaviour
         if (tank.healthCurrent < 0)
         {
             Debug.Log(" ");
+            // If SM or TB respawn
+
+            // if FFA then end the game
         }
 
         if (Input.GetKeyDown(KeyCode.H))
         {
             tank.damageTaken(10f);
         }
-
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            player.ScoreCurrent += 10;
-        }
     }
 
-    private void OnDisable()
-    {
-        
-    }
 }

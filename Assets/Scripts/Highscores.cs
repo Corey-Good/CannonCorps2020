@@ -21,21 +21,7 @@ public class Highscores : MonoBehaviour
             new List<GameObject>(),
         };
     private Player playerInstance;
-    
 
-
-    private void FirstTimeLoad(string tableKey)
-    {
-
-        if (PlayerPrefs.HasKey(tableKey))
-        {
-            loadedHighscoresJson = Load(tableKey);
-            highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
-            PopulateScoreListings(highscoreEntryList, tableKey);
-        }
-
-
-    }
     private void Awake()
     {
         //PlayerPrefs.DeleteKey("FFA");
@@ -44,10 +30,20 @@ public class Highscores : MonoBehaviour
         FirstTimeLoad("FFA");
         FirstTimeLoad("SM");
         FirstTimeLoad("TB");
-        //UpdatePermanentTable(GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>());
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
     }
+
+    private void FirstTimeLoad(string tableKey)
+    {
+        if (PlayerPrefs.HasKey(tableKey))
+        {
+            loadedHighscoresJson = Load(tableKey);
+            highscoreEntryList = loadedHighscoresJson.highscoreEntryList;
+            PopulateScoreListings(highscoreEntryList, tableKey);
+        }
+    }
+
     private void OnEnable()
     {
         if(playerInstance.inGame)
@@ -55,9 +51,9 @@ public class Highscores : MonoBehaviour
             UpdatePermanentTable(playerInstance);
             playerInstance.inGame = false;
             playerInstance.ResetPlayerStats();
-        }
-        
+        }        
     }
+
     private void UpdatePermanentTable(Player player) // do we want to have multiple copies of the same name? yes
     {
         if (!PlayerPrefs.HasKey(player.gameState.ToString()))
@@ -133,7 +129,6 @@ public class Highscores : MonoBehaviour
             }
             allListings[gameMode].Clear();
         }
-        // Note this list will delete all listings off of all the tables------------------------
 
         foreach (HighscoreEntry entry in highscoreEntries)
         {
@@ -149,10 +144,8 @@ public class Highscores : MonoBehaviour
             Text[] tempText = tempListing.GetComponentsInChildren<Text>();
             tempText[0].text = count.ToString() + ".  " + name;
             tempText[1].text = score.ToString();
-            count++;
-            
+            count++;            
         }
-
     }
 
     // class used to save the game
@@ -168,8 +161,6 @@ public class Highscores : MonoBehaviour
         public int score;
         public string name;
     }
-
-    // commented out until testing is complete
 
     private void Sort(List<HighscoreEntry> highscoreEntryList)
     {

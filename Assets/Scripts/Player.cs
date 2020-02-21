@@ -12,8 +12,6 @@ using Photon.Pun;
 
 public class Player : MonoBehaviour
 {
-    //public delegate void PlayerReturnsToMenu(Player player);
-    //public static event PlayerReturnsToMenu OnPlayerReturnsToMenu;
     public string PlayerID { get; set; }
     public string PlayerName { get; set; }
     public int KillsCurrent { get; set; }
@@ -25,27 +23,17 @@ public class Player : MonoBehaviour
     public int DeathsAlltime { get; set; }
     public int DeathsInARow { get; set; }
     public bool inGame = false;
+    public PhotonView photonView;
 
     private static Player playerInstance;
     public enum GameState
     {
         FFA, 
         SM, 
-        TB
+        TB,
+        Lobby
     }
     public GameState gameState;
-
-    private void OnDisable()
-    {
-        RoomManager.OnEnterGame -= UpdateHighscoreTable;
-        
-    }
-
-    private void OnEnable()
-    {
-        RoomManager.OnEnterGame += UpdateHighscoreTable;
-       
-    }
 
     private void UpdateHighscoreTable(string returningGameMode)
     {
@@ -65,8 +53,7 @@ public class Player : MonoBehaviour
     }
 
     private void Awake()
-    {
-        
+    {        
         this.PlayerID = CreatePlayerID(); // assign random, new player ID
         // Could add some kind of logic to see if player wants to reuse player ID
         // "Enter ID" and if ID matches then use that player
