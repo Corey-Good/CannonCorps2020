@@ -9,18 +9,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TutorialUI : MonoBehaviour
 {
-    public  List<GameObject> tutorialText = new List<GameObject>();
-    public  KeyCode          nextKey;
-    public  KeyCode          prevKey;
-    private int              stepCounter  = 0;
-    private float            promptDelay  = 2.0f;
+    public List<GameObject> tutorialText = new List<GameObject>();
+    public KeyCode nextKey;
+    public KeyCode prevKey;
+    private int stepCounter = 0;
+    private float promptDelay = 2.0f;
+    public TextMeshProUGUI movementKeys;
 
     void Start()
     {
         ShowAllSteps();
+
+        movementKeys.text = GetKeys();
     }
     void Update()
     {
@@ -112,5 +116,15 @@ public class TutorialUI : MonoBehaviour
     {
         tutorialText[8].SetActive(true); // CONGRATULATIONS!
         tutorialText[9].SetActive(true); // You have successfully completed the tutorial.
+    }
+
+    string GetKeys()
+    {
+        string keybindings;
+
+        keybindings = string.Format("Use the {0}, {1}, {2}, and {3} keys to control your vehicle.", 
+            KeyBindings.forwardKey, KeyBindings.leftKey, KeyBindings.backwardKey, KeyBindings.rightKey);
+
+        return keybindings;
     }
 }
