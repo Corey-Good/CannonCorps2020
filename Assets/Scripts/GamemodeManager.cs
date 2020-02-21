@@ -14,7 +14,6 @@ public class GamemodeManager : MonoBehaviour
     void Awake()
     {
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-
     }
 
     void Start()
@@ -29,6 +28,9 @@ public class GamemodeManager : MonoBehaviour
         if (tank.healthCurrent < 0)
         {
             Debug.Log(" ");
+            // If SM or TB respawn
+
+            // if FFA then end the game
         }
 
         if (Input.GetKeyDown(KeyCode.H))
@@ -37,8 +39,4 @@ public class GamemodeManager : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        
-    }
 }
