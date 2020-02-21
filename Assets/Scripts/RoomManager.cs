@@ -126,12 +126,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void LoadFreeForAll()
-    {
-        PhotonNetwork.LoadLevel(1);
-        roomCountFFA++;
-    }
-
     private void LoadGame()
     {
         if (playerInstance.gameState == Player.GameState.SM)
