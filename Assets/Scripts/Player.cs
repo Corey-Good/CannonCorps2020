@@ -12,8 +12,6 @@ using Photon.Pun;
 
 public class Player : MonoBehaviour
 {
-    //public delegate void PlayerReturnsToMenu(Player player);
-    //public static event PlayerReturnsToMenu OnPlayerReturnsToMenu;
     public string PlayerID { get; set; }
     public string PlayerName { get; set; }
     public int KillsCurrent { get; set; }
@@ -36,18 +34,6 @@ public class Player : MonoBehaviour
         Lobby
     }
     public GameState gameState;
-
-    private void OnDisable()
-    {
-        RoomManager.OnEnterGame -= UpdateHighscoreTable;
-        
-    }
-
-    private void OnEnable()
-    {
-        RoomManager.OnEnterGame += UpdateHighscoreTable;
-       
-    }
 
     private void UpdateHighscoreTable(string returningGameMode)
     {

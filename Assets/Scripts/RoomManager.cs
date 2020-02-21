@@ -13,10 +13,6 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-    public delegate void EnterGame(string gameMode);
-
-    public static event EnterGame OnEnterGame;
-
     public Text playerCount;
     public Text MinPlayerNote;
     public GameObject LobbyView;

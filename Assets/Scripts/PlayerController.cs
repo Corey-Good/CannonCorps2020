@@ -39,16 +39,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float movementMultiplier;
     private float rotateMultiplier;
     private float rotateSpeed;
-    #endregion
-
-    #region States
-    private enum states
-    {
-        Stationary, 
-        Moving
-    }
-    states playerState;
-    #endregion    
+    #endregion  
 
     private Tank tank;
 
@@ -60,7 +51,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         backwardMovement = KeyCode.S;
         leftMovement     = KeyCode.A;
         rightMovement    = KeyCode.D;
-        playerState      = states.Stationary;
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
 
         movementForce = tank.speedMovement;
@@ -80,22 +70,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
-        {
+        { 
             MovePlayer();            
         }
-        else
-        {
-            playerState = states.Stationary;
-        }  
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
         {
-            fireAnimation.SetTrigger("LaunchCatapult");
+            bulletActive = true;            
+            if (fireAnimation != null)
+            {
+                fireAnimation.SetTrigger("LaunchCatapult"); 
+            }            
         }
-
-        FireBullet();
-
-
+        ReloadBullet();
     }
 
     private void MovePlayer()
@@ -104,12 +91,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (Input.GetKey(forwardMovement))
         {
             transform.position += transform.forward * Time.deltaTime * movementForce * movementMultiplier;
-            playerState = states.Moving;
         }
         else if (Input.GetKey(backwardMovement))
         {
             transform.position += -transform.forward * Time.deltaTime * movementForce * movementMultiplier;
-            playerState = states.Moving;
         }
 
         if (Input.GetKey(rightMovement))
@@ -123,14 +108,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     }
 
-    public void FireBullet()
-    {   
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            bulletActive = true;
-        }
-
+    public void ReloadBullet()
+    { 
         if (bulletActive)
         {
             // Increase time and update the reloadBar progress
@@ -145,6 +124,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
