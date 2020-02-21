@@ -99,7 +99,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void LoadFreeForAll()
     {
-        PhotonNetwork.LoadLevel(1);
+        PhotonNetwork.LoadLevel(3);
     }
 
     public void OpenLobbyView()
