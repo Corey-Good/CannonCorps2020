@@ -4,8 +4,6 @@
 /* Last Modified Date: 1/27/2020  */
 /* Modified By:        C. Good    */
 /************************************************************************/
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
@@ -17,12 +15,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion headRotation;
     private Quaternion bodyRotation;
     private float      lagAdjustSpeed = 20f;
+    private float      timeElapsed = 0f;
+    private bool       bulletActive = false;
 
     public  Animator   fireAnimation;
     public  Camera     tankCamera;
     public  GameObject tankBody;
     public  GameObject tankHead;
-    
+
     #endregion
 
     #region Movement Keys
@@ -33,20 +33,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Movement Speeds
-    private float movementForce = 10.0f;
-    private float movementMultiplier = 1.0f;
-    private float rotateMultiplier = 8.0f;
-    private float rotateSpeed = 15.0f;
-    #endregion
+    private float movementForce;
+    private float movementMultiplier;
+    private float rotateMultiplier;
+    private float rotateSpeed;
+    #endregion  
 
-    #region States
-    private enum states
-    {
-        Stationary, 
-        Moving
-    }
-    states playerState;
-    #endregion    
+    private Tank tank;
 
 
     // Start is called before the first frame update
@@ -56,7 +49,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         backwardMovement = KeyCode.S;
         leftMovement     = KeyCode.A;
         rightMovement    = KeyCode.D;
-        playerState      = states.Stationary;
+        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+
+        movementForce = tank.speedMovement;
+        movementMultiplier = 1f;
+        rotateMultiplier = 8f;
+        rotateSpeed = tank.speedRotation;
     }
 
     // Update is called once per frame
@@ -70,20 +68,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
-        {
+        { 
             MovePlayer();            
         }
-        else
-        {
-            playerState = states.Stationary;
-        }  
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
         {
-            fireAnimation.SetTrigger("LaunchCatapult");
+            bulletActive = true;            
+            if (fireAnimation != null)
+            {
+                fireAnimation.SetTrigger("LaunchCatapult"); 
+            }            
         }
-
-
+        ReloadBullet();
     }
 
     private void MovePlayer()
@@ -92,23 +89,36 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (Input.GetKey(forwardMovement))
         {
             transform.position += transform.forward * Time.deltaTime * movementForce * movementMultiplier;
-            playerState = states.Moving;
         }
         else if (Input.GetKey(backwardMovement))
         {
             transform.position += -transform.forward * Time.deltaTime * movementForce * movementMultiplier;
-            playerState = states.Moving;
         }
 
-        if(playerState == states.Moving)
+        if (Input.GetKey(rightMovement))
         {
-            if (Input.GetKey(rightMovement))
+            transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+        }
+        else if (Input.GetKey(leftMovement))
+        {
+            transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+        }
+
+    }
+
+    public void ReloadBullet()
+    { 
+        if (bulletActive)
+        {
+            // Increase time and update the reloadBar progress
+            timeElapsed += Time.deltaTime;
+            tank.reloadProgress = timeElapsed / tank.reloadTime;
+
+            // When a bullet is reloaded, reset timer
+            if (timeElapsed >= tank.reloadTime)
             {
-                transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
-            }
-            else if (Input.GetKey(leftMovement))
-            {
-                transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+                timeElapsed = 0f;
+                bulletActive = false;
             }
         }
     }
