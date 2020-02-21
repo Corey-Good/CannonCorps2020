@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/************************************************************************/
+/* Author:             Corey Good                                       */
+/* Date Created:       02/12/20                                         */
+/* Last Modified Date: 02/13/20                                         */
+/* Modified By:        Jaben Calas                                      */
+/************************************************************************/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +13,6 @@ public class CustomizeCharacter : MonoBehaviour
 {
     private Tank tankInstance;
     private int model = 0;
-    // Start is called before the first frame update
 
     public List<GameObject> tankModels = new List<GameObject>();
     void Start()
@@ -18,7 +24,6 @@ public class CustomizeCharacter : MonoBehaviour
         tankModels[3].SetActive(false);
     }
 
-    // Update is called once per frame
     public void OnClickLeft() 
     {
         if(model - 1 > -1)

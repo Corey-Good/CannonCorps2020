@@ -10,14 +10,6 @@ using UnityEngine;
 public class MainMenuAnimations : MonoBehaviour
 {
     public GameObject mainMenu;
-
-    public void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    CloseMenu();
-        //}
-    }
     
     public void OpenMenu()
     {
