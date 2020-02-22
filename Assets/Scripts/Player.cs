@@ -22,10 +22,12 @@ public class Player : MonoBehaviour
     public int DeathsCurrent { get; set; }
     public int DeathsAlltime { get; set; }
     public int DeathsInARow { get; set; }
+    public int teamCode { get; set; }
+
     public bool inGame = false;
-    public PhotonView photonView;
 
     private static Player playerInstance;
+
     public enum GameState
     {
         FFA, 
@@ -34,23 +36,6 @@ public class Player : MonoBehaviour
         Lobby
     }
     public GameState gameState;
-
-    private void UpdateHighscoreTable(string returningGameMode)
-    {
-        inGame = true;
-        switch(returningGameMode)
-        {
-            case "FFA":
-                gameState = GameState.FFA;
-                break;
-            case "SM":
-                gameState = GameState.SM;
-                break;
-            case "TB":
-                gameState = GameState.TB;
-                break;
-        }
-    }
 
     private void Awake()
     {        
@@ -90,10 +75,5 @@ public class Player : MonoBehaviour
         DeathsCurrent  = 0;        
         DeathsInARow   = 0;
         KillsInARow    = 0;
-
-        Debug.Log("Stats have been reset");
     }
-
-
-
 }

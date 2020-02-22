@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI gameTimer;
     private int minute;
     private int second;
-    private float matchLength = 300f;
+    public static float matchTimer = 300f;
     #endregion
 
     void Awake()
@@ -103,13 +103,9 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     public void UpdateTimer()
     {
-        if (matchLength <= 0.0f)
-        {
-            Debug.Log("The match is over!!");
-        }
-        matchLength -= Time.deltaTime;
-        second = (int)(matchLength % 60.0f);
-        minute = (int)(matchLength / 60.0f);
+        matchTimer -= Time.deltaTime;
+        second = (int)(matchTimer % 60.0f);
+        minute = (int)(matchTimer / 60.0f);
         gameTimer.text = "";
         gameTimer.text = minute.ToString() + ":" + second.ToString("00");
     }

@@ -7,36 +7,131 @@ using UnityEngine.SceneManagement;
 public class GamemodeManager : MonoBehaviour
 {
     private Tank tank;
+    private Player player;
 
     public GameObject[] spawnlocations = new GameObject[5];
 
-    // Start is called before the first frame update
+
     void Awake()
     {
+        // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-    }
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
-    void Start()
-    {
+        // Load the UI scene on top of the curremt scene
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
-        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[0].transform.position, spawnlocations[0].transform.rotation);
+
+        // Spawn the player at a random location 
+        if(player.gameState == Player.GameState.TB)
+        {
+            SpawnPlayer(player.teamCode);
+        }
+        else 
+        {
+            SpawnPlayer();
+        }        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (tank.healthCurrent < 0)
+        // Call the update function for the respective game mode
+        switch(player.gameState)
         {
-            Debug.Log(" ");
-            // If SM or TB respawn
+            case Player.GameState.FFA:
+                FFA_Update();
+                break;
+            case Player.GameState.SM:
+                SM_Update();
+                break;
+            case Player.GameState.TB:
+                TB_Update();
+                break;
+        }
+    }
 
-            // if FFA then end the game
+    // Update for the Free for All game mode
+    void FFA_Update()
+    {
+        // Leave the game when the player dies
+        if (tank.healthCurrent < 0.1f)
+        {
+            StartCoroutine(DisconnectAndLoad());
+        }
+    }
+
+    // Update for the Sharks and Minnows game mode
+    void SM_Update()
+    {
+        // Respawn the player when they die
+        if (tank.healthCurrent < 0.1f)
+        {
+            SpawnPlayer();
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
+        // End the game when the timer has run out
+        if (UIManager.matchTimer <= 0.0f)
         {
-            tank.damageTaken(10f);
+            StartCoroutine(DisconnectAndLoad());
         }
+    }
+
+    // Update for the Team Battle game mode
+    void TB_Update()
+    {
+        // Respawn the player when they die
+        if (tank.healthCurrent < 0.1f)
+        {
+            SpawnPlayer(player.teamCode);
+        }
+
+        // End the game when the timer has run out
+        if (UIManager.matchTimer <= 0.0f)
+        {
+            StartCoroutine(DisconnectAndLoad());
+        }
+    }
+
+    // Leave the game and return to the main menu
+    private IEnumerator DisconnectAndLoad()
+    {
+        player.gameState = Player.GameState.Lobby;
+        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.UnloadSceneAsync(2);
+        PhotonNetwork.LoadLevel(0);
+    }
+
+    // Spawn the player at a random spawnpoint in the map
+    void SpawnPlayer()
+    {
+        tank.healthCurrent = tank.healthMax;
+        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
+        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+    }
+
+    // Overload: Spawn a player at a random spawnpoint in the map based on their team
+    void SpawnPlayer(int teamCode)
+    {
+        tank.healthCurrent = tank.healthMax;
+        int spawnPoint = 0;
+
+        if(teamCode == 0)
+        {
+            // Get a spawnpoint from the first half of the array
+            spawnPoint = Random.Range(0, (int)spawnlocations.Length / 2 - 1); 
+        }
+        else if (teamCode == 1)
+        {
+            // Get a spawnpoint from the second half of the array
+            spawnPoint = Random.Range((int)spawnlocations.Length / 2, spawnlocations.Length - 1);
+        }
+
+        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
     }
 
 }
