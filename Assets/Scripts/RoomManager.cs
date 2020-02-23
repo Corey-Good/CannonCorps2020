@@ -34,20 +34,30 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
+        ExitGames.Client.Photon.Hashtable teamScores = new ExitGames.Client.Photon.Hashtable();
         UpdatePlayerList();
 
         switch (playerInstance.gameState)
         {
             case Player.GameState.FFA:
                 LoadFreeForAll();
+                PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
                 break;
 
             case Player.GameState.SM:
-            case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount > PhotonNetwork.CurrentRoom.MaxPlayers)
+                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
                 {
                     LoadGame();
+                    roomCountSM++;
                 }
+                break;
+            case Player.GameState.TB:
+                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
+                {
+                    LoadGame();
+                    roomCountTB++;
+                }
+                PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
                 break;
         }
     }
@@ -60,6 +70,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         UpdatePlayerList();
+        if(playerInstance.gameState == Player.GameState.SM)
+            if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
+            {
+                LoadGame();
+                roomCountSM++;
+            }
+
+        if (playerInstance.gameState == Player.GameState.TB)
+            if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
+            {
+                LoadGame();
+                roomCountTB++;
+            }
     }
 
     public void FreeForAllButtonOnClick()
@@ -88,6 +111,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void LoadFreeForAll()
     {
         PhotonNetwork.LoadLevel(1);
+        Debug.Log("Loading the game");
     }
 
     public void OpenLobbyView()
@@ -130,21 +154,21 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (playerInstance.gameState == Player.GameState.SM)
         {
+            PhotonNetwork.LoadLevel(1);
             // Close the room, increase room counter for other rooms
 
             // Load the game
 
             //connectionStatus.text = "Loading Sharks and Minnows!";
-            roomCountSM++;
         }
         else if (playerInstance.gameState == Player.GameState.TB)
         {
+            PhotonNetwork.LoadLevel(1);
             // Close the room, increase room counter for other rooms
 
             // Load the game
 
             //connectionStatus.text = "Loading Team Battle!";
-            roomCountTB++;
         }
     }
 

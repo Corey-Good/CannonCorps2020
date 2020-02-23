@@ -11,6 +11,10 @@ public class GamemodeManager : MonoBehaviour
 
     public GameObject[] spawnlocations = new GameObject[5];
 
+    private ExitGames.Client.Photon.Hashtable teamScores = new ExitGames.Client.Photon.Hashtable();
+    private int RedScore = 0;
+    private int BlueScore = 0;
+
 
     void Awake()
     {
@@ -22,22 +26,25 @@ public class GamemodeManager : MonoBehaviour
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
 
         // Spawn the player at a random location 
-        if(player.gameState == Player.GameState.TB)
+        if (player.gameState == Player.GameState.TB)
         {
             SpawnPlayer(player.teamCode);
         }
-        else 
+        else
         {
             SpawnPlayer();
-        }        
+        }
 
+        teamScores.Add("RedScore", RedScore);
+        teamScores.Add("BlueScore", BlueScore);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
     }
 
     // Update is called once per frame
     void Update()
     {
         // Call the update function for the respective game mode
-        switch(player.gameState)
+        switch (player.gameState)
         {
             case Player.GameState.FFA:
                 FFA_Update();
@@ -49,6 +56,13 @@ public class GamemodeManager : MonoBehaviour
                 TB_Update();
                 break;
         }
+
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            UpdateTeamScores();
+        }
+
     }
 
     // Update for the Free for All game mode
@@ -71,9 +85,10 @@ public class GamemodeManager : MonoBehaviour
         }
 
         // End the game when the timer has run out
-        if (UIManager.matchTimer <= 0.0f)
+        if (UIManager.matchTimer >= 300.0)
         {
             StartCoroutine(DisconnectAndLoad());
+            UIManager.matchTimer = 0;
         }
     }
 
@@ -87,7 +102,7 @@ public class GamemodeManager : MonoBehaviour
         }
 
         // End the game when the timer has run out
-        if (UIManager.matchTimer <= 0.0f)
+        if (UIManager.matchTimer >= 300.0f)
         {
             StartCoroutine(DisconnectAndLoad());
         }
@@ -120,10 +135,10 @@ public class GamemodeManager : MonoBehaviour
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = 0;
 
-        if(teamCode == 0)
+        if (teamCode == 0)
         {
             // Get a spawnpoint from the first half of the array
-            spawnPoint = Random.Range(0, (int)spawnlocations.Length / 2 - 1); 
+            spawnPoint = Random.Range(0, (int)spawnlocations.Length / 2 - 1);
         }
         else if (teamCode == 1)
         {
@@ -134,4 +149,16 @@ public class GamemodeManager : MonoBehaviour
         PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
     }
 
+    void UpdateTeamScores()
+    {
+        ExitGames.Client.Photon.Hashtable newScores = new ExitGames.Client.Photon.Hashtable();
+        RedScore = (int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"];
+        BlueScore = (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"];
+        RedScore += 5;
+
+        newScores.Add("RedScore", RedScore);
+        newScores.Add("BlueScore", BlueScore);
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(newScores);
+    }
 }

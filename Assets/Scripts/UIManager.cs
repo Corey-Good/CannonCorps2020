@@ -27,9 +27,16 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     #region Game Timer
     public TextMeshProUGUI gameTimer;
-    private int minute;
-    private int second;
-    public static float matchTimer = 300f;
+    public static double matchTimer = 0;
+    private int    minute;
+    private int    second;
+    private double startTime;
+    private double matchLength = 300;
+    #endregion
+
+    #region Team Points
+    public Slider redTeamScore;
+    public Slider blueTeamScore;
     #endregion
 
     void Awake()
@@ -43,17 +50,24 @@ public class UIManager : MonoBehaviourPunCallbacks
         tank.reloadProgress = 1.0f;
         playerName.text = player.PlayerName;
         playerScoreText.text = player.ScoreCurrent.ToString();
+        matchTimer = 0;
 
-        // Turn on game timer when appropriate
+        // Turn on game timer for Sharks and Minnows
         if (player.gameState == Player.GameState.SM)
         {
-            gameTimer.gameObject.SetActive(true);
+            SetTimer();
+        }
+
+        // Turn on the team scores for Team Battle
+        if (player.gameState == Player.GameState.TB)
+        {
+            redTeamScore.gameObject.SetActive(true);
+            blueTeamScore.gameObject.SetActive(true);
         }
 
         // Update the table of players
         UpdateTable();
     }
-
 
     // Update is called once per frame
     void FixedUpdate()
@@ -62,16 +76,23 @@ public class UIManager : MonoBehaviourPunCallbacks
         healthBar.value = tank.healthCurrent / tank.healthMax;
         reloadBar.value = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
+
         if (player.gameState == Player.GameState.SM)
         {
             UpdateTimer();
+        }
+
+        if (player.gameState == Player.GameState.TB)
+        {
+            redTeamScore.value = (int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"];
+            blueTeamScore.value = (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"];
         }
 
         // Display the list of players 
         if (Input.GetKeyUp(KeyCode.P))
         {
             playerTable.SetActive(!playerTable.activeSelf);
-        }        
+        }
     }
 
     private void UpdateTable()
@@ -101,11 +122,35 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
     }
 
+    public void SetTimer()
+    {
+        bool timeSet = false;
+        gameTimer.gameObject.SetActive(true);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startTime = PhotonNetwork.Time;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartTime", startTime } });
+        }
+        else
+        {
+            try
+            {
+                startTime = (double)PhotonNetwork.CurrentRoom.CustomProperties["StartTime"];
+            }
+            catch
+            {
+                startTime = PhotonNetwork.Time;
+            }           
+        }
+    }
+
     public void UpdateTimer()
     {
-        matchTimer -= Time.deltaTime;
-        second = (int)(matchTimer % 60.0f);
-        minute = (int)(matchTimer / 60.0f);
+        double timer;
+        matchTimer = PhotonNetwork.Time - startTime;
+        timer = matchLength - matchTimer;
+        second = (int)(timer % 60.0f);
+        minute = (int)(timer / 60.0f);
         gameTimer.text = "";
         gameTimer.text = minute.ToString() + ":" + second.ToString("00");
     }
