@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 6113459420375525031}
   m_Layer: 0
   m_Name: futureTank
-  m_TagString: Untagged
+  m_TagString: PlayerGO
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

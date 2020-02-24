@@ -87,7 +87,7 @@ public class GamemodeManager : MonoBehaviour
         // Respawn the player when they die
         if (tank.healthCurrent < 0.1f)
         {
-            SpawnPlayer();
+            RespawnPlayer();
         }
 
         // End the game when the timer has run out
@@ -104,7 +104,7 @@ public class GamemodeManager : MonoBehaviour
         // Respawn the player when they die
         if (tank.healthCurrent < 0.1f)
         {
-            SpawnPlayer(player.teamCode);
+            RespawnPlayer();
         }
 
         // End the game when one of the team reaches 100 points
@@ -152,8 +152,14 @@ public class GamemodeManager : MonoBehaviour
             // Get a spawnpoint from the second half of the array
             spawnPoint = Random.Range((int)spawnlocations.Length / 2, spawnlocations.Length - 1);
         }
-
         PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+    }
+
+    void RespawnPlayer()
+    {
+        tank.healthCurrent = tank.healthMax;
+        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
+        GameObject.FindGameObjectWithTag("PlayerGO").transform.position = spawnlocations[spawnPoint].transform.position;
     }
 
     public void UpdateTeamScores(int teamCode, int pointsEarned)
