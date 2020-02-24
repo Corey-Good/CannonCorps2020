@@ -14,110 +14,75 @@ using TMPro;
 public class TutorialUI : MonoBehaviour
 {
     public List<GameObject> tutorialText = new List<GameObject>();
+
     public KeyCode nextKey;
     public KeyCode prevKey;
-    private int stepCounter = 0;
+    private int   stepCounter = 0;
+
     private float promptDelay = 2.0f;
+
     public TextMeshProUGUI movementKeys;
 
-    void Start()
-    {
-        ShowAllSteps();
+    public TextMeshProUGUI mainText;
+    public TextMeshProUGUI subText;
 
-        movementKeys.text = GetKeys();
+    public GameObject moveHere;
+    public GameObject lookHere;
+
+    [TextArea(2, 10)]
+    public string[] sentences;
+
+    void   Start()
+    {
+
     }
-    void Update()
+    void   Update()
     {
         if ((Input.GetKeyDown(nextKey)))
         {
             stepCounter++;
-            TurnOffText();
-            ShowAllSteps();
         }
-
         if ((Input.GetKeyDown(prevKey)))
         {
             stepCounter--;
-            TurnOffText();
-            ShowAllSteps();
         }
-        //Debug.Log(stepCounter);
+        ShowAllSteps();
     }
-    void ShowAllSteps()
+
+    #region TextUI
+    void   ShowAllSteps()
     {
         switch (stepCounter)
         {
             case 0:
-                Welcome();
+                mainText.text = sentences[0]; // Welcome to the training camp!
+                subText.text  = sentences[1]; // Here you will learn the basic skills required in battle.
                 Invoke("PressToContinue", promptDelay);
                 break;
 
             case 1:
-                ControlMouse();
+                mainText.text = sentences[2]; // Use your mouse to control the camera.
+                subText.text  = sentences[3]; // The turret follows the camera as you move it.
                 Invoke("PressToContinue", promptDelay);
                 break;
 
             case 2:
-                ControlKeys();
+                mainText.text = GetKeys(); // Use the W, A, S, and D keys to control your vehicle.
                 Invoke("PressToContinue", promptDelay);
                 break;
 
             case 3:
-                Move();
+                mainText.text = sentences[6]; // Move to the designated location.
                 Invoke("PressToContinue", promptDelay);
                 break;
 
             case 4:
-                Congrats();
+                mainText.text = sentences[8]; // CONGRATULATIONS!
+                subText.text  = sentences[9]; // You have successfully completed the tutorial.
                 Invoke("PressToContinue", promptDelay);
                 break;
         }
     }
-    void TurnOffText()
-    {
-        tutorialText[0].SetActive(false); // Press any key to continue.
-        tutorialText[1].SetActive(false); // Completed!
-        tutorialText[2].SetActive(false); // Welcome to the training camp!
-        tutorialText[3].SetActive(false); // Here you will learn the basic skills required in battle.
-        tutorialText[4].SetActive(false); // Use your mouse to control the camera.
-        tutorialText[5].SetActive(false); // The turret follows the camera as you move it.
-        tutorialText[6].SetActive(false); // Use the W, A, S, and D keys to control your vehicle.
-        tutorialText[7].SetActive(false); // Move to the designated location.
-        tutorialText[8].SetActive(false); // CONGRATULATIONS!
-        tutorialText[9].SetActive(false); // You have successfully completed the tutorial.
-    }
-    void PressToContinue()
-    {
-        tutorialText[0].SetActive(true); // Press any key to continue.
-    }
-    void Completed()
-    {
-        tutorialText[1].SetActive(true); // Completed!
-    }
-    void Welcome()
-    {
-        tutorialText[2].SetActive(true); // Welcome to the training camp!
-        tutorialText[3].SetActive(true); // Here you will learn the basic skills required in battle.
-    }
-    void ControlMouse()
-    {
-        tutorialText[4].SetActive(true); // Use your mouse to control the camera.
-        tutorialText[5].SetActive(true); // The turret follows the camera as you move it.
-    }
-    void ControlKeys()
-    {
-        tutorialText[6].SetActive(true); // Use the W, A, S, and D keys to control your vehicle.
-    }
-    void Move()
-    {
-        tutorialText[7].SetActive(true); // Move to the designated location.
-    }
-    void Congrats()
-    {
-        tutorialText[8].SetActive(true); // CONGRATULATIONS!
-        tutorialText[9].SetActive(true); // You have successfully completed the tutorial.
-    }
-
     string GetKeys()
     {
         string keybindings;
@@ -126,5 +91,17 @@ public class TutorialUI : MonoBehaviour
             KeyBindings.forwardKey, KeyBindings.leftKey, KeyBindings.backwardKey, KeyBindings.rightKey);
 
         return keybindings;
+    }
+    #endregion
+
+    void OnCollisionEnter(Collision collisionInfo)
+    {
+        if(collisionInfo.collider.tag == "TutorialUI")
+        {
+            if(collisionInfo.collider.gameObject == moveHere)
+            {
+
+            }
+        }
     }
 }
