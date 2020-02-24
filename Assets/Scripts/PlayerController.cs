@@ -22,9 +22,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public  Camera     tankCamera;
     public  GameObject tankBody;
     public  GameObject tankHead;
-
-
-
     #endregion
 
     #region Movement Keys
@@ -57,8 +54,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         movementMultiplier = 1f;
         rotateMultiplier = 8f;
         rotateSpeed = tank.speedRotation;
-
-
     }
 
     // Update is called once per frame
@@ -112,7 +107,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
-
     }
 
     public void ReloadBullet()

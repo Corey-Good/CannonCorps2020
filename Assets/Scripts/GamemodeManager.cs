@@ -6,15 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class GamemodeManager : MonoBehaviour
 {
+    #region Classes
     private Tank tank;
     private Player player;
+    #endregion
 
+    #region Spawn Locations
     public GameObject[] spawnlocations = new GameObject[5];
+    #endregion
 
+    #region Team Scores
     private ExitGames.Client.Photon.Hashtable teamScores = new ExitGames.Client.Photon.Hashtable();
     private int RedScore = 0;
     private int BlueScore = 0;
-
+    #endregion
 
     void Awake()
     {
@@ -28,7 +33,7 @@ public class GamemodeManager : MonoBehaviour
         // Spawn the player at a random location 
         if (player.gameState == Player.GameState.TB)
         {
-            SpawnPlayer(player.teamCode);
+            SpawnPlayer();
         }
         else
         {
@@ -128,18 +133,9 @@ public class GamemodeManager : MonoBehaviour
         PhotonNetwork.LoadLevel(0);
     }
 
-    // Spawn the player at a random spawnpoint in the map
-    void SpawnPlayer()
-    {
-        tank.healthCurrent = tank.healthMax;
-        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
-    }
-
-    // Overload: Spawn a player at a random spawnpoint in the map based on their team
-    void SpawnPlayer(int teamCode)
-    {
-        tank.healthCurrent = tank.healthMax;
+    // Grab a random spawn point code
+    int GetSpawnPoint(int teamCode)
+    {        
         int spawnPoint = 0;
 
         if (teamCode == 0)
@@ -152,14 +148,27 @@ public class GamemodeManager : MonoBehaviour
             // Get a spawnpoint from the second half of the array
             spawnPoint = Random.Range((int)spawnlocations.Length / 2, spawnlocations.Length - 1);
         }
+        else
+        {
+            spawnPoint = Random.Range(0, spawnlocations.Length - 1);
+        }
+
+        return spawnPoint;
+    }
+
+    // Spawn the player at a random spawnpoint in the map
+    void SpawnPlayer()
+    {
+        tank.healthCurrent = tank.healthMax;
+        int spawnPoint = GetSpawnPoint(player.teamCode);
         PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
     }
 
+    // Move the player to a random location in the map
     void RespawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
-        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        GameObject.FindGameObjectWithTag("PlayerGO").transform.position = spawnlocations[spawnPoint].transform.position;
+        GameObject.FindGameObjectWithTag("PlayerGO").transform.position = spawnlocations[GetSpawnPoint(player.teamCode)].transform.position;
     }
 
     public void UpdateTeamScores(int teamCode, int pointsEarned)

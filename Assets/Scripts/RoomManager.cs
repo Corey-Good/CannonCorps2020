@@ -56,6 +56,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 25 };
         PhotonNetwork.JoinOrCreateRoom("FreeForAll " + roomCountFFA, roomOps, null);
         playerInstance.gameState = Player.GameState.FFA;
+        playerInstance.teamCode = 3;
     }
 
     public void SharksMinnowsButtonOnClick()
@@ -63,6 +64,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 15 };
         PhotonNetwork.JoinOrCreateRoom("SharksAndMinnows " + roomCountSM, roomOps, null);
         playerInstance.gameState = Player.GameState.SM;
+        playerInstance.teamCode = 3;
         OpenLobbyView();
     }
 
