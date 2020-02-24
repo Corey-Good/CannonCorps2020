@@ -25,7 +25,7 @@ public class GenerateName : MonoBehaviour
         },
         nameTitle = new string[]
         {
-            "Sir ", "Knight ", "Honourable ", "Admiral ", "Master ", "Private ", "Specialist ", "Corporal ", "Sergeant ", "Major ", "Captain ", ""
+            "Sir ", "Knight ", "Honourable ", "Admiral ", "Professor ", "Private ", "Specialist ", "Corporal ", "Sergeant ", "Major ", "Captain ", ""
         },
         nameBody = new string[]
         {

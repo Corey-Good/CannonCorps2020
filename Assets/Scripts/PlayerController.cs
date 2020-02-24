@@ -161,33 +161,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
 
         #region AdjustBodyPosition
-            if (bodyPositionLag.magnitude > 5f)
-            {
-                tankBody.transform.position = bodyPosition;
-            }
-            else if(bodyPositionLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else 
-            { 
-                Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
-            }
+        if (bodyPositionLag.magnitude > 5f)
+        {
+            tankBody.transform.position = bodyPosition;
+        }
+        else if(bodyPositionLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else 
+        { 
+            Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
 
         #region AdjustBodyRotation
-            if (bodyRotationLag.magnitude > 5.0f)
-            {
-                tankBody.transform.rotation = bodyRotation;
-            }
-            else if(bodyRotationLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else
-            {
-                Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
-            }
+        if (bodyRotationLag.magnitude > 5.0f)
+        {
+            tankBody.transform.rotation = bodyRotation;
+        }
+        else if(bodyRotationLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
 
         #region AdjustHeadPosition
@@ -208,17 +208,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         #region AdjustHeadRotation
         if (headRotationLag.magnitude > 5.0f)
-            {
-                tankHead.transform.rotation = headRotation;
-            }
-            else if (headRotationLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else
-            {
-                Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
-            }
+        {
+            tankHead.transform.rotation = headRotation;
+        }
+        else if (headRotationLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
     }
 }
