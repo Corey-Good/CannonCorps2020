@@ -35,6 +35,7 @@ public class GamemodeManager : MonoBehaviour
             SpawnPlayer();
         }
 
+        // Initialize the scores for both teams
         teamScores.Add("RedScore", RedScore);
         teamScores.Add("BlueScore", BlueScore);
         PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
@@ -57,10 +58,15 @@ public class GamemodeManager : MonoBehaviour
                 break;
         }
 
-
+        // Test the Red Score Bar by hitting U
         if (Input.GetKeyDown(KeyCode.U))
         {
-            UpdateTeamScores();
+            UpdateTeamScores(0, 5);
+        }
+        // Test the Blue Score Bar by hitting I
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            UpdateTeamScores(1, 5);
         }
 
     }
@@ -101,8 +107,8 @@ public class GamemodeManager : MonoBehaviour
             SpawnPlayer(player.teamCode);
         }
 
-        // End the game when the timer has run out
-        if (UIManager.matchTimer >= 300.0f)
+        // End the game when one of the team reaches 100 points
+        if (RedScore >= 100 || BlueScore >= 100)
         {
             StartCoroutine(DisconnectAndLoad());
         }
@@ -149,16 +155,28 @@ public class GamemodeManager : MonoBehaviour
         PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
     }
 
-    void UpdateTeamScores()
+    public void UpdateTeamScores(int teamCode, int pointsEarned)
     {
-        ExitGames.Client.Photon.Hashtable newScores = new ExitGames.Client.Photon.Hashtable();
+        // Get the current score for both teams
         RedScore = (int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"];
         BlueScore = (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"];
-        RedScore += 5;
 
+        // Increment the score based on the team
+        if(teamCode == 0)
+        {
+            RedScore += pointsEarned;
+        }
+        else if(teamCode == 1)
+        {
+            BlueScore += pointsEarned;
+        }
+
+        // Create a new Hashtable and add the new scores
+        ExitGames.Client.Photon.Hashtable newScores = new ExitGames.Client.Photon.Hashtable();
         newScores.Add("RedScore", RedScore);
         newScores.Add("BlueScore", BlueScore);
 
+        // Set the new custom properties for the room
         PhotonNetwork.CurrentRoom.SetCustomProperties(newScores);
     }
 }

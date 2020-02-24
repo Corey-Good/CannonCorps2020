@@ -34,32 +34,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
-        ExitGames.Client.Photon.Hashtable teamScores = new ExitGames.Client.Photon.Hashtable();
+
         UpdatePlayerList();
+        TryToStartGame();
 
-        switch (playerInstance.gameState)
-        {
-            case Player.GameState.FFA:
-                LoadFreeForAll();
-                PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
-                break;
-
-            case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
-                {
-                    LoadGame();
-                    roomCountSM++;
-                }
-                break;
-            case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
-                {
-                    LoadGame();
-                    roomCountTB++;
-                }
-                PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
-                break;
-        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -74,20 +52,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
             {
                 LoadGame();
-                roomCountSM++;
             }
 
         if (playerInstance.gameState == Player.GameState.TB)
             if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
             {
                 LoadGame();
-                roomCountTB++;
             }
     }
 
     public void FreeForAllButtonOnClick()
     {
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 20 };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 25 };
         PhotonNetwork.JoinOrCreateRoom("FreeForAll " + roomCountFFA, roomOps, null);
         playerInstance.gameState = Player.GameState.FFA;
     }
@@ -116,7 +92,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void OpenLobbyView()
     {
-        //GameModeView.SetActive(false);
         LobbyView.SetActive(true);
         MinPlayerNote.text = "*Note, a game needs at least 8 players to begin.";
     }
@@ -154,21 +129,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if (playerInstance.gameState == Player.GameState.SM)
         {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            roomCountSM++;
             PhotonNetwork.LoadLevel(1);
-            // Close the room, increase room counter for other rooms
-
-            // Load the game
-
-            //connectionStatus.text = "Loading Sharks and Minnows!";
         }
         else if (playerInstance.gameState == Player.GameState.TB)
         {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+            roomCountTB++;
             PhotonNetwork.LoadLevel(1);
-            // Close the room, increase room counter for other rooms
-
-            // Load the game
-
-            //connectionStatus.text = "Loading Team Battle!";
         }
     }
 
@@ -190,6 +159,29 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 Destroy(listing);
             }
             playerListings.Clear();
+        }
+    }
+
+    private void TryToStartGame()
+    {
+        switch (playerInstance.gameState)
+        {
+            case Player.GameState.FFA:
+                LoadFreeForAll();
+                break;
+
+            case Player.GameState.SM:
+                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
+                {
+                    LoadGame();
+                }
+                break;
+            case Player.GameState.TB:
+                if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
+                {
+                    LoadGame();
+                }
+                break;
         }
     }
 }
