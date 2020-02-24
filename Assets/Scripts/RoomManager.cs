@@ -48,17 +48,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         UpdatePlayerList();
-        if(playerInstance.gameState == Player.GameState.SM)
-            if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
-            {
-                LoadGame();
-            }
-
-        if (playerInstance.gameState == Player.GameState.TB)
-            if (PhotonNetwork.CurrentRoom.PlayerCount > 1/*PhotonNetwork.CurrentRoom.MaxPlayers*/)
-            {
-                LoadGame();
-            }
+        TryToStartGame();
     }
 
     public void FreeForAllButtonOnClick()

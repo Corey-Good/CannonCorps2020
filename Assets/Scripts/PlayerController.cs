@@ -85,6 +85,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }            
         }
 
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            tank.healthCurrent -= 10;
+        }
         ReloadBullet();
     }
 

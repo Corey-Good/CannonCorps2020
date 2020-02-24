@@ -108,7 +108,8 @@ public class GamemodeManager : MonoBehaviour
         }
 
         // End the game when one of the team reaches 100 points
-        if (RedScore >= 100 || BlueScore >= 100)
+        if ((int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"] >= 100 || 
+            (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"] >= 100)
         {
             StartCoroutine(DisconnectAndLoad());
         }
