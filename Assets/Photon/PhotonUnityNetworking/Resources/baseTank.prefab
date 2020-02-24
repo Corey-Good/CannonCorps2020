@@ -454,8 +454,6 @@ MonoBehaviour:
   tankCamera: {fileID: 645646487575194092}
   tankBody: {fileID: 5749583255142438743}
   tankHead: {fileID: 8539385610585499611}
-  tankRB: {fileID: 645646487973343326}
-  movementForce: 176.08
 --- !u!114 &3772726824002750994
 MonoBehaviour:
   m_ObjectHideFlags: 0

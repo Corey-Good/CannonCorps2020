@@ -13,16 +13,24 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    #region Classes
+    private Player playerInstance;
+    #endregion
+
+    #region Lobby Info
     public Text playerCount;
     public Text MinPlayerNote;
     public GameObject LobbyView;
     public GameObject PlayerNames;
     public GameObject playerListingPrefab;
+    private List<GameObject> playerListings = new List<GameObject>();
+    #endregion
+
+    #region Room Counts
     private int roomCountFFA = 0;
     private int roomCountSM = 0;
     private int roomCountTB = 0;
-    private List<GameObject> playerListings = new List<GameObject>();
-    private Player playerInstance;
+    #endregion
 
     private void Awake()
     {
@@ -37,7 +45,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
         UpdatePlayerList();
         TryToStartGame();
-
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
