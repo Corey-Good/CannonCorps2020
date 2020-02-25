@@ -27,18 +27,19 @@ public class GamemodeManager : MonoBehaviour
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
+        player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
+
         // Load the UI scene on top of the curremt scene
         SceneManager.LoadScene(2, LoadSceneMode.Additive);
 
         // Spawn the player at a random location 
         if (player.gameState == Player.GameState.TB)
         {
-            SpawnPlayer();
+            player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
         }
-        else
-        {
-            SpawnPlayer();
-        }
+
+        SpawnPlayer();
+
 
         // Initialize the scores for both teams
         teamScores.Add("RedScore", RedScore);
