@@ -8627,6 +8627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inGame: 0
+  photonView: {fileID: 0}
   gameState: 1
 --- !u!114 &1417471202
 MonoBehaviour:
