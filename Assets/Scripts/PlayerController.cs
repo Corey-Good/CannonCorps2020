@@ -35,6 +35,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #region Movement Speeds
     private float movementForce;
     private float movementMultiplier;
+    private float originalMovementMultiplier;
+    private float originalRotateMultiplier;
     private float rotateMultiplier;
     private float rotateSpeed;
     #endregion  
@@ -211,6 +213,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
             }
         #endregion
+    }
+
+    public void SetSpeedBoostOn(float speedMultiplier, float newRotateMultiplier)
+    {
+        originalMovementMultiplier = movementMultiplier;
+        movementMultiplier = speedMultiplier;
+        originalRotateMultiplier = rotateMultiplier;
+        rotateMultiplier = newRotateMultiplier;
+    }
+
+    public void SetSpeedBoostOff()
+    {
+        movementMultiplier = originalMovementMultiplier;
+        rotateMultiplier = originalRotateMultiplier;
     }
 }
 
