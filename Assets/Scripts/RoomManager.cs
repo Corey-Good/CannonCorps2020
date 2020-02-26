@@ -128,7 +128,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if(playerInstance.gameState == Player.GameState.FFA)
         {
-            PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel(2);
         }
         if (playerInstance.gameState == Player.GameState.SM)
         {
@@ -150,14 +150,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
             roomCountSM++;
 
             // Load the scene
-            PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel(3);
         }
         else if (playerInstance.gameState == Player.GameState.TB)
         {
             AssignTeamCodes();
             PhotonNetwork.CurrentRoom.IsOpen = false;
             roomCountTB++;
-            PhotonNetwork.LoadLevel(1);
+            PhotonNetwork.LoadLevel(4);
         }
     }
 
@@ -191,13 +191,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= PhotonNetwork.CurrentRoom.MaxPlayers - 5)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     LoadGame();
                 }
                 break;
+
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= PhotonNetwork.CurrentRoom.MaxPlayers - 2)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
                     LoadGame();
                 }
@@ -221,6 +222,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
             {
                 player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "team", 1 } });
             }
+
+            count++;
         }
     }
 }
