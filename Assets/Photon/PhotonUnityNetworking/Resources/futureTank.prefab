@@ -295,6 +295,7 @@ MonoBehaviour:
   tankCamera: {fileID: 3443925785779075122}
   tankBody: {fileID: 7880837375835147117}
   tankHead: {fileID: 1785731828956023871}
+  teamSymbol: {fileID: 0}
 --- !u!114 &5601363998312697753
 MonoBehaviour:
   m_ObjectHideFlags: 0

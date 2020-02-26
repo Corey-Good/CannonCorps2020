@@ -21,6 +21,8 @@ public class TmManager : MonoBehaviour
     private int BlueScore = 0;
     #endregion
 
+    private GameObject tankObject;
+
     void Awake()
     {
         // Get access to the tank and player class
@@ -30,27 +32,23 @@ public class TmManager : MonoBehaviour
         // Load the UI scene on top of the curremt scene
         SceneManager.LoadScene(1, LoadSceneMode.Additive);
 
-        // Spawn the player at a random location 
-        player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
-        if (player.teamCode == 0)
-        {
-            // For now change the model to test setting up the team view
-            tank.tankModel = "baseTank";
-            tank.CreateTank("baseTank");
-        }
-        else if (player.teamCode == 1)
-        {
-            tank.tankModel = "cartoonTank";
-            tank.CreateTank("cartoonTank");
-        }
-
         // Initialize the scores for both teams
         teamScores.Add("RedScore", RedScore);
         teamScores.Add("BlueScore", BlueScore);
         PhotonNetwork.CurrentRoom.SetCustomProperties(teamScores);
-        
 
+        // Spawn the player at a random location 
+        player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
         SpawnPlayer();
+        if (player.teamCode == 0)
+        {
+            ChangeColor(Color.red);
+        }
+        else if (player.teamCode == 1)
+        {
+            ChangeColor(Color.blue);
+        }
+        
     }
 
     // Update is called once per frame
@@ -119,14 +117,14 @@ public class TmManager : MonoBehaviour
     {
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = GetSpawnPoint(player.teamCode);
-        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
     }
 
     // Move the player to a random location in the map
     void RespawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
-        GameObject.FindGameObjectWithTag("PlayerGO").transform.position = spawnlocations[GetSpawnPoint(player.teamCode)].transform.position;
+        tankObject.transform.position = spawnlocations[GetSpawnPoint(player.teamCode)].transform.position;
     }
 
     public void UpdateTeamScores(int teamCode, int pointsEarned)
@@ -152,5 +150,43 @@ public class TmManager : MonoBehaviour
 
         // Set the new custom properties for the room
         PhotonNetwork.CurrentRoom.SetCustomProperties(newScores);
+    }
+
+    void ChangeColor(Color tankColor)
+    {
+        if (tank.tankModel == "baseTank")
+        {
+            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[0].color = tankColor;
+            }
+        }
+        if (tank.tankModel == "futureTank")
+        {
+            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[1].color = tankColor;
+            }
+        }
+        if (tank.tankModel == "cartoonTank")
+        {
+            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer rend in rends)
+            {
+                if (rend.name != "Tread")
+                {
+                    Material[] materials = rend.materials;
+                    foreach (Material material in materials)
+                    {
+                        material.color = tankColor;
+                    }
+                }
+            }
+        }
     }
 }

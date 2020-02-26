@@ -10,19 +10,19 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-    private Vector3    headPosition;
-    private Vector3    bodyPosition;
+    private Vector3 headPosition;
+    private Vector3 bodyPosition;
     private Quaternion headRotation;
     private Quaternion bodyRotation;
-    private float      lagAdjustSpeed = 20f;
-    private float      timeElapsed = 0f;
-    private bool       bulletActive = false;
+    private float lagAdjustSpeed = 20f;
+    private float timeElapsed = 0f;
+    private bool bulletActive = false;
 
-    public  Animator   fireAnimation;
-    public  Camera     tankCamera;
-    public  GameObject tankBody;
-    public  GameObject tankHead;
-    public  GameObject teamSymbol;
+    public Animator fireAnimation;
+    public Camera tankCamera;
+    public GameObject tankBody;
+    public GameObject tankHead;
+    public GameObject teamSymbol;
     #endregion
 
     #region Movement Keys
@@ -46,10 +46,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        forwardMovement  = KeyCode.W;
+        forwardMovement = KeyCode.W;
         backwardMovement = KeyCode.S;
-        leftMovement     = KeyCode.A;
-        rightMovement    = KeyCode.D;
+        leftMovement = KeyCode.A;
+        rightMovement = KeyCode.D;
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         rotateMultiplier = 8f;
         rotateSpeed = tank.speedRotation;
 
-        if(player.gameState == Player.GameState.TB)
+        if (player.gameState == Player.GameState.TB)
         {
             teamSymbol.SetActive(true);
         }
@@ -67,28 +67,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        
-        if (!photonView.IsMine) 
+
+        if (!photonView.IsMine)
         {
             LagAdjust();
-            return; 
+            return;
         }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
-        { 
-            MovePlayer();            
-        }
-        
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
         {
-            bulletActive = true;            
-            if (fireAnimation != null)
-            {
-                fireAnimation.SetTrigger("LaunchCatapult"); 
-            }            
+            MovePlayer();
         }
 
-        if(Input.GetKeyDown(KeyCode.H))
+        if (Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
+        {
+            bulletActive = true;
+            if (fireAnimation != null)
+            {
+                fireAnimation.SetTrigger("LaunchCatapult");
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
         {
             tank.healthCurrent -= 10;
         }
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     public void ReloadBullet()
-    { 
+    {
         if (bulletActive)
         {
             // Increase time and update the reloadBar progress
@@ -167,12 +167,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankBody.transform.position = bodyPosition;
         }
-        else if(bodyPositionLag.magnitude < 0.11f)
+        else if (bodyPositionLag.magnitude < 0.11f)
         {
             // do nothing
         }
-        else 
-        { 
+        else
+        {
             Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
         }
         #endregion
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankBody.transform.rotation = bodyRotation;
         }
-        else if(bodyRotationLag.magnitude < 0.11f)
+        else if (bodyRotationLag.magnitude < 0.11f)
         {
             // do nothing
         }
