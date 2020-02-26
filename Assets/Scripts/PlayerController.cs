@@ -215,10 +215,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
     }
 
-    public void SetSpeedBoostOn(float speedMultiplier, float newRotateMultiplier)
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
     {
         originalMovementMultiplier = movementMultiplier;
-        movementMultiplier = speedMultiplier;
+        movementMultiplier = newMovementMultiplier;
         originalRotateMultiplier = rotateMultiplier;
         rotateMultiplier = newRotateMultiplier;
     }

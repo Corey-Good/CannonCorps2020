@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 /************************************************************************/
@@ -100,6 +101,7 @@ public class Tank : MonoBehaviour, ITakeDamage
 
     public void damageTaken(float damage)
     {
+        SendPlayerHurtMessages();
         if (healthCurrent >= 0)
         {
             healthCurrent -= damage;
@@ -113,5 +115,21 @@ public class Tank : MonoBehaviour, ITakeDamage
     public void OnDestroy()
     {
         //play animation and sound
+    }
+
+    private void SendPlayerHurtMessages()
+    {
+        // Send message to any listeners
+        if(EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPlayerEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnPlayerHurt((int)healthCurrent)            // 4
+                    );
+            }
+        }
+        
     }
 }

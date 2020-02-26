@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class SpeedPowerUp : PowerUp
+class SpeedPowerUp : PowerUp, IPlayerEvents
 {
     public float rotateMultiplier = 16f;
     public float speedMultiplier = 2.0f;
@@ -17,6 +17,23 @@ class SpeedPowerUp : PowerUp
     {
         playerBrain.SetSpeedBoostOff();
         base.PowerUpHasExpired();
+    }
+
+    void IPlayerEvents.OnPlayerHurt(int newHealth)
+    {
+        // You only want to react once collected
+        if (powerUpState != PowerUpState.IsCollected)
+        {
+            return;
+        }
+
+        // You expire when player hurt
+        PowerUpHasExpired();
+    }
+
+    void IPlayerEvents.OnPlayerReachedExit(GameObject exit)
+    {
+        
     }
 }
 
