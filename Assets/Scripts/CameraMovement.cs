@@ -1,19 +1,18 @@
 ﻿/************************************************************************/
-/* Author:            Jaben Calas*/
-/* Date Created:       1/27/2020 */
-/* Last Modified Date: 1/27/2020 */
-/* Modified By:        C. Good   */
+/* Author:             Jaben Calas                                      */
+/* Date Created:       1/27/2020                                        */
+/* Last Modified Date: 2/26/2020                                        */
+/* Modified By:        M. Agamalian                                     */
 /************************************************************************/
 
-//using Photon.Pun;
 using Photon.Pun;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
 {
-    private float cameraTargetOffset = 1.2f;
+    private       float cameraTargetOffset = 1.2f;
 
-    public static float cameraRotateSpeed = 300.0f;
+    public static float cameraRotateSpeed  = 300.0f;
     
     public Camera     tankCamera;
     public Transform  target;
