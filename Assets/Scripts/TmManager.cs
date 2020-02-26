@@ -91,7 +91,7 @@ public class TmManager : MonoBehaviour
         while (PhotonNetwork.InRoom)
             yield return null;
         Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(2);
+        SceneManager.UnloadSceneAsync(1);
         PhotonNetwork.LoadLevel(0);
     }
 

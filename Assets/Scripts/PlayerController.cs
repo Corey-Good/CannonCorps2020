@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public  Camera     tankCamera;
     public  GameObject tankBody;
     public  GameObject tankHead;
+    public  GameObject teamSymbol;
     #endregion
 
     #region Movement Keys
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion  
 
     private Tank tank;
+    private Player player;
 
 
     // Start is called before the first frame update
@@ -49,11 +51,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         leftMovement     = KeyCode.A;
         rightMovement    = KeyCode.D;
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
         movementForce = tank.speedMovement;
         movementMultiplier = 1f;
         rotateMultiplier = 8f;
         rotateSpeed = tank.speedRotation;
+
+        if(player.gameState == Player.GameState.TB)
+        {
+            teamSymbol.SetActive(true);
+        }
     }
 
     // Update is called once per frame
