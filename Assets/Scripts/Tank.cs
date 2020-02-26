@@ -101,12 +101,19 @@ public class Tank : MonoBehaviour, ITakeDamage
 
     public void damageTaken(float damage)
     {
-        SendPlayerHurtMessages();
-        if (healthCurrent >= 0)
+        if(damage > 0)
         {
-            healthCurrent -= damage;
+            SendPlayerHurtMessages();
         }
-        else
+
+        healthCurrent -= damage;
+
+        if (healthCurrent >= healthMax)
+        {
+            healthCurrent = healthMax;
+        }
+
+        if (healthCurrent <= 0.0f)
         {
             Destroy(this);
         }

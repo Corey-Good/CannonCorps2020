@@ -228,6 +228,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         movementMultiplier = originalMovementMultiplier;
         rotateMultiplier = originalRotateMultiplier;
     }
+
+    public void SetHealthBoost(float healthBoost)
+    {
+        healthBoost = -healthBoost;
+        tank.damageTaken(healthBoost);
+    }
 }
 
 
