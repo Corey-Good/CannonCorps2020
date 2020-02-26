@@ -10,6 +10,7 @@ class SpeedPowerUp : PowerUp, IPlayerEvents
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
+        base.StartListening(this.gameObject);
         playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier);
     }
 

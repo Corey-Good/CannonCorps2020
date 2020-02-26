@@ -135,4 +135,9 @@ public class PowerUp : MonoBehaviour
         Destroy(gameObject, 10f);
     }
 
+    protected void StartListening(GameObject gameObjectListen)
+    {
+        EventSystemListeners.main.AddListener(gameObjectListen);
+    }
+
 }
