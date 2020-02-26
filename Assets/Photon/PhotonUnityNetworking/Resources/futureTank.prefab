@@ -210,6 +210,7 @@ GameObject:
   - component: {fileID: 5601363998312697753}
   - component: {fileID: 20485667654297509}
   - component: {fileID: 6113459420375525031}
+  - component: {fileID: 7645503101804211105}
   m_Layer: 0
   m_Name: futureTank
   m_TagString: PlayerGO
@@ -295,7 +296,6 @@ MonoBehaviour:
   tankCamera: {fileID: 3443925785779075122}
   tankBody: {fileID: 7880837375835147117}
   tankHead: {fileID: 1785731828956023871}
-  teamSymbol: {fileID: 0}
 --- !u!114 &5601363998312697753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -348,6 +348,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turretObject: {fileID: 1785731828956023871}
+--- !u!114 &7645503101804211105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6695345589345639273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa4e11fa85cd094991aa31e2563b1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7880837375835147117
 GameObject:
   m_ObjectHideFlags: 0

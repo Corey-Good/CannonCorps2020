@@ -112,7 +112,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3242644080029266048}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &5182402257086063641
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,6 +289,7 @@ GameObject:
   - component: {fileID: 3772726824002750994}
   - component: {fileID: 6240190702589857518}
   - component: {fileID: 2108724439655265378}
+  - component: {fileID: 3752046618714944317}
   m_Layer: 0
   m_Name: baseTank
   m_TagString: PlayerGO
@@ -339,8 +340,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.5478249, y: 1, z: 3.7745361}
-  m_Center: {x: 0.26676035, y: 0, z: 1.1928215}
+  m_Size: {x: 2.8812318, y: 0.9992194, z: 2.6338863}
+  m_Center: {x: -1.7861903, y: 1.2581608, z: 0.1974001}
 --- !u!114 &645646487973343323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,8 +374,6 @@ MonoBehaviour:
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}
   tankHead: {fileID: 9124562359191819413}
-  teamSymbol: {fileID: -927199367670048503, guid: c2e828c8c9a5d4b4fb0399b55b8bc86a,
-    type: 3}
 --- !u!114 &3772726824002750994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +426,18 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &3752046618714944317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8922793154969520094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa4e11fa85cd094991aa31e2563b1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &9124562359191819413
 GameObject:
   m_ObjectHideFlags: 0

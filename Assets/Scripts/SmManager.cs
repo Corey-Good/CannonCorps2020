@@ -16,6 +16,7 @@ public class SmManager : MonoBehaviour
     #endregion
 
     private GameObject tankObject;
+    private PhotonView tankPhotonView;
 
     void Awake()
     {
@@ -63,30 +64,33 @@ public class SmManager : MonoBehaviour
     // Spawn the player at a random spawnpoint in the map
     void SpawnPlayer()
     {
-        tank.healthCurrent = tank.healthMax;
+        if (tank.tankModel == "baseTank")
+        {
+            tank.healthCurrent = tank.healthMax * 0.2f;
+        }
+        else
+        {
+            tank.healthCurrent = tank.healthMax;
+        }
+
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 
     // Move the player to a random location in the map
     void RespawnPlayer()
     {
-        tank.healthCurrent = tank.healthMax * 0.1f;
-        ChangeColor(Color.red);
+        if (tank.tankModel == "baseTank")
+        {
+            tank.healthCurrent = tank.healthMax * 0.2f;       
+        }
+        else
+        {
+            tank.healthCurrent = tank.healthMax;
+        }        
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         tankObject.transform.position = spawnlocations[spawnPoint].transform.position;
     }
 
-    void ChangeColor(Color tankColor)
-    {
-        if (tank.tankModel == "baseTank")
-        {
-            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
-            foreach (Renderer rend in rends)
-            {
-                Material[] materials = rend.materials;
-                materials[0].color = tankColor;
-            }
-        }
-    }
 }

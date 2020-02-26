@@ -22,7 +22,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
-    public GameObject teamSymbol;
     #endregion
 
     #region Movement Keys
@@ -57,11 +56,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         movementMultiplier = 1f;
         rotateMultiplier = 8f;
         rotateSpeed = tank.speedRotation;
-
-        if (player.gameState == Player.GameState.TB)
-        {
-            teamSymbol.SetActive(true);
-        }
     }
 
     // Update is called once per frame
@@ -223,6 +217,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         #endregion
     }
+
 }
 
 

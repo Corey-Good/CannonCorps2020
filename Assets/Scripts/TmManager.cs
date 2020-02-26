@@ -22,6 +22,7 @@ public class TmManager : MonoBehaviour
     #endregion
 
     private GameObject tankObject;
+    private PhotonView tankPhotonView;
 
     void Awake()
     {
@@ -39,16 +40,7 @@ public class TmManager : MonoBehaviour
 
         // Spawn the player at a random location 
         player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
-        SpawnPlayer();
-        if (player.teamCode == 0)
-        {
-            ChangeColor(Color.red);
-        }
-        else if (player.teamCode == 1)
-        {
-            ChangeColor(Color.blue);
-        }
-        
+        SpawnPlayer();        
     }
 
     // Update is called once per frame
@@ -118,6 +110,7 @@ public class TmManager : MonoBehaviour
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = GetSpawnPoint(player.teamCode);
         tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 
     // Move the player to a random location in the map
@@ -150,43 +143,5 @@ public class TmManager : MonoBehaviour
 
         // Set the new custom properties for the room
         PhotonNetwork.CurrentRoom.SetCustomProperties(newScores);
-    }
-
-    void ChangeColor(Color tankColor)
-    {
-        if (tank.tankModel == "baseTank")
-        {
-            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
-            foreach (Renderer rend in rends)
-            {
-                Material[] materials = rend.materials;
-                materials[0].color = tankColor;
-            }
-        }
-        if (tank.tankModel == "futureTank")
-        {
-            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
-            foreach (Renderer rend in rends)
-            {
-                Material[] materials = rend.materials;
-                materials[1].color = tankColor;
-            }
-        }
-        if (tank.tankModel == "cartoonTank")
-        {
-            Renderer[] rends = tankObject.GetComponentsInChildren<Renderer>();
-
-            foreach (Renderer rend in rends)
-            {
-                if (rend.name != "Tread")
-                {
-                    Material[] materials = rend.materials;
-                    foreach (Material material in materials)
-                    {
-                        material.color = tankColor;
-                    }
-                }
-            }
-        }
     }
 }
