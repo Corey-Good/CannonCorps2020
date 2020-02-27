@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 3772726824002750994}
   - component: {fileID: 6240190702589857518}
   - component: {fileID: 2108724439655265378}
-  - component: {fileID: 3752046618714944317}
+  - component: {fileID: 4014001327471633796}
   m_Layer: 0
   m_Name: baseTank
   m_TagString: PlayerGO
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &3752046618714944317
+--- !u!114 &4014001327471633796
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

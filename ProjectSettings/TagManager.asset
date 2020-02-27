@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - PlayerClass
   - PlayerGO
+  - TankModel
   layers:
   - Default
   - TransparentFX

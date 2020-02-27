@@ -91,6 +91,7 @@ public class SmManager : MonoBehaviour
         }        
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         tankObject.transform.position = spawnlocations[spawnPoint].transform.position;
+        tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered);
     }
 
 }

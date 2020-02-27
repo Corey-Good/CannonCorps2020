@@ -5,53 +5,38 @@ using Photon.Pun;
 
 public class ColorChanger : MonoBehaviourPun
 {
-
-
-    private void Start()
-    {
-
-    }
-    public static void ChangeColor(int code)
-    {
-
-    }
-
-    public void ChangeColor()
-    {
-        tank.RPC("ChangeColor", RpcTarget.All);
-    }
     [PunRPC]
-    void ChangeColor_RPC(int code)
+    void ChangeColor_RPC(int teamCode, string tankName)
     {
         Color tankColor;
-        if (code == 0)
-        {
-            tankColor = Color.red;
+        if (teamCode == 0)
+        { 
+             tankColor = Color.red;
         }
         else
         {
             tankColor = Color.blue;
         }
 
-        if (gameObject.name == "baseTank")
+        if (tankName == "baseTank")
         {
-            Renderer[] rends = GameObject.FindGameObjectWithTag("PlayerGO").GetComponentsInChildren<Renderer>();
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in rends)
             {
                 Material[] materials = rend.materials;
                 materials[0].color = tankColor;
             }
         }
-        if (gameObject.name == "futureTank")
+        if (tankName == "futureTank")
         {
-            Renderer[] rends = GameObject.FindGameObjectWithTag("PlayerGO").GetComponentsInChildren<Renderer>();
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in rends)
             {
                 Material[] materials = rend.materials;
                 materials[1].color = tankColor;
             }
         }
-        if (gameObject.name == "cartoonTank")
+        if (tankName == "cartoonTank")
         {
             Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
 
@@ -69,18 +54,57 @@ public class ColorChanger : MonoBehaviourPun
         }
     }
 
-
     [PunRPC]
     void ChangeColor_RPC()
     {
         Color tankColor = Color.red;
-        if (gameObject.name == "baseTank")
+
+        Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer rend in rends)
         {
-            Renderer[] rends = GameObject.FindGameObjectWithTag("PlayerGO").GetComponentsInChildren<Renderer>();
+            Material[] materials = rend.materials;
+            materials[0].color = tankColor;
+        }
+        
+    }
+
+    [PunRPC]
+    void ChangeColor_RPC(string tankName, float r, float g, float b)
+    {
+        Color tankColor = new Color(r, g, b, 1);
+
+        if (tankName == "baseTank")
+        {
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in rends)
             {
                 Material[] materials = rend.materials;
                 materials[0].color = tankColor;
+            }
+        }
+        if (tankName == "futureTank")
+        {
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[1].color = tankColor;
+            }
+        }
+        if (tankName == "cartoonTank")
+        {
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer rend in rends)
+            {
+                if (rend.name != "Tread")
+                {
+                    Material[] materials = rend.materials;
+                    foreach (Material material in materials)
+                    {
+                        material.color = tankColor;
+                    }
+                }
             }
         }
     }
@@ -88,11 +112,4 @@ public class ColorChanger : MonoBehaviourPun
 
 
 
-        //if (player.teamCode == 0)
-        //{
-        //    tankPhotonView.RPC("ChangeColor", RpcTarget.All, new object[] { 0 });
-        //}
-        //else if (player.teamCode == 1)
-        //{
-        //    tankPhotonView.RPC("ChangeColor", RpcTarget.All, new object[] { 1 });
-        //}
+

@@ -40,7 +40,17 @@ public class TmManager : MonoBehaviour
 
         // Spawn the player at a random location 
         player.teamCode = (int)PhotonNetwork.LocalPlayer.CustomProperties["team"];
-        SpawnPlayer();        
+        SpawnPlayer();
+        if (player.teamCode == 0)
+        {
+            tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, 0, tank.tankModel);
+
+        }
+        else if (player.teamCode == 1)
+        {
+            tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, 1, tank.tankModel);
+        }
+
     }
 
     // Update is called once per frame
@@ -62,7 +72,8 @@ public class TmManager : MonoBehaviour
         // Test the Red Score Bar by hitting U
         if (Input.GetKeyDown(KeyCode.U))
         {
-            UpdateTeamScores(0, 5);
+            //UpdateTeamScores(0, 5);
+            tankPhotonView.RPC("ChangeAllColors", RpcTarget.AllBuffered);
         }
         // Test the Blue Score Bar by hitting I
         if (Input.GetKeyDown(KeyCode.I))

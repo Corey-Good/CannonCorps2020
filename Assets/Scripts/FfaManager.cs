@@ -14,6 +14,7 @@ public class FfaManager : MonoBehaviour
     #region Spawn Locations
     public GameObject[] spawnlocations = new GameObject[5];
     #endregion
+    private PhotonView tankPhotonView;
 
     void Awake()
     {
@@ -26,6 +27,8 @@ public class FfaManager : MonoBehaviour
 
         //Spawn the player at a random location
         SpawnPlayer();
+
+        tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
     }
 
     // Update is called once per frame
@@ -43,7 +46,8 @@ public class FfaManager : MonoBehaviour
     {
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        GameObject tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 
     // Leave the game and return to the main menu
