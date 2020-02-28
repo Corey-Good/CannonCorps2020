@@ -10,19 +10,18 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-    private Vector3    headPosition;
-    private Vector3    bodyPosition;
+    private Vector3 headPosition;
+    private Vector3 bodyPosition;
     private Quaternion headRotation;
     private Quaternion bodyRotation;
-    private float      lagAdjustSpeed = 20f;
-    private float      timeElapsed = 0f;
-    private bool       bulletActive = false;
+    private float lagAdjustSpeed = 20f;
+    private float timeElapsed = 0f;
+    private bool bulletActive = false;
 
-    public  Animator   fireAnimation;
-    public  Camera     tankCamera;
-    public  GameObject tankBody;
-    public  GameObject tankHead;
-
+    public Animator fireAnimation;
+    public Camera tankCamera;
+    public GameObject tankBody;
+    public GameObject tankHead;
     #endregion
 
     #region Movement Keys
@@ -40,16 +39,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion  
 
     private Tank tank;
+    private Player player;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        forwardMovement  = KeyCode.W;
+        forwardMovement = KeyCode.W;
         backwardMovement = KeyCode.S;
-        leftMovement     = KeyCode.A;
-        rightMovement    = KeyCode.D;
+        leftMovement = KeyCode.A;
+        rightMovement = KeyCode.D;
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
         movementForce = tank.speedMovement;
         movementMultiplier = 1f;
@@ -60,25 +61,30 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        
-        if (!photonView.IsMine) 
+
+        if (!photonView.IsMine)
         {
             LagAdjust();
-            return; 
+            return;
         }
 
         if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
-        { 
-            MovePlayer();            
-        }
-        
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
         {
-            bulletActive = true;            
+            MovePlayer();
+        }
+
+        if (Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
+        {
+            bulletActive = true;
             if (fireAnimation != null)
             {
-                fireAnimation.SetTrigger("LaunchCatapult"); 
-            }            
+                fireAnimation.SetTrigger("LaunchCatapult");
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            tank.healthCurrent -= 10;
         }
         ReloadBullet();
     }
@@ -103,11 +109,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
-
     }
 
     public void ReloadBullet()
-    { 
+    {
         if (bulletActive)
         {
             // Increase time and update the reloadBar progress
@@ -152,33 +157,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
 
         #region AdjustBodyPosition
-            if (bodyPositionLag.magnitude > 5f)
-            {
-                tankBody.transform.position = bodyPosition;
-            }
-            else if(bodyPositionLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else 
-            { 
-                Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
-            }
+        if (bodyPositionLag.magnitude > 5f)
+        {
+            tankBody.transform.position = bodyPosition;
+        }
+        else if (bodyPositionLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
 
         #region AdjustBodyRotation
-            if (bodyRotationLag.magnitude > 5.0f)
-            {
-                tankBody.transform.rotation = bodyRotation;
-            }
-            else if(bodyRotationLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else
-            {
-                Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
-            }
+        if (bodyRotationLag.magnitude > 5.0f)
+        {
+            tankBody.transform.rotation = bodyRotation;
+        }
+        else if (bodyRotationLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
 
         #region AdjustHeadPosition
@@ -199,19 +204,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         #region AdjustHeadRotation
         if (headRotationLag.magnitude > 5.0f)
-            {
-                tankHead.transform.rotation = headRotation;
-            }
-            else if (headRotationLag.magnitude < 0.11f)
-            {
-                // do nothing
-            }
-            else
-            {
-                Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
-            }
+        {
+            tankHead.transform.rotation = headRotation;
+        }
+        else if (headRotationLag.magnitude < 0.11f)
+        {
+            // do nothing
+        }
+        else
+        {
+            Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
+        }
         #endregion
     }
+
 }
 
 

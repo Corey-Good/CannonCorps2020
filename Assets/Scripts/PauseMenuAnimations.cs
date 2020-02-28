@@ -130,9 +130,7 @@ public class PauseMenuAnimations : MonoBehaviour
             yield return null;
 
         Cursor.lockState = CursorLockMode.None;
-        
-        // load the menu scene
-        SceneManager. UnloadSceneAsync(2);
+        SceneManager.UnloadSceneAsync(1);
         PhotonNetwork.LoadLevel(0);
     }
 }
