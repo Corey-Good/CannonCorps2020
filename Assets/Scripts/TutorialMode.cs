@@ -1,7 +1,7 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       02/12/20                                         */
-/* Last Modified Date: 02/27/20                                         */
+/* Last Modified Date: 02/28/20                                         */
 /* Modified By:        Jaben Calas                                      */
 /************************************************************************/
 using Photon.Pun;
@@ -13,7 +13,7 @@ using TMPro;
 public class TutorialMode : MonoBehaviour
 {
     #region Variables
-    public  static bool     TutorialModeOn  = false;
+    public  static bool     TutorialModeOn  = false; // Affects CameraMovement, TurretRotation, and PlayerController, respectively.
     public  static bool     ActionRequired  = false;
     public  static bool     TaskIsComplete  = false;
             
@@ -43,7 +43,7 @@ public class TutorialMode : MonoBehaviour
         }
         #endregion
 
-        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString());
+        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
     }
 
     void Update()
@@ -59,7 +59,7 @@ public class TutorialMode : MonoBehaviour
         }
     }
 
-    void   GuideText()
+    void GuideText()
     {
         switch (tutorialStep)
         {
@@ -123,13 +123,14 @@ public class TutorialMode : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         Debug.Log(gameObject);
     }
 
     private IEnumerator DisconnectAndLoad()
     {
+        TutorialModeOn = false;
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)
