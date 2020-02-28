@@ -4,13 +4,13 @@
 /* Last Modified Date: 2/26/2020                                        */
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
-
-using Photon.Pun;
 using UnityEngine;
+using Photon.Pun;
 
 public class CameraMovement : MonoBehaviourPun
 {
-    private       float cameraTargetOffset = 1.2f;
+    #region Variables
+    private float cameraTargetOffset = 1.2f;
 
     public static float cameraRotateSpeed  = 300.0f;
     
@@ -18,6 +18,7 @@ public class CameraMovement : MonoBehaviourPun
     public Transform  target;
     public Transform  cameraTransform;
     public GameObject player;
+    #endregion
 
     // Lock the cursor from moveing and disable the tank camera view on start
     public void Awake()
@@ -38,7 +39,7 @@ public class CameraMovement : MonoBehaviourPun
         {
             return;
         }
-        if ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.tutorialStep >= 1))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 1))
         {
             ZoomCamera();
         }

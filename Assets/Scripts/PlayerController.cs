@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
-/* Author:             Corey Good */
-/* Date Created:       1/27/2020  */
-/* Last Modified Date: 2/27/2020  */
-/* Modified By:        J. Calas   */
+/* Author:             Corey Good                                       */
+/* Date Created:       1/27/2020                                        */
+/* Last Modified Date: 2/27/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 using UnityEngine;
 using Photon.Pun;
@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Tank tank;
     private Player player;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -73,7 +72,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.tutorialStep >= 3))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 3))
         {
             MovePlayer();            
         }

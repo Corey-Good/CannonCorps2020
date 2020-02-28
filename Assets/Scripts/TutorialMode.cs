@@ -12,11 +12,12 @@ using TMPro;
 
 public class TutorialMode : MonoBehaviour
 {
+    #region Variables
     public  static bool     TutorialModeOn  = false;
     public  static bool     ActionRequired  = false;
     public  static bool     TaskIsComplete  = false;
             
-    public  static int      tutorialStep    = 0;
+    public  static int      tutorialStep;
     public  static float    delayTime       = 2.0f;
 
     public  TextMeshProUGUI headingText;
@@ -26,9 +27,13 @@ public class TutorialMode : MonoBehaviour
     private string          sceneName;
 
     public  GameObject      TutorialUI;
+    #endregion
 
-    void   Start()
+    void Start()
     {
+        tutorialStep = 1;
+
+        #region Check for Tutorial Scene
         Scene currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
         if (sceneName == "Tutorial")
@@ -36,7 +41,9 @@ public class TutorialMode : MonoBehaviour
             TutorialUI.SetActive(true);
             TutorialModeOn     = true ;
         }
+        #endregion
 
+        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString());
     }
 
     void Update()
@@ -47,47 +54,8 @@ public class TutorialMode : MonoBehaviour
             {
                 tutorialStep++;
             }
-            //Debug.Log(tutorialStep);
 
             GuideText();
-
-            //    //ClearText();
-
-            //    if (ActionRequired)
-            //    {
-            //        StartCoroutine(DelayedPrompt());
-
-            //        if (Input.anyKeyDown)
-            //        {
-            //            stepCounter++;
-            //            //promptText.gameObject.SetActive(true);
-            //            //DisplayPrompt = true;
-            //        }
-
-            //        //if (TaskCompleted)
-            //        //{
-            //        //    promptText.text = "Task complete!";
-
-            //        //    stepCounter++;
-
-            //        //    promptText.gameObject.SetActive(true);
-
-            //        //    DisplayPrompt = false;
-            //        //    TaskCompleted = false;
-            //        //}
-            //    }
-            //    else
-            //    {
-            //        if (Input.anyKeyDown)
-            //        {
-            //            StartCoroutine(ClearPrompt());
-            //            //ActionRequired = true;
-            //            stepCounter++;
-            //        }
-
-            //    }
-
-            //    //Debug.Log(ActionRequired);
         }
     }
 
@@ -95,43 +63,63 @@ public class TutorialMode : MonoBehaviour
     {
         switch (tutorialStep)
         {
-            case 0:
-                headingText.text   = "Welcome to the training camp!";
-                subtitleText.text  = "Here you will learn the basic skills required in battle.";
-                break;
-
+            #region Step 1
             case 1:
-                headingText.text  = "Use your mouse wheel to zoom in/out.";
-                subtitleText.text = "You can adjust it to your preference.";
+                headingText.text  = "Welcome to the training camp!";
+                subtitleText.text = "Here you will learn the basic skills required in battle.";
                 break;
+            #endregion
 
+            #region Step 2
             case 2:
-                headingText.text   = "Use your mouse to control the camera.";
-                subtitleText.text  = "The turret follows the camera as you move it.";
+                headingText.text  = "Use your mouse wheel to zoom in or out.";
+                subtitleText.text = "";
                 break;
+            #endregion
 
+            #region Step 3
             case 3:
-                headingText.text   = string.Format(
+                headingText.text  = "Use your mouse to control the camera.";
+                subtitleText.text = "The turret follows the camera as you move it.";
+                break;
+            #endregion
+
+            #region Step 4
+            case 4:
+                headingText.text  = string.Format(
                                      "Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
                                         KeyBindings.forwardKey,  KeyBindings.leftKey, 
                                         KeyBindings.backwardKey, KeyBindings.rightKey);
                 subtitleText.text = "";
                 break;
+            #endregion
 
-            case 4:
-                headingText.text   = "Move to the designated location.";
+            #region Step 5
+            case 5:
+                headingText.text  = "Move to the designated location.";
                 subtitleText.text = "";
                 break;
+            #endregion
 
-            case 5:
-                headingText.text   = "CONGRATULATIONS!";
-                subtitleText.text  = "You have successfully completed the tutorial.";
-
-                promptText.gameObject.SetActive(false);
-                break;
+            #region Step 6
             case 6:
+                headingText.text  = "Aim at the [target] and {click} to fire.";
+                subtitleText.text = "";
+                break;
+            #endregion
+
+            #region Step 7
+            case 7:
+                headingText.text  = "CONGRATULATIONS!";
+                subtitleText.text = "You have successfully completed the tutorial.";
+                break;
+            #endregion
+
+            #region Step 8
+            case 8:
                 StartCoroutine(DisconnectAndLoad());
                 break;
+            #endregion
         }
     }
 
@@ -140,25 +128,13 @@ public class TutorialMode : MonoBehaviour
         Debug.Log(gameObject);
     }
 
-    private IEnumerator ClearPrompt()
-    {
-        promptText.gameObject.SetActive(false);
-        promptText.text = "";
-        yield return new WaitForSecondsRealtime(0);
-        promptText.gameObject.SetActive(true);
-    }
-
-    private IEnumerator DelayedPrompt()
-    {
-        yield return new WaitForSecondsRealtime(delayTime);
-        promptText.text = "Press any key to continue.";
-    }
-
     private IEnumerator DisconnectAndLoad()
     {
+        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         PhotonNetwork.LeaveRoom();
         while (PhotonNetwork.InRoom)
             yield return null;
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.UnloadSceneAsync(1);
         PhotonNetwork.LoadLevel(0);
     }
