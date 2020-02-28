@@ -10,91 +10,125 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEditor.Compilation;
 
 public class TutorialUI : MonoBehaviour
 {
-    public  KeyCode         nextKey;
-    public  KeyCode         prevKey;
-
-    private int             stepCounter   = 0;
-    private float           promptDelay   = 2.0f;
+    public static int             tutorialStep    = 0;
+    public static float           delayTime       = 2.0f;
 
     public  TextMeshProUGUI headingText;
     public  TextMeshProUGUI subtitleText;
-    public  TextMeshProUGUI actionText;
-
-    [TextArea(2, 10)]
-    public string[] sentences;
+    public  TextMeshProUGUI promptText;
 
     void   Start()
     {
 
     }
-    void   Update()
-    {
-        if ((Input.GetKeyDown(nextKey)))
-        {
-            stepCounter++;
-        }
-        if ((Input.GetKeyDown(prevKey)))
-        {
-            stepCounter--;
-        }
-        ShowAllSteps();
-    }
 
-    #region TextUI
-    void   ShowAllSteps()
+    void Update()
     {
-        switch (stepCounter)
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            tutorialStep++;
+        }
+        Debug.Log(tutorialStep);
+    }
+    //void   Update()
+    //{
+    //    GuideText();
+
+    //    //ClearText();
+
+    //    if (ActionRequired)
+    //    {
+    //        StartCoroutine(DelayedPrompt());
+
+    //        if (Input.anyKeyDown)
+    //        {
+    //            stepCounter++;
+    //            //promptText.gameObject.SetActive(true);
+    //            //DisplayPrompt = true;
+    //        }
+
+    //        //if (TaskCompleted)
+    //        //{
+    //        //    promptText.text = "Task complete!";
+
+    //        //    stepCounter++;
+
+    //        //    promptText.gameObject.SetActive(true);
+
+    //        //    DisplayPrompt = false;
+    //        //    TaskCompleted = false;
+    //        //}
+    //    }
+    //    else
+    //    {
+    //        if (Input.anyKeyDown)
+    //        {
+    //            StartCoroutine(ClearPrompt());
+    //            //ActionRequired = true;
+    //            stepCounter++;
+    //        }
+
+    //    }
+
+    //    //Debug.Log(ActionRequired);
+    //}
+
+    void   GuideText()
+    {
+        switch (tutorialStep)
         {
             case 0:
-                headingText.text = sentences[0]; // Welcome to the training camp!
-                subtitleText.text  = sentences[1]; // Here you will learn the basic skills required in battle.
-                Invoke("PressKeyToContinue", promptDelay);
+                headingText.text   = "Welcome to the training camp!";
+                subtitleText.text  = "Here you will learn the basic skills required in battle.";
                 break;
 
             case 1:
-                headingText.text = sentences[2]; // Use your mouse to control the camera.
-                subtitleText.text  = sentences[3]; // The turret follows the camera as you move it.
-                Invoke("PressKeyToContinue", promptDelay);
+                headingText.text  = "Use your mouse wheel to zoom in/out.";
+                subtitleText.text = "You can adjust it to your preference.";
                 break;
 
             case 2:
-                headingText.text = GetKeys(); // Use the W, A, S, and D keys to control your vehicle.
-                Invoke("PressKeyToContinue", promptDelay);
+                headingText.text   = "Use your mouse to control the camera.";
+                subtitleText.text  = "The turret follows the camera as you move it.";
                 break;
 
             case 3:
-                headingText.text = sentences[6]; // Move to the designated location.
-                Invoke("PressKeyToContinue", promptDelay);
+                headingText.text   = string.Format(
+                                     "Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
+                                        KeyBindings.forwardKey,  KeyBindings.leftKey, 
+                                        KeyBindings.backwardKey, KeyBindings.rightKey);
+                subtitleText.text = "";
                 break;
 
             case 4:
-                headingText.text = sentences[8]; // CONGRATULATIONS!
-                subtitleText.text  = sentences[9]; // You have successfully completed the tutorial.
-                Invoke("PressKeyToContinue", promptDelay);
+                headingText.text   = "Move to the designated location.";
+                subtitleText.text = "";
+                break;
+
+            case 5:
+                headingText.text   = "CONGRATULATIONS!";
+                subtitleText.text  = "You have successfully completed the tutorial.";
+                promptText.gameObject.SetActive(false);
                 break;
         }
     }
-    #endregion
-    string GetKeys()
-    {
-        string keybindings = string.Format("Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
-            KeyBindings.forwardKey, KeyBindings.leftKey, KeyBindings.backwardKey, KeyBindings.rightKey);
 
-        return keybindings;
+    public IEnumerator ClearPrompt()
+    {
+        promptText.gameObject.SetActive(false);
+        promptText.text = "";
+        yield return new WaitForSecondsRealtime(0);
+        promptText.gameObject.SetActive(true);
     }
 
-    void PressKeyToContinue()
+    public IEnumerator DelayedPrompt()
     {
-        if (Input.anyKeyDown)
-        {
-            actionText.text = sentences[13]; // Completed!
-        }
-        else
-        {
-            actionText.text = sentences[12]; // Press any key to continue.
-        }
+        yield return new WaitForSecondsRealtime(delayTime);
+        promptText.text = "Press any key to continue.";
     }
+
 }

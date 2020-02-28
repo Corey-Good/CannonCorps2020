@@ -36,7 +36,7 @@ public class CameraMovement : MonoBehaviourPun /*MonoBehaviourPun*/
         {
             return;
         }
-        if (!PauseMenuAnimations.GameIsPaused)
+        if ((!PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 1))
         {
             ZoomCamera();
         }

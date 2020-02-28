@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good */
 /* Date Created:       1/27/2020  */
-/* Last Modified Date: 1/27/2020  */
-/* Modified By:        C. Good    */
+/* Last Modified Date: 2/27/2020  */
+/* Modified By:        J. Calas   */
 /************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
@@ -26,10 +26,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Movement Keys
-    KeyCode forwardMovement;
+    KeyCode forwardMovement ;
     KeyCode backwardMovement;
-    KeyCode leftMovement;
-    KeyCode rightMovement;
+    KeyCode leftMovement    ;
+    KeyCode rightMovement   ;
     #endregion
 
     #region Movement Speeds
@@ -52,11 +52,27 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     // Start is called before the first frame update
     void Start()
     {
-        forwardMovement  = KeyCode.W;
-        backwardMovement = KeyCode.S;
-        leftMovement     = KeyCode.A;
-        rightMovement    = KeyCode.D;
-        playerState      = states.Stationary;
+        #region Key Function Initialization
+        if ((forwardMovement  == KeyCode.None) &&
+            (backwardMovement == KeyCode.None) &&
+            (leftMovement     == KeyCode.None) &&
+            (rightMovement    == KeyCode.None))
+        {
+             forwardMovement   = KeyCode.W;
+             backwardMovement  = KeyCode.S;
+             leftMovement      = KeyCode.A;
+             rightMovement     = KeyCode.D;
+        }
+        else
+        {
+             forwardMovement   = KeyBindings.forwardKey;
+             backwardMovement  = KeyBindings.backwardKey;
+             leftMovement      = KeyBindings.leftKey;
+             rightMovement     = KeyBindings.rightKey;
+        }
+        #endregion
+
+        playerState = states.Stationary;
     }
 
     // Update is called once per frame
@@ -66,10 +82,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (!photonView.IsMine) 
         {
             LagAdjust();
-            return; 
+            return;
         }
 
-        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
+        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 3))
         {
             MovePlayer();            
         }
@@ -78,11 +94,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             playerState = states.Stationary;
         }  
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (TutorialMode.ActionRequired) && fireAnimation != null)
         {
             fireAnimation.SetTrigger("LaunchCatapult");
         }
-
 
     }
 

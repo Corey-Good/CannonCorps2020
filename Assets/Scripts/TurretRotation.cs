@@ -13,7 +13,7 @@ public class TurretRotation : MonoBehaviour
 
     private void Update()
     {
-        if (!PauseMenuAnimations.GameIsPaused)
+        if ((!PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 2))
         {
             turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
         }
