@@ -1,15 +1,22 @@
-﻿using UnityEngine;
+﻿/************************************************************************/
+/* Author:             Corey Good                                       */
+/* Date Created:       2/26/2020                                        */
+/* Last Modified Date: 2/28/2020                                        */
+/* Modified By:        J. Calas                                         */
+/************************************************************************/
+using UnityEngine;
 using Photon.Pun;
 
 public class ColorChanger : MonoBehaviourPun
 {
-    private bool CCMenuIsOn = false;
+    #region Variables
+    public  GameObject RedSlider;
+    public  GameObject BlueSlider;
+    public  GameObject GreenSlider;
 
-    public GameObject RedSlider;
-    public GameObject BlueSlider;
-    public GameObject GreenSlider;
+    private bool       CCMenuIsOn   = false;
+    #endregion
 
-    #region ChangeColor_RPC
     [PunRPC]
     void ChangeColor_RPC(int teamCode, string tankName)
     {
@@ -113,8 +120,8 @@ public class ColorChanger : MonoBehaviourPun
             }
         }
     }
-    #endregion
 
+    #region ChangeColorButton
     public void ChangeColorMenu()
     {
         if (CCMenuIsOn)
@@ -126,8 +133,7 @@ public class ColorChanger : MonoBehaviourPun
             TurnChangeColorOn();
         }
     }
-
-    public void TurnChangeColorOn()
+    void TurnChangeColorOn()
     {
         CCMenuIsOn = true;
 
@@ -135,7 +141,7 @@ public class ColorChanger : MonoBehaviourPun
         BlueSlider.SetActive(true);
         GreenSlider.SetActive(true);
     }
-    public void TurnChangeColorOff()
+    void TurnChangeColorOff()
     {
         CCMenuIsOn = false;
 
@@ -143,6 +149,7 @@ public class ColorChanger : MonoBehaviourPun
         BlueSlider.SetActive(false);
         GreenSlider.SetActive(false);
     }
+    #endregion
 }
 
 
