@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         FFA, 
         SM, 
         TB,
+        TT,
         Lobby
     }
     public GameState gameState;

@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
-/* Author:             Corey Good */
-/* Date Created:       1/27/2020  */
-/* Last Modified Date: 1/27/2020  */
-/* Modified By:        C. Good    */
+/* Author:             Corey Good                                       */
+/* Date Created:       1/27/2020                                        */
+/* Last Modified Date: 2/27/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 using UnityEngine;
 using Photon.Pun;
@@ -41,14 +41,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Tank tank;
     private Player player;
 
-
     // Start is called before the first frame update
     void Start()
     {
-        forwardMovement = KeyCode.W;
-        backwardMovement = KeyCode.S;
-        leftMovement = KeyCode.A;
-        rightMovement = KeyCode.D;
+        #region Key Function Initialization
+        forwardMovement  = KeyBindings.forwardKey;
+        backwardMovement = KeyBindings.backwardKey;
+        leftMovement     = KeyBindings.leftKey;
+        rightMovement    = KeyBindings.rightKey;
+        #endregion
+
+        //playerState = states.Stationary;
+
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
@@ -68,12 +72,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 3))
         {
-            MovePlayer();
+            MovePlayer();            
         }
-
-        if (Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused))
+        
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.ActionRequired) && fireAnimation != null)
         {
             bulletActive = true;
             if (fireAnimation != null)

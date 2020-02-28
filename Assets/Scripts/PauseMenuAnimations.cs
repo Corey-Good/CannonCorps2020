@@ -121,6 +121,8 @@ public class PauseMenuAnimations : MonoBehaviour
     // Disconnect from the current game and switch to the main menu
     private IEnumerator DisconnectAndLoad()
     {
+        TutorialMode.TutorialModeOn = false;
+
         // center the mouse
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
 

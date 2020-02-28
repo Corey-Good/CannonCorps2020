@@ -31,6 +31,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private int roomCountFFA = 0;
     private int roomCountSM = 0;
     private int roomCountTB = 0;
+    private int roomCountTT = 0;
     #endregion
 
     #region Variables
@@ -89,6 +90,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         OpenLobbyView();
     }
 
+    public void TutorialButtonOnClick()
+    {
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1  };
+        PhotonNetwork.JoinOrCreateRoom("Tutorial " + roomCountTT, roomOps, null);
+        playerInstance.gameState = Player.GameState.TT;
+        //OpenLobbyView();
+    }
+    
     public void OpenLobbyView()
     {
         LobbyView.SetActive(true);
@@ -159,6 +168,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             roomCountTB++;
             PhotonNetwork.LoadLevel(4);
         }
+        if(playerInstance.gameState == Player.GameState.TT)
+        {
+            PhotonNetwork.LoadLevel(5);
+        }
     }
 
     public void LeaveRoom()
@@ -202,6 +215,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 {
                     LoadGame();
                 }
+                break;
+            case Player.GameState.TT:
+                LoadGame();
                 break;
         }
     }

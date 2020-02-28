@@ -9,6 +9,7 @@ TagManager:
   - PlayerClass
   - PlayerGO
   - TankModel
+  - TutorialUI
   layers:
   - Default
   - TransparentFX
