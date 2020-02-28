@@ -19,7 +19,8 @@ public class Tank : MonoBehaviour, ITakeDamage
     public float speedMovement { get; set; }
     public float bulletSpeed { get; set; }
     public float bulletDamage { get; set; }
-    public float bulletReload { get; set; }
+    public float reloadTime { get; set; }
+    public float reloadProgress { get; set; }
     public string tankModel { get; set; }
     public GameObject tankProjectile { get; set; }
     public Color tankColor { get; set; }
@@ -47,11 +48,11 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
-                speedRotation = 5;
-                speedMovement = 50;
+                speedRotation = 10;
+                speedMovement = 25;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                bulletReload = 10;
+                reloadTime = 2f;
                 tankModel = "cartoonTank";
                 break;
 
@@ -60,11 +61,11 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
-                speedRotation = 5;
-                speedMovement = 50;
+                speedRotation = 10;
+                speedMovement = 25;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                bulletReload = 10;
+                reloadTime = 1.8f;
                 tankModel = "futureTank";
                 break;
 
@@ -73,11 +74,11 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
-                speedRotation = 5;
-                speedMovement = 50;
+                speedRotation = 10;
+                speedMovement = 25;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                bulletReload = 10;
+                reloadTime = 3f;
                 tankModel = "Catapult";
                 break;
 
@@ -86,11 +87,11 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
-                speedRotation = 5;
-                speedMovement = 50;
+                speedRotation = 10;
+                speedMovement = 25;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                bulletReload = 10;
+                reloadTime = 2f;
                 tankModel = "baseTank";
                 break;
 
