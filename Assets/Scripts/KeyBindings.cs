@@ -13,15 +13,16 @@ using System;
 public class KeyBindings : MonoBehaviour
 {
     #region Variables
+    public   static bool     CustomKeys      = false;
     private  bool            lookingForKey   = false;
     private  bool            lookingForClick = false;
 
     public   static int      clickIndex      = 0;
 
-    public   static KeyCode  forwardKey;
-    public   static KeyCode  backwardKey;
-    public   static KeyCode  leftKey;
-    public   static KeyCode  rightKey;
+    public   static KeyCode  forwardKey      =  KeyCode.W;
+    public   static KeyCode  backwardKey     =  KeyCode.S;
+    public   static KeyCode  leftKey         =  KeyCode.A;
+    public   static KeyCode  rightKey        =  KeyCode.D;
 
     private  string          keyHit;
     private  string          objectName;
@@ -35,19 +36,6 @@ public class KeyBindings : MonoBehaviour
 
     private void Start()
     {
-        #region Key Function Initialization
-        if((forwardKey   == KeyCode.None)  && 
-            (backwardKey == KeyCode.None)  &&
-            (leftKey     == KeyCode.None)  &&
-            (rightKey    == KeyCode.None))
-        {
-            forwardKey   =  KeyCode.W;
-            backwardKey  =  KeyCode.S;
-            leftKey      =  KeyCode.A;
-            rightKey     =  KeyCode.D;
-        }
-        #endregion
-
         #region Key Text Initialization
         forwardButton. text = forwardKey. ToString();
         backwardButton.text = backwardKey.ToString();
@@ -109,6 +97,7 @@ public class KeyBindings : MonoBehaviour
                     break;
             }
             lookingForKey = false;
+            CustomKeys = true;
         }
 
         //Note: Modify to accommodate FiringMechanism
@@ -125,9 +114,9 @@ public class KeyBindings : MonoBehaviour
                 fireButton.text = "RightClick";
             }
             lookingForClick = false;
+            CustomKeys = true;
         }
     }
-
     KeyCode getKeyPress()
     {
         KeyCode keyHit = KeyCode.None;

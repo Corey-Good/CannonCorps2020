@@ -25,10 +25,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Movement Keys
-    KeyCode forwardMovement ;
+    KeyCode forwardMovement;
     KeyCode backwardMovement;
-    KeyCode leftMovement    ;
-    KeyCode rightMovement   ;
+    KeyCode leftMovement;
+    KeyCode rightMovement;
     #endregion
 
     #region Movement Speeds
@@ -46,23 +46,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     void Start()
     {
         #region Key Function Initialization
-        if ((forwardMovement  == KeyCode.None) &&
-            (backwardMovement == KeyCode.None) &&
-            (leftMovement     == KeyCode.None) &&
-            (rightMovement    == KeyCode.None))
-        {
-             forwardMovement   = KeyCode.W;
-             backwardMovement  = KeyCode.S;
-             leftMovement      = KeyCode.A;
-             rightMovement     = KeyCode.D;
-        }
-        else
-        {
-             forwardMovement   = KeyBindings.forwardKey;
-             backwardMovement  = KeyBindings.backwardKey;
-             leftMovement      = KeyBindings.leftKey;
-             rightMovement     = KeyBindings.rightKey;
-        }
+        forwardMovement  = KeyBindings.forwardKey;
+        backwardMovement = KeyBindings.backwardKey;
+        leftMovement     = KeyBindings.leftKey;
+        rightMovement    = KeyBindings.rightKey;
         #endregion
 
         //playerState = states.Stationary;
@@ -86,12 +73,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 3))
+        if (Input.anyKey && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.tutorialStep >= 3))
         {
             MovePlayer();            
         }
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (TutorialMode.ActionRequired) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.ActionRequired) && fireAnimation != null)
         {
             bulletActive = true;
             if (fireAnimation != null)

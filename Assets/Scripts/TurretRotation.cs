@@ -14,7 +14,7 @@ public class TurretRotation : MonoBehaviour
     // Every frame, sync the turrent rotation to the movement of the mouse
     private void Update()
     {
-        if ((!PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 2))
+        if ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.tutorialStep >= 2))
         {
             turretObject.transform.Rotate
             (0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
