@@ -23,15 +23,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private int roomCountTB = 0;
     private int roomCountTT = 0;
     private List<GameObject> playerListings = new List<GameObject>();
-    private GameMode currentGameMode;
-    enum  GameMode
-    {
-        FreeForAll, 
-        SharksAndMinnows, 
-        TeamBattle,
-        Tutorial,
-        Lobby
-    }
     private Player playerInstance;
 
     private void Awake()
@@ -59,10 +50,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
                     LoadGame();
                 }
                 break;
-        }
-        if (currentGameMode == GameMode.Tutorial)
-        {
-            LoadTutorial();
+
+            case Player.GameState.TT:
+                LoadTutorial();
+                break;
         }
     }
 
@@ -101,13 +92,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void TutorialButtonOnClick()
     {
-        if (OnEnterGame != null)
-        {
-            OnEnterGame("TT");
-        }
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1 };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1  };
         PhotonNetwork.JoinOrCreateRoom("Tutorial " + roomCountTT, roomOps, null);
-        currentGameMode = GameMode.Tutorial;
+        playerInstance.gameState = Player.GameState.TT;
+        OpenLobbyView();
 
     }
 
@@ -118,7 +106,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void LoadTutorial()
     {
-        PhotonNetwork.LoadLevel(3);
+        PhotonNetwork.LoadLevel(7);
     }
 
     public void OpenLobbyView()

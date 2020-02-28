@@ -35,11 +35,13 @@ public class CameraMovement : MonoBehaviourPun
     public void FixedUpdate()
     {
         if (!photonView.IsMine)
+        {
             return;
         }
         if ((!PauseMenuAnimations.GameIsPaused) && (TutorialUI.tutorialStep >= 1))
         {
             ZoomCamera();
+        }
     }
 
     // Ensure camera is pointing at right target
