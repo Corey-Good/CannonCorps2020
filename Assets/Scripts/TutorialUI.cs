@@ -32,7 +32,7 @@ public class TutorialUI : MonoBehaviour
         {
             tutorialStep++;
         }
-        Debug.Log(tutorialStep);
+        //Debug.Log(tutorialStep);
     }
     //void   Update()
     //{

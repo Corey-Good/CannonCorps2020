@@ -23,7 +23,7 @@ public class TutorialManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
         // Load the UI scene on top of the curremt scene
-        SceneManager.LoadScene(5, LoadSceneMode.Additive);
+        SceneManager.LoadScene(1, LoadSceneMode.Additive);
 
         //Spawn the player at a random location
         SpawnPlayer();
@@ -59,7 +59,7 @@ public class TutorialManager : MonoBehaviour
         while (PhotonNetwork.InRoom)
             yield return null;
         Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(5);
+        SceneManager.UnloadSceneAsync(1);
         PhotonNetwork.LoadLevel(0);
     }
 }
