@@ -124,7 +124,7 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     public void SetTimer()
     {
-        bool timeSet = false;
+        //bool timeSet = false;
         gameTimer.gameObject.SetActive(true);
         if (PhotonNetwork.IsMasterClient)
         {

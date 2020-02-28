@@ -94,8 +94,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1  };
         PhotonNetwork.JoinOrCreateRoom("Tutorial " + roomCountTT, roomOps, null);
-        playerInstance.teamCode = 3; //(maybe) playerInstance.gameState = Player.GameState.TT; (?)
-        OpenLobbyView();
+        playerInstance.gameState = Player.GameState.TT;
+        //OpenLobbyView();
     }
     
     public void OpenLobbyView()
@@ -170,7 +170,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         if(playerInstance.gameState == Player.GameState.TT)
         {
-            PhotonNetwork.LoadLevel(7);
+            PhotonNetwork.LoadLevel(5);
         }
     }
 
@@ -215,6 +215,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 {
                     LoadGame();
                 }
+                break;
+            case Player.GameState.TT:
+                LoadGame();
                 break;
         }
     }
