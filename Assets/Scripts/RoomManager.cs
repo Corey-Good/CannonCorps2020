@@ -13,21 +13,35 @@ using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
+    #region Classes
+    private Player playerInstance;
+    private Tank tank;
+    #endregion
+
+    #region Lobby Info
     public Text playerCount;
     public Text MinPlayerNote;
     public GameObject LobbyView;
     public GameObject PlayerNames;
     public GameObject playerListingPrefab;
+    private List<GameObject> playerListings = new List<GameObject>();
+    #endregion
+
+    #region Room Counts
     private int roomCountFFA = 0;
     private int roomCountSM = 0;
     private int roomCountTB = 0;
     private int roomCountTT = 0;
-    private List<GameObject> playerListings = new List<GameObject>();
-    private Player playerInstance;
+    #endregion
+
+    #region Variables
+    int previousTeam;
+    #endregion
 
     private void Awake()
     {
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         playerInstance.gameState = Player.GameState.Lobby;
     }
 
@@ -35,26 +49,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
+
         UpdatePlayerList();
-
-        switch (playerInstance.gameState)
-        {
-            case Player.GameState.FFA:
-                LoadFreeForAll();
-                break;
-
-            case Player.GameState.SM:
-            case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount > PhotonNetwork.CurrentRoom.MaxPlayers)
-                {
-                    LoadGame();
-                }
-                break;
-
-            case Player.GameState.TT:
-                LoadTutorial();
-                break;
-        }
+        TryToStartGame();
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
@@ -65,13 +62,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         UpdatePlayerList();
+        TryToStartGame();
     }
 
     public void FreeForAllButtonOnClick()
     {
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 20 };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 25 };
         PhotonNetwork.JoinOrCreateRoom("FreeForAll " + roomCountFFA, roomOps, null);
         playerInstance.gameState = Player.GameState.FFA;
+        playerInstance.teamCode = 3;
     }
 
     public void SharksMinnowsButtonOnClick()
@@ -79,6 +78,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 15 };
         PhotonNetwork.JoinOrCreateRoom("SharksAndMinnows " + roomCountSM, roomOps, null);
         playerInstance.gameState = Player.GameState.SM;
+        playerInstance.teamCode = 3;
         OpenLobbyView();
     }
 
@@ -94,24 +94,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1  };
         PhotonNetwork.JoinOrCreateRoom("Tutorial " + roomCountTT, roomOps, null);
-        playerInstance.gameState = Player.GameState.TT;
+        playerInstance.teamCode = 3; //(maybe) playerInstance.gameState = Player.GameState.TT; (?)
         OpenLobbyView();
-
     }
-
-    public void LoadFreeForAll()
-    {
-        PhotonNetwork.LoadLevel(1);
-    }
-
-    public void LoadTutorial()
-    {
-        PhotonNetwork.LoadLevel(7);
-    }
-
+    
     public void OpenLobbyView()
     {
-        //GameModeView.SetActive(false);
         LobbyView.SetActive(true);
         MinPlayerNote.text = "*Note, a game needs at least 8 players to begin.";
     }
@@ -147,23 +135,42 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void LoadGame()
     {
+        if(playerInstance.gameState == Player.GameState.FFA)
+        {
+            PhotonNetwork.LoadLevel(2);
+        }
         if (playerInstance.gameState == Player.GameState.SM)
         {
-            // Close the room, increase room counter for other rooms
+            // Set the Shark to the Master Client
+            if(PhotonNetwork.IsMasterClient)
+            {
+                tank.tankModel = "futureTank";
+                tank.healthCurrent = 100f;
+            }
+            // Set everyone else in the room to the base tank with minmal health
+            else
+            {
+                tank.tankModel = "baseTank";
+                tank.healthCurrent = 10f;
+            }
 
-            // Load the game
-
-            //connectionStatus.text = "Loading Sharks and Minnows!";
+            // Close the current room and increment the counter
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             roomCountSM++;
+
+            // Load the scene
+            PhotonNetwork.LoadLevel(3);
         }
         else if (playerInstance.gameState == Player.GameState.TB)
         {
-            // Close the room, increase room counter for other rooms
-
-            // Load the game
-
-            //connectionStatus.text = "Loading Team Battle!";
+            AssignTeamCodes();
+            PhotonNetwork.CurrentRoom.IsOpen = false;
             roomCountTB++;
+            PhotonNetwork.LoadLevel(4);
+        }
+        if(playerInstance.gameState == Player.GameState.TT)
+        {
+            PhotonNetwork.LoadLevel(7);
         }
     }
 
@@ -185,6 +192,51 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 Destroy(listing);
             }
             playerListings.Clear();
+        }
+    }
+
+    private void TryToStartGame()
+    {
+        switch (playerInstance.gameState)
+        {
+            case Player.GameState.FFA:
+                LoadGame();
+                break;
+
+            case Player.GameState.SM:
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                {
+                    LoadGame();
+                }
+                break;
+
+            case Player.GameState.TB:
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                {
+                    LoadGame();
+                }
+                break;
+        }
+    }
+
+    private void AssignTeamCodes()
+    {
+        Photon.Realtime.Player[] networkPlayers = PhotonNetwork.PlayerList;
+        int count = 1;
+        int totalPlayers = networkPlayers.Length;
+
+        foreach (Photon.Realtime.Player player in networkPlayers)
+        {
+            if (count <= (int)totalPlayers / 2)
+            {
+                player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { {"team", 0 } } );
+            }
+            else
+            {
+                player.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "team", 1 } });
+            }
+
+            count++;
         }
     }
 }
