@@ -10443,6 +10443,11 @@ MonoBehaviour:
   R: {fileID: 835606466}
   G: {fileID: 2145111258}
   B: {fileID: 1520240730}
+  defaultColors:
+  - {r: 0, g: 0.784, b: 0.8, a: 0}
+  - {r: 0.14, g: 0.26, b: 0.033, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 1, g: 0, b: 0, a: 0}
   tankModels:
   - {fileID: 1264323566}
   - {fileID: 2133712337}

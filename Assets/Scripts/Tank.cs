@@ -38,6 +38,8 @@ public class Tank : MonoBehaviour, ITakeDamage
             Destroy(gameObject);
         }
         CreateTank();
+
+        tankColor = Color.white;
     }
     public void CreateTank(string tankModelChosen = "baseTank")
     {
