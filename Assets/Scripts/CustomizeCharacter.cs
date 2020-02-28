@@ -23,7 +23,7 @@ public class CustomizeCharacter : MonoBehaviour
     float g_value = 1.0f;
     float b_value = 1.0f;
     Color tankColor;
-    // Start is called before the first frame update
+    public Color[] defaultColors;
 
     public List<GameObject> tankModels = new List<GameObject>();
 
@@ -36,9 +36,8 @@ public class CustomizeCharacter : MonoBehaviour
         tankModels[2].SetActive(false);
         tankModels[3].SetActive(false);
 
-        R.value = r_value;
-        G.value = g_value;
-        B.value = b_value;        
+        UpdateDefault();
+
     }
 
     // Scroll to the left within the tank menu
@@ -55,6 +54,8 @@ public class CustomizeCharacter : MonoBehaviour
             model = 3;
             tankModels[model].SetActive(true);
         }
+        UpdateDefault();
+        tankInstance.tankColor = tankColor;
     }
 
     // Scroll to the right within the tank menu
@@ -71,6 +72,7 @@ public class CustomizeCharacter : MonoBehaviour
             model = 0;
             tankModels[model].SetActive(true);
         }
+        UpdateDefault();
     }
 
     // Set the selected tank as the player's tank
@@ -131,5 +133,15 @@ public class CustomizeCharacter : MonoBehaviour
                 }
             }
         }
+    }
+
+    void UpdateDefault ()
+    {
+        R.value = defaultColors[model].r;
+        G.value = defaultColors[model].g;
+        B.value = defaultColors[model].b;
+        g_value = G.value;
+        b_value = B.value;
+        r_value = R.value;
     }
 }

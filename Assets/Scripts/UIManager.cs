@@ -48,7 +48,10 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Set default values
         playerScoreText.text = "0";
         tank.reloadProgress = 1.0f;
-        playerName.text = player.PlayerName;
+        if (player.PlayerName != null)
+            playerName.text = player.PlayerName;
+        else
+            playerName.text = "Blank";
         playerScoreText.text = player.ScoreCurrent.ToString();
         matchTimer = 0;
 
