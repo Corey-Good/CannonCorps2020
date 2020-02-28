@@ -9,14 +9,6 @@ using Photon.Pun;
 
 public class ColorChanger : MonoBehaviourPun
 {
-    #region Variables
-    public  GameObject RedSlider;
-    public  GameObject BlueSlider;
-    public  GameObject GreenSlider;
-
-    private bool       CCMenuIsOn   = false;
-    #endregion
-
     [PunRPC]
     void ChangeColor_RPC(int teamCode, string tankName)
     {
@@ -121,35 +113,6 @@ public class ColorChanger : MonoBehaviourPun
         }
     }
 
-    #region ChangeColorButton
-    public void ChangeColorMenu()
-    {
-        if (CCMenuIsOn)
-        {
-            TurnChangeColorOff();
-        }
-        else
-        {
-            TurnChangeColorOn();
-        }
-    }
-    void TurnChangeColorOn()
-    {
-        CCMenuIsOn = true;
-
-        RedSlider.SetActive(true);
-        BlueSlider.SetActive(true);
-        GreenSlider.SetActive(true);
-    }
-    void TurnChangeColorOff()
-    {
-        CCMenuIsOn = false;
-
-        RedSlider.SetActive(false);
-        BlueSlider.SetActive(false);
-        GreenSlider.SetActive(false);
-    }
-    #endregion
 }
 
 
