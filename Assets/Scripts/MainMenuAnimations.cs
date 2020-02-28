@@ -4,7 +4,6 @@
 /* Last Modified Date: 2/26/2020                                        */
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
-
 using UnityEngine;
 
 public class MainMenuAnimations : MonoBehaviour
