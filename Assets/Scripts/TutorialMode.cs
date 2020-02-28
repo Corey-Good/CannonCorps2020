@@ -20,13 +20,14 @@ public class TutorialMode : MonoBehaviour
     public  static int      tutorialStep;
     public  static float    delayTime       = 2.0f;
 
+    public  GameObject      PlayerUI;
+    public  GameObject      TutorialUI;
+
     public  TextMeshProUGUI headingText;
     public  TextMeshProUGUI subtitleText;
     public  TextMeshProUGUI promptText;
 
     private string          sceneName;
-
-    public  GameObject      TutorialUI;
     #endregion
 
     void Start()
@@ -38,8 +39,9 @@ public class TutorialMode : MonoBehaviour
         sceneName = currentScene.name;
         if (sceneName == "Tutorial")
         {
+            PlayerUI.SetActive(false);
             TutorialUI.SetActive(true);
-            TutorialModeOn     = true ;
+            TutorialModeOn = true;
         }
         #endregion
 
