@@ -21,8 +21,12 @@ public class TmManager : MonoBehaviour
     private int BlueScore = 0;
     #endregion
 
+    #region Variables
     private GameObject tankObject;
     private PhotonView tankPhotonView;
+    public RectTransform panel;
+    bool firstCall = true;
+    #endregion
 
     void Awake()
     {
@@ -50,7 +54,11 @@ public class TmManager : MonoBehaviour
         {
             tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, 1, tank.tankModel);
         }
+    }
 
+    void Start()
+    {
+        LeanTween.alpha(panel, 0, 1);
     }
 
     // Update is called once per frame
@@ -63,37 +71,13 @@ public class TmManager : MonoBehaviour
         }
 
         // End the game when one of the team reaches 100 points
-        if ((int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"] >= 100 ||
-            (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"] >= 100)
+        if (((int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"] >= 100 ||
+             (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"] >= 100) &&
+                  firstCall)
         {
-            StartCoroutine(DisconnectAndLoad());
+            player.leaveGame = true;
+            firstCall = false;
         }
-
-        // Test the Red Score Bar by hitting U
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            //UpdateTeamScores(0, 5);
-            tankPhotonView.RPC("ChangeAllColors", RpcTarget.AllBuffered);
-        }
-        // Test the Blue Score Bar by hitting I
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            UpdateTeamScores(1, 5);
-        }
-
-    }
-
-    // Leave the game and return to the main menu
-    private IEnumerator DisconnectAndLoad()
-    {
-        player.gameState = Player.GameState.Lobby;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 
     // Grab a random spawn point code

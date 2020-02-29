@@ -7,6 +7,7 @@
 
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,13 +37,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     #region Variables
     int previousTeam;
+    public RectTransform panel;
     #endregion
 
     private void Awake()
     {
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        playerInstance.gameState = Player.GameState.Lobby;
     }
 
     public override void OnJoinedRoom()
@@ -135,9 +136,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void LoadGame()
     {
-        if(playerInstance.gameState == Player.GameState.FFA)
+        if (playerInstance.gameState == Player.GameState.FFA)
         {
-            PhotonNetwork.LoadLevel(2);
+            StartCoroutine(TransitionScene(2));
         }
         if (playerInstance.gameState == Player.GameState.SM)
         {
@@ -159,18 +160,19 @@ public class RoomManager : MonoBehaviourPunCallbacks
             roomCountSM++;
 
             // Load the scene
-            PhotonNetwork.LoadLevel(3);
+            StartCoroutine(TransitionScene(3));
         }
         else if (playerInstance.gameState == Player.GameState.TB)
         {
             AssignTeamCodes();
             PhotonNetwork.CurrentRoom.IsOpen = false;
             roomCountTB++;
-            PhotonNetwork.LoadLevel(4);
+            StartCoroutine(TransitionScene(4));
         }
+
         if(playerInstance.gameState == Player.GameState.TT)
         {
-            PhotonNetwork.LoadLevel(5);
+            StartCoroutine(TransitionScene(5));
         }
     }
 
@@ -204,7 +206,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  3/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     LoadGame();
                 }
@@ -242,4 +244,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
             count++;
         }
     }
+
+    private IEnumerator TransitionScene(int scene)
+    {
+        LeanTween.alpha(panel, 1, 1);
+        yield return new WaitForSeconds(1f);
+        PhotonNetwork.LoadLevel(scene);
+    }
+      
 }

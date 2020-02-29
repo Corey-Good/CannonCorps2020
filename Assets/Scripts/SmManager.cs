@@ -15,8 +15,13 @@ public class SmManager : MonoBehaviour
     public GameObject[] spawnlocations = new GameObject[5];
     #endregion
 
-    private GameObject tankObject;
-    private PhotonView tankPhotonView;
+    #region Variables
+    private GameObject    tankObject;
+    private PhotonView    tankPhotonView;
+    public  RectTransform panel;
+            int           deathCount = 0;
+            bool          firstCall = true;
+    #endregion
 
     void Awake()
     {
@@ -29,36 +34,34 @@ public class SmManager : MonoBehaviour
 
         // Spawn the player at a random location
         SpawnPlayer();
+
+        // Set the room property MinnowCount to the all of the player except the shark
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", 1} });
+    }
+
+    void Start()
+    {
+        LeanTween.alpha(panel, 0, 1);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (((int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"] >= PhotonNetwork.CurrentRoom.PlayerCount ||
+            UIManager.matchTimer >= 300.0) && firstCall)
+        {
+            // Triggers the leave function in UIManager
+            player.leaveGame = true;
+            UIManager.matchTimer = 0;
+            firstCall = false;
+        }
+
         // Respawn the player when they die
         if (tank.healthCurrent < 0.1f)
         {
-            RespawnPlayer();
+            deathCount++;
+            RespawnPlayer();            
         }
-
-        // End the game when the timer has run out
-        if (UIManager.matchTimer >= 300.0)
-        {
-            StartCoroutine(DisconnectAndLoad());
-            UIManager.matchTimer = 0;
-        }
-    }
-
-    // Leave the game and return to the main menu
-    private IEnumerator DisconnectAndLoad()
-    {
-        player.gameState = Player.GameState.Lobby;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 
     // Spawn the player at a random spawnpoint in the map
@@ -92,6 +95,12 @@ public class SmManager : MonoBehaviour
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         tankObject.transform.position = spawnlocations[spawnPoint].transform.position;
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered);
+
+        if(deathCount == 1 && !PhotonNetwork.IsMasterClient)
+        {
+            int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount + 1 } });
+        }
     }
 
 }

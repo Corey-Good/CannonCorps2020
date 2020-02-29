@@ -28,10 +28,15 @@ public class TutorialMode : MonoBehaviour
     public  TextMeshProUGUI promptText;
 
     private string          sceneName;
+
+    public RectTransform panel;
+    private Player player;
+    private bool firstCall = true;
     #endregion
 
-    void Start()
+    void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tutorialStep = 1;
 
         #region Check for Tutorial Scene
@@ -116,29 +121,18 @@ public class TutorialMode : MonoBehaviour
                 subtitleText.text = "You have successfully completed the tutorial.";
                 break;
             #endregion
-
-            #region Step 8
-            case 8:
-                StartCoroutine(DisconnectAndLoad());
-                break;
-            #endregion
         }
+
+        if(tutorialStep > 7 && firstCall)
+        {
+            player.leaveGame = true;
+            firstCall = false;
+        }
+
     }
 
     void OnTriggerEnter(Collider other)
     {
         Debug.Log(gameObject);
-    }
-
-    private IEnumerator DisconnectAndLoad()
-    {
-        TutorialModeOn = false;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 }
