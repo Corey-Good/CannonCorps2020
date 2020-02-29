@@ -133,6 +133,16 @@ public class CustomizeCharacter : MonoBehaviour
                 }
             }
         }
+        if (tankModels[model].name == "Catapult")
+        {
+            Renderer[] rends = tankModels[model].GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[1].color = tankColor;
+            }
+        }
     }
 
     void UpdateDefault ()

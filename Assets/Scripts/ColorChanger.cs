@@ -56,6 +56,16 @@ public class ColorChanger : MonoBehaviourPun
                 }
             }
         }
+        if (tankName == "Catapult")
+        {
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[1].color = tankColor;
+            }
+        }
     }
 
     [PunRPC]
@@ -98,7 +108,6 @@ public class ColorChanger : MonoBehaviourPun
         if (tankName == "cartoonTank")
         {
             Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
-
             foreach (Renderer rend in rends)
             {
                 if (rend.name != "Tread")
@@ -111,10 +120,14 @@ public class ColorChanger : MonoBehaviourPun
                 }
             }
         }
+        if (tankName == "Catapult")
+        {
+            Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
+            foreach (Renderer rend in rends)
+            {
+                Material[] materials = rend.materials;
+                materials[1].color = tankColor;
+            }
+        }
     }
-
 }
-
-
-
-

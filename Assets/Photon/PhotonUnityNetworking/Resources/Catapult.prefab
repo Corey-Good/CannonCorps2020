@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 5540668966065814750}
   - component: {fileID: 8254057016562431584}
   - component: {fileID: 670323618193709697}
+  - component: {fileID: -1749033928175059287}
   m_Layer: 0
   m_Name: Catapult
   m_TagString: PlayerGO
@@ -289,6 +290,18 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-1749033928175059287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2177514303472334809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daa4e11fa85cd094991aa31e2563b1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2177514303472334811
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,9 +359,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100004, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   - {fileID: 2100000, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
-  - {fileID: 2100002, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
+  - {fileID: 2100004, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -427,7 +439,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
-  - {fileID: 2100002, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   - {fileID: 2100004, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
