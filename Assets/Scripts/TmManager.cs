@@ -78,6 +78,11 @@ public class TmManager : MonoBehaviour
             player.leaveGame = true;
             firstCall = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            player.ScoreCurrent += 10;
+        }
     }
 
     // Grab a random spawn point code
