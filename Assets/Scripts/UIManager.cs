@@ -180,6 +180,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     private IEnumerator SwitchScene()
     {
         player.leaveGame = false;
+        player.returning = true;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         yield return new WaitForSeconds(1);

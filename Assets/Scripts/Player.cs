@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
 
     public bool leaveGame = false;
 
+    public bool returning = false;
+
     private static Player playerInstance;
 
     public enum GameState

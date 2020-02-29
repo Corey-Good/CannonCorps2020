@@ -44,7 +44,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        playerInstance.gameState = Player.GameState.Lobby;
     }
 
     public override void OnJoinedRoom()
@@ -250,7 +249,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         LeanTween.alpha(panel, 1, 1);
         yield return new WaitForSeconds(1f);
         PhotonNetwork.LoadLevel(scene);
-
     }
       
 }
