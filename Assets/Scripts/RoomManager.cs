@@ -169,6 +169,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             roomCountTB++;
             StartCoroutine(TransitionScene(4));
         }
+
         if(playerInstance.gameState == Player.GameState.TT)
         {
             StartCoroutine(TransitionScene(5));

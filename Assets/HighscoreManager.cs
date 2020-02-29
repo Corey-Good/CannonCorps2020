@@ -24,8 +24,8 @@ public class HighscoreManager : MonoBehaviour
 
     private void Update()
     {
-        if(player.returning)
-        {
+        if(player.returning && player.PlayerName != null)
+        {            
             dreamlo.AddScore(player.PlayerName, player.ScoreCurrent, 0, player.gameState.ToString());
             player.returning = false;
             player.gameState = Player.GameState.Lobby;

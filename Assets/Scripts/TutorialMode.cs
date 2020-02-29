@@ -31,9 +31,10 @@ public class TutorialMode : MonoBehaviour
 
     public RectTransform panel;
     private Player player;
+    private bool firstCall = true;
     #endregion
 
-    void Start()
+    void Awake()
     {
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tutorialStep = 1;
@@ -120,13 +121,14 @@ public class TutorialMode : MonoBehaviour
                 subtitleText.text = "You have successfully completed the tutorial.";
                 break;
             #endregion
-
-            #region Step 8
-            case 8:
-                player.leaveGame = true;
-                break;
-            #endregion
         }
+
+        if(tutorialStep > 7 && firstCall)
+        {
+            player.leaveGame = true;
+            firstCall = false;
+        }
+
     }
 
     void OnTriggerEnter(Collider other)

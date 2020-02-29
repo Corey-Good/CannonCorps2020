@@ -25,6 +25,7 @@ public class PauseMenuAnimations : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
+
     // Lock the mouse, pause the game, and open the pause menu and vice versa
     public void LateUpdate()
     {
