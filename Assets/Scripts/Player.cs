@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
 
     public bool inGame = false;
 
+    public bool leaveGame = false;
+
     private static Player playerInstance;
 
     public enum GameState
@@ -43,7 +45,6 @@ public class Player : MonoBehaviour
         this.PlayerID = CreatePlayerID(); // assign random, new player ID
         // Could add some kind of logic to see if player wants to reuse player ID
         // "Enter ID" and if ID matches then use that player
-        PhotonNetwork.NickName = "Blank";
 
         if (playerInstance == null)
         {

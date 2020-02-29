@@ -14,7 +14,12 @@ public class FfaManager : MonoBehaviour
     #region Spawn Locations
     public GameObject[] spawnlocations = new GameObject[5];
     #endregion
+
+    #region Variables
     private PhotonView tankPhotonView;
+    public RectTransform panel;
+    bool firstCall = true;
+    #endregion
 
     void Awake()
     {
@@ -30,14 +35,20 @@ public class FfaManager : MonoBehaviour
 
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
     }
+    void Start()
+    {
+        LeanTween.alpha(panel, 0, 1);
+    }
 
     // Update is called once per frame
     void Update()
     {
         // Leave the game when the player dies
-        if (tank.healthCurrent < 0.1f)
+        if (tank.healthCurrent < 0.1f && firstCall)
         {
-            StartCoroutine(DisconnectAndLoad());
+            // Triggers the leave function in UIManager
+            player.leaveGame = true;
+            firstCall = false;
         }
     }
 
@@ -46,20 +57,9 @@ public class FfaManager : MonoBehaviour
     {
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        GameObject tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        GameObject tankObject = PhotonNetwork.Instantiate(tank.tankModel, 
+            spawnlocations[spawnPoint].transform.position, 
+            spawnlocations[spawnPoint].transform.rotation);
         tankPhotonView = tankObject.GetComponent<PhotonView>();
-    }
-
-    // Leave the game and return to the main menu
-    private IEnumerator DisconnectAndLoad()
-    {
-        player.gameState = Player.GameState.Lobby;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 }

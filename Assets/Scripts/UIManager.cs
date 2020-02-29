@@ -3,7 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using Photon.Pun;
-
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviourPunCallbacks
 {
@@ -37,7 +38,9 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Team Points
     public Slider redTeamScore;
     public Slider blueTeamScore;
-    #endregion
+    #endregion    
+
+    public RectTransform transitionPanel;
 
     void Awake()
     {
@@ -95,6 +98,11 @@ public class UIManager : MonoBehaviourPunCallbacks
         if (Input.GetKeyUp(KeyCode.P))
         {
             playerTable.SetActive(!playerTable.activeSelf);
+        }
+
+        if(player.leaveGame)
+        {
+            StartCoroutine(SwitchScene());
         }
     }
 
@@ -168,4 +176,25 @@ public class UIManager : MonoBehaviourPunCallbacks
         UpdateTable();
     }
 
+
+    private IEnumerator SwitchScene()
+    {
+        player.leaveGame = false;
+        // Start the scene transition, wait 1 second before proceeding to the next line
+        LeanTween.alpha(transitionPanel, 1, 1);
+        yield return new WaitForSeconds(1);
+
+        // Leave the room, waiting until we are disconnected from the room to proceed
+        PhotonNetwork.LeaveRoom();
+        while (PhotonNetwork.InRoom)
+            yield return null;
+
+        // Make the cursor visible and free to move on the screen
+        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
+        Cursor.lockState = CursorLockMode.None;
+
+        // Move back to main menu, unload the UI scene (this must be done last)
+        PhotonNetwork.LoadLevel(0);
+        SceneManager.UnloadSceneAsync(1);
+    }
 }

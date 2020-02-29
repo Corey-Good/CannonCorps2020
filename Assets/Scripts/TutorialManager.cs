@@ -15,6 +15,7 @@ public class TutorialManager : MonoBehaviour
     public GameObject[] spawnlocations = new GameObject[1];
     #endregion
     private PhotonView tankPhotonView;
+    public RectTransform panel;
 
     void Awake()
     {
@@ -30,15 +31,9 @@ public class TutorialManager : MonoBehaviour
 
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
     }
-
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        // Leave the game when the player dies
-        if (tank.healthCurrent < 0.1f)
-        {
-            StartCoroutine(DisconnectAndLoad());
-        }
+        LeanTween.alpha(panel, 0, 1);
     }
 
     // Spawn the player at a random spawnpoint in the map
@@ -48,18 +43,5 @@ public class TutorialManager : MonoBehaviour
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         GameObject tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
         tankPhotonView = tankObject.GetComponent<PhotonView>();
-    }
-
-    // Leave the game and return to the main menu
-    private IEnumerator DisconnectAndLoad()
-    {
-        player.gameState = Player.GameState.Lobby;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 }

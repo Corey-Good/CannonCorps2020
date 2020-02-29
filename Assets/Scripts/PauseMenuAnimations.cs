@@ -18,7 +18,13 @@ public class PauseMenuAnimations : MonoBehaviour
     public GameObject optionsMenu;
     public GameObject controlsMenu;
     public GameObject infoMenu;
+    public static RectTransform transitionPanel;
+    private Player player;
 
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+    }
     // Lock the mouse, pause the game, and open the pause menu and vice versa
     public void LateUpdate()
     {
@@ -41,12 +47,12 @@ public class PauseMenuAnimations : MonoBehaviour
     public void Pause()
     {
         Cursor.visible = true;
-        GameIsPaused   = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(true);
-        optionsMenu. SetActive(false);
+        pauseMenu.SetActive(true);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     // Close all menus and resume the game
@@ -54,53 +60,53 @@ public class PauseMenuAnimations : MonoBehaviour
     {
         GameIsPaused = false;
 
-        pauseMenu.   SetActive(false);
-        optionsMenu. SetActive(false);
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     // Switch to the options menu
     public void Options()
     {
         Cursor.visible = true;
-        GameIsPaused   = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
-        optionsMenu. SetActive(true);
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(true);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     // Switch to the Controls menu
     public void Controls()
     {
         Cursor.visible = true;
-        GameIsPaused   = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
-        optionsMenu. SetActive(false);
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(true);
-        infoMenu.    SetActive(false);
+        infoMenu.SetActive(false);
     }
 
     // Switch to the Info menu
     public void Info()
     {
         Cursor.visible = true;
-        GameIsPaused   = true;
+        GameIsPaused = true;
 
-        pauseMenu.   SetActive(false);
-        optionsMenu. SetActive(false);
+        pauseMenu.SetActive(false);
+        optionsMenu.SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.    SetActive(true);
+        infoMenu.SetActive(true);
     }
 
     // Exit for the game and switch to the main menu
     public void Quit()
     {
         GameIsPaused = false;
-        StartCoroutine(DisconnectAndLoad());
+        player.leaveGame = true;
     }
 
     // Scale the menu as an animation
@@ -108,31 +114,13 @@ public class PauseMenuAnimations : MonoBehaviour
     {
         Menu.SetActive(true);
         Menu.transform.localScale = new Vector3(0, 0, 0);
-        LeanTween.scale(Menu, new Vector3(1, 1, 1), 0.5f);
+        LeanTween.scale(Menu, Vector3.one, 0.5f);
     }
 
     // Scale the menue as an animation
     public void ClosePauseMenu(GameObject Menu)
     {
-        LeanTween.scale(Menu, new Vector3(0, 0, 0), 0.5f);
+        LeanTween.scale(Menu, Vector3.zero, 0.5f);
         Invoke("turnOffMenu", 0.5f);
-    }
-
-    // Disconnect from the current game and switch to the main menu
-    private IEnumerator DisconnectAndLoad()
-    {
-        TutorialMode.TutorialModeOn = false;
-
-        // center the mouse
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-
-        // disconnect from the game
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 }

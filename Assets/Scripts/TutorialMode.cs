@@ -28,10 +28,14 @@ public class TutorialMode : MonoBehaviour
     public  TextMeshProUGUI promptText;
 
     private string          sceneName;
+
+    public RectTransform panel;
+    private Player player;
     #endregion
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tutorialStep = 1;
 
         #region Check for Tutorial Scene
@@ -119,7 +123,7 @@ public class TutorialMode : MonoBehaviour
 
             #region Step 8
             case 8:
-                StartCoroutine(DisconnectAndLoad());
+                player.leaveGame = true;
                 break;
             #endregion
         }
@@ -128,17 +132,5 @@ public class TutorialMode : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Debug.Log(gameObject);
-    }
-
-    private IEnumerator DisconnectAndLoad()
-    {
-        TutorialModeOn = false;
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(1);
-        PhotonNetwork.LoadLevel(0);
     }
 }
