@@ -39,21 +39,26 @@ public class RoomManager : MonoBehaviourPunCallbacks
     int previousTeam;
     public RectTransform panel;
     public Button startGameButton;
+    bool firstCall;
     #endregion
 
     private void Awake()
     {
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        firstCall = true;
     }
 
     private void Update()
     {
         if(PhotonNetwork.InRoom)
         {
-            Debug.Log((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"]);
-            if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"])
+            if((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && (bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && firstCall);
+            {
+                firstCall = false;
                 LoadGame();
+            }
+                
         }
     }
 
