@@ -220,14 +220,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     startGameButton.interactable = true;
                 }
                 break;
 
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
                     startGameButton.interactable = true;
                 }
