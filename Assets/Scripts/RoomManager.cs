@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
@@ -39,33 +40,21 @@ public class RoomManager : MonoBehaviourPunCallbacks
     int previousTeam;
     public RectTransform panel;
     public Button startGameButton;
+    public TextMeshProUGUI buttonText;
     #endregion
 
     private void Awake()
     {
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-    }
+        buttonText.text = "Waiting for players...";
 
-    private void Update()
-    {
-        if (PhotonNetwork.InRoom)
-        {
-            if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"])
-            {
-                Debug.Log("Loading the Game");
-                LoadGame();
-            }
-
-        }
     }
 
     public override void OnJoinedRoom()
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
 
         UpdatePlayerList();
         TryToStartGame();
@@ -152,7 +141,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void LoadGame()
     {
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
         if (playerInstance.gameState == Player.GameState.FFA)
         {
             StartCoroutine(TransitionScene(2));
@@ -223,16 +211,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
-                    startGameButton.interactable = true;
+                    buttonText.text = "Starting Game!";
+                    LoadGame();
                 }
                 break;
 
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
-                    startGameButton.interactable = true;
+                    buttonText.text = "StartingGame!";
+                    LoadGame();
                 }
                 break;
             case Player.GameState.TT:
