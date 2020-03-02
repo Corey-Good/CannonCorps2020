@@ -53,7 +53,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.InRoom)
         {
-            if((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && (bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && firstCall);
+            if((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && firstCall)
             {
                 firstCall = false;
                 LoadGame();
@@ -66,7 +66,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
-
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
 
