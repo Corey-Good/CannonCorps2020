@@ -49,18 +49,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
         firstCall = true;
     }
 
-    private void Update()
-    {
-        if(PhotonNetwork.InRoom)
-        {
-            if((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && firstCall)
-            {
-                firstCall = false;
-                LoadGame();
-            }
+    //private void Update()
+    //{
+    //    if(PhotonNetwork.InRoom)
+    //    {
+    //        if((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"] && firstCall)
+    //        {
+    //            firstCall = false;
+    //            LoadGame();
+    //        }
                 
-        }
-    }
+    //    }
+    //}
 
     public override void OnJoinedRoom()
     {
@@ -265,7 +265,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public void OnClickStart()
     {
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", true } });
+        //PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", true } });
+        LoadGame();
     }
 
     private IEnumerator TransitionScene(int scene)
