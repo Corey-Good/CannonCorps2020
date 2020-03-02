@@ -48,6 +48,8 @@ public class HighscoreManager : MonoBehaviour
         foreach (dreamloLeaderBoard.Score score in scores)
         {
             int playerScore = score.score;
+            if (playerScore == 0)
+                continue;
             string playerName = score.playerName.Replace("+", " ");
 
             // Create and add a player listing

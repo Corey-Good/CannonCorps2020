@@ -211,14 +211,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  3/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     StartCoroutine(LoadDelay());
                 }
                 break;
 
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 3/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
                     StartCoroutine(LoadDelay());
                 }
