@@ -62,6 +62,11 @@ public class SmManager : MonoBehaviour
             deathCount++;
             RespawnPlayer();            
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            player.ScoreCurrent += 10;
+        }
     }
 
     // Spawn the player at a random spawnpoint in the map

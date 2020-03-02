@@ -38,6 +38,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     #region Variables
     int previousTeam;
     public RectTransform panel;
+    public Button startGameButton;
     #endregion
 
     private void Awake()
@@ -134,7 +135,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    private void LoadGame()
+    public void LoadGame()
     {
         if (playerInstance.gameState == Player.GameState.FFA)
         {
@@ -206,16 +207,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  3/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
-                    LoadGame();
+                    startGameButton.interactable = true;
                 }
                 break;
 
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
-                    LoadGame();
+                    startGameButton.interactable = true;
                 }
                 break;
             case Player.GameState.TT:

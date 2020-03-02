@@ -35,8 +35,10 @@ public class HighscoreManager : MonoBehaviour
 
     public void DisplayScores(List<dreamloLeaderBoard.Score> scores)
     {
-        Debug.Log(scores.Count);
-        int count = 1;
+
+        int countF = 1;
+        int countS = 1;
+        int countT = 1;
         foreach(GameObject listing in playerListings)
         {
             Destroy(listing);
@@ -50,25 +52,29 @@ public class HighscoreManager : MonoBehaviour
 
             // Create and add a player listing
             GameObject tempListing = Instantiate(playerScoreListing);
-            switch(score.shortText)
+            Text[] tempText = tempListing.GetComponentsInChildren<Text>();
+            switch (score.shortText)
             {
                 case "FFA":
                     tempListing.transform.SetParent(ffaScrollView.transform, false);
+                    tempText[0].text = countF.ToString() + ".  " + playerName;
+                    countF++;
                     break;
                 case "SM":
                     tempListing.transform.SetParent(smScrollView.transform, false);
+                    tempText[0].text = countS.ToString() + ".  " + playerName;
+                    countS++;
                     break;
                 case "TB":
                     tempListing.transform.SetParent(tbScrollView.transform, false);
+                    tempText[0].text = countT.ToString() + ".  " + playerName;
+                    countT++;
                     break;
-            }
-
-            // Set the players name and score
-            Text[] tempText = tempListing.GetComponentsInChildren<Text>();
-            tempText[0].text = count.ToString() + ".  " + playerName;
+            }         
+            
             tempText[1].text = playerScore.ToString();
             playerListings.Add(tempListing);
-            count++;
+
         }
     }
 }
