@@ -213,16 +213,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
             case Player.GameState.SM:
                 if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
-                    buttonText.text = "Starting Game!";
-                    LoadGame();
+                    StartCoroutine(LoadDelay());
                 }
                 break;
 
             case Player.GameState.TB:
                 if (PhotonNetwork.CurrentRoom.PlayerCount >= 2/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
-                    buttonText.text = "StartingGame!";
-                    LoadGame();
+                    StartCoroutine(LoadDelay());
                 }
                 break;
             case Player.GameState.TT:
@@ -262,6 +260,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
         LeanTween.alpha(panel, 1, 1);
         yield return new WaitForSeconds(1f);
         PhotonNetwork.LoadLevel(scene);
+    }
+
+    private IEnumerator LoadDelay()
+    {
+        buttonText.text = "StartingGame!";
+        yield return new WaitForSeconds(1.5f);
+        LoadGame();
     }
       
 }
