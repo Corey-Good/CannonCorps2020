@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465782, g: 0.49641252, b: 0.5748167, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1937,7 +1937,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: -45}
+  m_AnchoredPosition: {x: 400, y: -45}
   m_SizeDelta: {x: 112.5, y: 90}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &301341420
@@ -2566,7 +2566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922ad1425ce90164eac714009a8f5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMenu: {fileID: 0}
+  currentMenu: {fileID: 387557162}
 --- !u!114 &387557165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4108,7 +4108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922ad1425ce90164eac714009a8f5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMenu: {fileID: 0}
+  currentMenu: {fileID: 530861148}
 --- !u!114 &530861150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4223,7 +4223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922ad1425ce90164eac714009a8f5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMenu: {fileID: 0}
+  currentMenu: {fileID: 533382723}
 --- !u!114 &533382726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5277,7 +5277,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &698485694
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7044,7 +7044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922ad1425ce90164eac714009a8f5aba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentMenu: {fileID: 0}
+  currentMenu: {fileID: 966642198}
 --- !u!114 &966642201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10338,7 +10338,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1489629371}
         m_MethodName: CloseMenu
         m_Mode: 1
         m_Arguments:
@@ -12765,7 +12765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: -45}
+  m_AnchoredPosition: {x: -475, y: -45}
   m_SizeDelta: {x: 112.5, y: 90}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1912437059
