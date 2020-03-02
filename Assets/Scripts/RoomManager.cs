@@ -49,9 +49,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"])
+        if(PhotonNetwork.InRoom)
         {
-            LoadGame();
+            Debug.Log((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"]);
+            if ((bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"])
+                LoadGame();
         }
     }
 
@@ -59,6 +61,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
         PhotonNetwork.SetPlayerCustomProperties(playerScore);
+
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
 
         UpdatePlayerList();
         TryToStartGame();
@@ -215,7 +220,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
                 if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     startGameButton.interactable = true;
@@ -223,7 +227,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.TB:
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
                 if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
                     startGameButton.interactable = true;
