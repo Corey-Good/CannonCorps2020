@@ -22,8 +22,10 @@ public class TutorialMode : MonoBehaviour
 
     public  GameObject      PlayerUI;
     public  GameObject      TutorialUI;
+    public GameObject wall;
 
-    public  TextMeshProUGUI headingText;
+
+    public TextMeshProUGUI headingText;
     public  TextMeshProUGUI subtitleText;
     public  TextMeshProUGUI promptText;
 
@@ -51,6 +53,8 @@ public class TutorialMode : MonoBehaviour
         #endregion
 
         promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
+
+        wall = GameObject.FindGameObjectWithTag("Wall");
     }
 
     void Update()
@@ -103,6 +107,8 @@ public class TutorialMode : MonoBehaviour
 
             #region Step 5
             case 5:
+                wall.LeanMoveLocalY(-5, 1.5f);
+
                 headingText.text  = "Move to the designated location.";
                 subtitleText.text = "";
                 break;
