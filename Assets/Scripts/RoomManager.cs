@@ -47,6 +47,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
     }
 
+    private void Update()
+    {
+        if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["gameStart"])
+        {
+            LoadGame();
+        }
+    }
+
     public override void OnJoinedRoom()
     {
         ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
@@ -207,6 +215,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
                 if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
                     startGameButton.interactable = true;
@@ -214,6 +223,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.TB:
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", false } });
                 if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
                     startGameButton.interactable = true;
@@ -244,6 +254,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
             count++;
         }
+    }
+
+    public void OnClickStart()
+    {
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", true } });
     }
 
     private IEnumerator TransitionScene(int scene)
