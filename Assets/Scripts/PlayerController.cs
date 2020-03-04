@@ -16,12 +16,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion bodyRotation;
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
-    private bool bulletActive = false;
+    public bool bulletActive = false;
 
     public Animator fireAnimation;
     public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
+
+    private FireMechanism fireMechanism;
     #endregion
 
     #region Movement Keys
@@ -55,6 +57,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
         movementMultiplier = 1f;
@@ -77,9 +80,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             MovePlayer();            
         }
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) //(TutorialMode.ActionRequired) && fireAnimation != null)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && !bulletActive)
         {
             bulletActive = true;
+            fireMechanism.FireBullet();
             if (fireAnimation != null)
             {
                 fireAnimation.SetTrigger("LaunchCatapult");
