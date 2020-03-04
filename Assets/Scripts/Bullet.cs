@@ -40,6 +40,10 @@ public class Bullet : MonoBehaviour
                 continue;
             Debug.Log("Found a rigibody");
             PlayerController targetHealth = target.GetComponentInParent<PlayerController>();
+            if(targetHealth == null)
+            {
+                continue;
+            }
             float damage = CalculateDamage(target.position);
             Debug.Log("Dealing damage: " + damage);
 

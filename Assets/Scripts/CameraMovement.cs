@@ -27,6 +27,7 @@ public class CameraMovement : MonoBehaviourPun
 
         if (!photonView.IsMine)
         {
+            tankCamera.GetComponent<AudioListener>().gameObject.SetActive(false);
             tankCamera.enabled = false;
             return;
         }
