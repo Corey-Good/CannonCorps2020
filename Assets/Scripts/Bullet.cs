@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour
             targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
 
             // Find the TankHealth script associated with the rigidbody.
-            Tank targetHealth = targetRigidbody.GetComponent<Tank>();
+            PlayerController targetHealth = targetRigidbody.GetComponent<PlayerController>();
 
             // If there is no TankHealth script attached to the gameobject, go on to the next collider.
             if (!targetHealth)
@@ -62,7 +62,7 @@ public class Bullet : MonoBehaviour
             float damage = CalculateDamage(targetRigidbody.position);
 
             // Deal this damage to the tank.
-            targetHealth.damageTaken(damage);
+            targetHealth.DealDamage(damage);
         }
 
         // Unparent the particles from the shell.

@@ -6,6 +6,7 @@
 /************************************************************************/
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float rotateSpeed;
     #endregion  
 
-    private Tank tank;
+    public Tank tank;
     private Player player;
 
     // Start is called before the first frame update
@@ -83,7 +84,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && !bulletActive)
         {
             bulletActive = true;
-            fireMechanism.FireBullet();
+            
+            if(tank.tankModel == "Catapult")
+            {
+                StartCoroutine(DelayStart());
+            }
+            else
+            {
+                fireMechanism.FireBullet();
+            }
             if (fireAnimation != null)
             {
                 fireAnimation.SetTrigger("LaunchCatapult");
@@ -226,6 +235,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
     }
 
+    IEnumerator DelayStart()
+    {
+        yield return new WaitForSeconds(0.75f);
+        fireMechanism.FireBullet();
+    }
+
+    public void DealDamage(float damage)
+    {
+        tank.damageTaken(damage);
+    }
 }
 
 
