@@ -41,6 +41,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public RectTransform panel;
     public Button startGameButton;
     public TextMeshProUGUI buttonText;
+    float timeLeft = 30f;
+    bool countDown = false;
     #endregion
 
     private void Awake()
@@ -49,6 +51,25 @@ public class RoomManager : MonoBehaviourPunCallbacks
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         buttonText.text = "Waiting for players...";
 
+    }
+
+    private void FixedUpdate()
+    {
+        if(playerInstance.gameState == Player.GameState.SM || playerInstance.gameState == Player.GameState.TB)
+        {
+            if(countDown)
+            {
+                timeLeft -= Time.deltaTime;
+                buttonText.text = "Starting game in " + timeLeft.ToString("00");
+            }
+
+            if(timeLeft <= 0f)
+            {
+                countDown = false;
+                timeLeft = 30f;
+                LoadGame();
+            }
+        }
     }
 
     public override void OnJoinedRoom()
@@ -62,6 +83,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
+        if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
+        {
+            countDown = false;
+            timeLeft = 30f;
+            buttonText.text = "Waiting for players...";
+        }
         UpdatePlayerList();
     }
 
@@ -211,16 +238,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  3/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
-                    StartCoroutine(LoadDelay());
+                    //StartCoroutine(LoadDelay()); 
+                    countDown = true;
                 }
                 break;
 
             case Player.GameState.TB:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >= 3/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
-                    StartCoroutine(LoadDelay());
+                    //StartCoroutine(LoadDelay());
+                    countDown = true;
                 }
                 break;
             case Player.GameState.TT:
@@ -264,7 +293,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private IEnumerator LoadDelay()
     {
-        buttonText.text = "StartingGame!";
+        buttonText.text = "Starting game in " + timeLeft.ToString("00");
         yield return new WaitForSeconds(1.5f);
         LoadGame();
     }
