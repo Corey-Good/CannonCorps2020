@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Entered an object");
         // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
@@ -38,7 +39,7 @@ public class Bullet : MonoBehaviour
             if (!target)
                 continue;
             Debug.Log("Found a rigibody");
-            PlayerController targetHealth = target.GetComponent<PlayerController>();
+            PlayerController targetHealth = target.GetComponentInParent<PlayerController>();
             float damage = CalculateDamage(target.position);
             Debug.Log("Dealing damage: " + damage);
 
