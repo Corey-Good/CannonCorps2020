@@ -79,7 +79,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         UpdatePlayerList();
-        TryToStartGame();
+        if(playerInstance.gameState != Player.GameState.FFA)
+            TryToStartGame();
     }
 
     // This is called when you leave the room
