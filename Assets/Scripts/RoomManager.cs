@@ -316,6 +316,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private IEnumerator TransitionScene(int scene)
     {
         LeanTween.alpha(panel, 1, 1);
+        PhotonNetwork.IsMessageQueueRunning = false;
         yield return new WaitForSeconds(1f);
         PhotonNetwork.LoadLevel(scene);
     }

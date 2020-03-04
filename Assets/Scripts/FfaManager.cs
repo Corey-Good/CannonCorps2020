@@ -22,7 +22,7 @@ public class FfaManager : MonoBehaviour
     #endregion
 
     void Awake()
-    {
+    {        
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
@@ -34,6 +34,7 @@ public class FfaManager : MonoBehaviour
         SpawnPlayer();
 
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
+        PhotonNetwork.IsMessageQueueRunning = true;
     }
     void Start()
     {
