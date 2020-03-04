@@ -61,6 +61,9 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         if(timeLeft <= 0)
         {
+            countDown = false;
+            timeLeft = 30f;
+            buttonText.text = "";
             LoadGame();
         }
     }
