@@ -67,6 +67,13 @@ public class SmManager : MonoBehaviour
         {
             player.ScoreCurrent += 10;
         }
+
+        // If a shark leaves the game for some reason, decrease the shark count
+        if (player.leaveGame && deathCount > 1)
+        {
+            int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount - 1 } });
+        }
     }
 
     // Spawn the player at a random spawnpoint in the map
@@ -91,15 +98,15 @@ public class SmManager : MonoBehaviour
     {
         if (tank.tankModel == "baseTank")
         {
-            tank.healthCurrent = tank.healthMax * 0.2f;       
+            tank.healthCurrent = tank.healthMax * 0.2f;
+            tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered);
         }
         else
         {
             tank.healthCurrent = tank.healthMax;
         }        
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        tankObject.transform.position = spawnlocations[spawnPoint].transform.position;
-        tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered);
+        tankObject.transform.position = spawnlocations[spawnPoint].transform.position;        
 
         if(deathCount == 1 && !PhotonNetwork.IsMasterClient)
         {
@@ -107,5 +114,4 @@ public class SmManager : MonoBehaviour
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount + 1 } });
         }
     }
-
 }
