@@ -50,49 +50,41 @@ public class RoomManager : MonoBehaviourPunCallbacks
         playerInstance = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         buttonText.text = "Waiting for players...";
-
     }
 
     private void FixedUpdate()
     {
-        if(playerInstance.gameState == Player.GameState.SM || playerInstance.gameState == Player.GameState.TB)
+        if(countDown)
         {
-            if(countDown)
-            {
-                timeLeft -= Time.deltaTime;
-                buttonText.text = "Starting game in " + timeLeft.ToString("00");
-            }
-
-            if(timeLeft <= 0f)
-            {
-                countDown = false;
-                timeLeft = 30f;
-                LoadGame();
-            }
+            timeLeft -= Time.deltaTime;
+            buttonText.text = "Starting game in " + timeLeft.ToString("00");
         }
     }
-
+    // This is called when you join a room
     public override void OnJoinedRoom()
     {
-        ExitGames.Client.Photon.Hashtable playerScore = new ExitGames.Client.Photon.Hashtable() { { "Score", playerInstance.ScoreCurrent } };
-        PhotonNetwork.SetPlayerCustomProperties(playerScore);
-
         UpdatePlayerList();
         TryToStartGame();
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    // This is called when someone else joins your room
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        if (PhotonNetwork.CurrentRoom.PlayerCount < 2)
-        {
-            countDown = false;
-            timeLeft = 30f;
-            buttonText.text = "Waiting for players...";
-        }
         UpdatePlayerList();
+        TryToStartGame();
     }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    // This is called when you leave the room
+    public void LeaveRoom()
+    {
+        playerInstance.gameState = Player.GameState.Lobby;
+        PhotonNetwork.LeaveRoom();
+        LobbyView.SetActive(false);
+        EmptyPlayerList();
+    }
+
+    // This is called when someone else leaves a room
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         UpdatePlayerList();
         TryToStartGame();
@@ -208,14 +200,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void LeaveRoom()
-    {
-        playerInstance.gameState = Player.GameState.Lobby;
-        PhotonNetwork.LeaveRoom();
-        LobbyView.SetActive(false);
-        EmptyPlayerList();
-    }
-
     private void EmptyPlayerList()
     {
         // Remove the currently listed players
@@ -238,18 +222,28 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 break;
 
             case Player.GameState.SM:
-                if (PhotonNetwork.CurrentRoom.PlayerCount >=  1/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
+                if (PhotonNetwork.CurrentRoom.PlayerCount >=  2/*PhotonNetwork.CurrentRoom.MaxPlayers - 5*/)
                 {
-                    //StartCoroutine(LoadDelay()); 
                     countDown = true;
+                    timeLeft = 30f;
+                }
+                else
+                {
+                    countDown = false;
+                    timeLeft = 30f;
                 }
                 break;
 
             case Player.GameState.TB:
                 if (PhotonNetwork.CurrentRoom.PlayerCount >= 1/*PhotonNetwork.CurrentRoom.MaxPlayers - 2*/)
                 {
-                    //StartCoroutine(LoadDelay());
                     countDown = true;
+                    timeLeft = 30f;
+                }
+                else
+                {
+                    countDown = false;
+                    timeLeft = 30f;
                 }
                 break;
             case Player.GameState.TT:
@@ -279,23 +273,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public void OnClickStart()
-    {
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "gameStart", true } });
-    }
-
     private IEnumerator TransitionScene(int scene)
     {
         LeanTween.alpha(panel, 1, 1);
         yield return new WaitForSeconds(1f);
         PhotonNetwork.LoadLevel(scene);
     }
-
-    private IEnumerator LoadDelay()
-    {
-        buttonText.text = "Starting game in " + timeLeft.ToString("00");
-        yield return new WaitForSeconds(1.5f);
-        LoadGame();
-    }
-      
 }
