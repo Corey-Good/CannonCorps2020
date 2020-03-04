@@ -59,6 +59,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
             timeLeft -= Time.deltaTime;
             buttonText.text = "Starting game in " + timeLeft.ToString("00");
         }
+        if(timeLeft <= 0)
+        {
+            LoadGame();
+        }
     }
     // This is called when you join a room
     public override void OnJoinedRoom()
@@ -231,6 +235,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 {
                     countDown = false;
                     timeLeft = 30f;
+                    buttonText.text = "Waiting for players...";
                 }
                 break;
 
@@ -244,6 +249,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
                 {
                     countDown = false;
                     timeLeft = 30f;
+                    buttonText.text = "Waiting for players...";
                 }
                 break;
             case Player.GameState.TT:
