@@ -15,8 +15,14 @@ public class TurretRotation : MonoBehaviour
     {
         if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 2))
         {
-            turretObject.transform.Rotate
-            (0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
+            if (KeyBindings.XisInverted)
+            {
+                turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * -300 * Time.deltaTime);
+            }
+            else
+            {
+                turretObject.transform.Rotate(0f, 0, Input.GetAxis("Mouse X") * 300 * Time.deltaTime);
+            }
         }
     }
 }

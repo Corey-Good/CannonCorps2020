@@ -14,7 +14,11 @@ public class KeyBindings : MonoBehaviour
 {
     #region Variables
     public   static bool     CustomKeys      = false;
-    private  bool            lookingForKey   = false;
+
+    public static bool XisInverted = false;
+    public static bool YisInverted = false;
+
+    private bool            lookingForKey   = false;
     private  bool            lookingForClick = false;
 
     public   static int      clickIndex      = 0;
@@ -31,7 +35,10 @@ public class KeyBindings : MonoBehaviour
     public   TextMeshProUGUI backwardButton;
     public   TextMeshProUGUI leftButton;
     public   TextMeshProUGUI rightButton;
+
     public   TextMeshProUGUI fireButton;
+
+
     #endregion
 
     private void Start()
@@ -64,7 +71,32 @@ public class KeyBindings : MonoBehaviour
         objectName      = text.name;
     }
 
-    public  void OnGUI()
+    public void InvertX()
+    {
+        if (XisInverted)
+        {
+            XisInverted = false;
+        }
+        else
+        {
+            XisInverted = true;
+        }
+    }
+
+    public void InvertY()
+    {
+        if (YisInverted)
+        {
+            YisInverted = false;
+        }
+        else
+        {
+            YisInverted = true;
+        }
+    }
+
+
+    public void OnGUI()
     {
         Event e = Event.current;
 

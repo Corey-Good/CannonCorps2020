@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311912, g: 0.3807398, b: 0.3587272, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311912, g: 0.3807398, b: 0.3587271, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4915,7 +4915,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1023619256}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 842886519}
+        m_MethodName: InvertX
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1023619256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5143,6 +5154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerUI: {fileID: 663981379}
   TutorialUI: {fileID: 1099866443}
+  wall: {fileID: 0}
   headingText: {fileID: 561688025}
   subtitleText: {fileID: 242822799}
   promptText: {fileID: 354409114}
@@ -5770,7 +5782,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1203625055}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 842886519}
+        m_MethodName: InvertY
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1203625055
 MonoBehaviour:
   m_ObjectHideFlags: 0
