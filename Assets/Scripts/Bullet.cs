@@ -35,49 +35,60 @@ public class Bullet : MonoBehaviour
         foreach (Collider collider in colliders)
         {
             Rigidbody target = collider.GetComponent<Rigidbody>();
-
-        }
-
-        // Go through all the colliders...
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            // ... and find their rigidbody.
-            Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
-
-            // If they don't have a rigidbody, go on to the next collider.
-            if (!targetRigidbody)
+            if (!target)
                 continue;
+            Debug.Log("Found a rigibody");
+            PlayerController targetHealth = target.GetComponent<PlayerController>();
+            float damage = CalculateDamage(target.position);
+            Debug.Log("Dealing damage: " + damage);
 
-            // Add an explosion force.
-            targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
-
-            // Find the TankHealth script associated with the rigidbody.
-            PlayerController targetHealth = targetRigidbody.GetComponent<PlayerController>();
-
-            // If there is no TankHealth script attached to the gameobject, go on to the next collider.
-            if (!targetHealth)
-                continue;
-
-            // Calculate the amount of damage the target should take based on it's distance from the shell.
-            float damage = CalculateDamage(targetRigidbody.position);
-
-            // Deal this damage to the tank.
             targetHealth.DealDamage(damage);
+            Debug.Log("Health should go down");
+
         }
 
-        // Unparent the particles from the shell.
-        //m_ExplosionParticles.transform.parent = null;
+       // // Go through all the colliders...
+       // for (int i = 0; i < colliders.Length; i++)
+       // {
+       //     // ... and find their rigidbody.
+       //     Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
 
-        // Play the particle system.
-       // m_ExplosionParticles.Play();
+       //     // If they don't have a rigidbody, go on to the next collider.
+       //     if (!targetRigidbody)
+       //         continue;
 
-        // Play the explosion sound effect.
-        m_ExplosionAudio.Play();
+       //     // Add an explosion force.
+       //     targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
 
-        // Once the particles have finished, destroy the gameobject they are on.
-       // Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
+       //     // Find the TankHealth script associated with the rigidbody.
+       //     PlayerController targetHealth = targetRigidbody.GetComponent<PlayerController>();
 
-        // Destroy the shell.
+       //     // If there is no TankHealth script attached to the gameobject, go on to the next collider.
+       //     if (!targetHealth)
+       //         continue;
+
+       //     // Calculate the amount of damage the target should take based on it's distance from the shell.
+       //     float damage = CalculateDamage(targetRigidbody.position);
+
+       //     // Deal this damage to the tank.
+       //     targetHealth.DealDamage(damage);
+       // }
+
+       // // Unparent the particles from the shell.
+       // //m_ExplosionParticles.transform.parent = null;
+
+       // // Play the particle system.
+       //// m_ExplosionParticles.Play();
+
+       // // Play the explosion sound effect.
+       // if(m_ExplosionAudio != null)
+       // { m_ExplosionAudio.Play(); }
+        
+
+       // // Once the particles have finished, destroy the gameobject they are on.
+       //// Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
+
+       // // Destroy the shell.
         Destroy(gameObject);
     }
 
