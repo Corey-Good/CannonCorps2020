@@ -72,6 +72,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     {
         UpdatePlayerList();
         TryToStartGame();
+        Debug.Log(PhotonNetwork.CurrentRoom.Name);
     }
 
     // This is called when someone else joins your room
@@ -127,9 +128,20 @@ public class RoomManager : MonoBehaviourPunCallbacks
         RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 1  };
         PhotonNetwork.JoinOrCreateRoom("Tutorial " + roomCountTT, roomOps, null);
         playerInstance.gameState = Player.GameState.TT;
-        //OpenLobbyView();
     }
-    
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("Room is closed, creating a new one");
+        if(playerInstance.gameState == Player.GameState.TB)
+        {
+            RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
+            PhotonNetwork.JoinOrCreateRoom("TeamBattle " + ++roomCountTB, roomOps, null);
+            playerInstance.gameState = Player.GameState.TB;
+        }
+
+    }
+
     public void OpenLobbyView()
     {
         LobbyView.SetActive(true);
