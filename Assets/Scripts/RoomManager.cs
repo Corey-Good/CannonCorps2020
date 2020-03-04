@@ -89,6 +89,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
         EmptyPlayerList();
+        if (playerInstance.gameState == Player.GameState.TB)
+        {
+            roomCountTB = 0;
+        }
+        if (playerInstance.gameState == Player.GameState.SM)
+        {
+            roomCountSM = 0;
+        }
+        if (playerInstance.gameState == Player.GameState.FFA)
+        {
+            roomCountFFA = 0;
+        }
     }
 
     // This is called when someone else leaves a room
@@ -138,6 +150,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
             RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
             PhotonNetwork.JoinOrCreateRoom("TeamBattle " + ++roomCountTB, roomOps, null);
             playerInstance.gameState = Player.GameState.TB;
+        }
+        if (playerInstance.gameState == Player.GameState.SM)
+        {
+            RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 15 };
+            PhotonNetwork.JoinOrCreateRoom("SharksAndMinnows " + ++roomCountSM, roomOps, null);
+            playerInstance.gameState = Player.GameState.SM;
+            playerInstance.teamCode = 3;
         }
 
     }
