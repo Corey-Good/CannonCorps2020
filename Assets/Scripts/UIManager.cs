@@ -106,9 +106,10 @@ public class UIManager : MonoBehaviourPunCallbacks
             StartCoroutine(SwitchScene());
         }
 
-        if(Input.GetKeyDown(KeyCode.G))
+        if(tank.tankHit)
         {
             FlashHit();
+            tank.tankHit = false;
         }
     }
 

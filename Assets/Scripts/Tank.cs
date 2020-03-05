@@ -25,6 +25,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     public GameObject tankProjectile { get; set; }
     public Color tankColor { get; set; }
     public static Tank tankInstance { get; set; }
+    public bool tankHit = false;
 
 
     void Awake()

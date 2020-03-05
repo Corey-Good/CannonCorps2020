@@ -10,15 +10,16 @@ public class CollisionDetection : MonoBehaviour
     {
         photonView = GetComponentInParent<PhotonView>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        ui = GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>();
     }
+
     private void OnCollisionEnter (Collision collision)
     {
         Debug.Log(collision.gameObject.tag);
         if(photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
             tank.healthCurrent -= 10f;
-            ui.FlashHit();
+            tank.tankHit = true;
+
         }
     }
 }
