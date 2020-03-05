@@ -5,7 +5,7 @@ using UnityEngine;
 class SpeedPowerUp : PowerUp, IPlayerEvents
 {
     public float rotateMultiplier = 16f;
-    public float speedMultiplier = 2.0f;
+    public float speedMultiplier = 3.0f;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {

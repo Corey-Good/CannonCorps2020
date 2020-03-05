@@ -51,7 +51,7 @@ public class PowerUp : MonoBehaviour
     protected virtual void PowerUpCollected (GameObject gameObjectCollectingPowerUp)
     {
         // We only care if we've been collected by the player
-        if (gameObjectCollectingPowerUp.tag != "Player")
+        if (gameObjectCollectingPowerUp.tag != "PlayerGO")
         {
             return;
         }
