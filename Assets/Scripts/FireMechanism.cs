@@ -9,7 +9,7 @@ public class FireMechanism : MonoBehaviour
 
     public void FireBullet()
     {
-        GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, gameObject.transform.rotation);
+        GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, gameObject.transform.rotation);
         bullet.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * bulletForce);
     }
 }

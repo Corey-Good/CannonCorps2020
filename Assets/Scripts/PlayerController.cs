@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public bool bulletActive = false;
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
+    private bool speedBoostOn = false;
 
     public Animator fireAnimation;
     public Camera tankCamera;
@@ -240,16 +241,22 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
     {
+        if (speedBoostOn)
+        {
+            return;
+        }
         originalMovementMultiplier = movementMultiplier;
         movementMultiplier = newMovementMultiplier;
         originalRotateMultiplier = rotateMultiplier;
         rotateMultiplier = newRotateMultiplier;
+        speedBoostOn = true;
     }
 
     public void SetSpeedBoostOff()
     {
         movementMultiplier = originalMovementMultiplier;
         rotateMultiplier = originalRotateMultiplier;
+        speedBoostOn = false;
     }
 
     public void SetHealthBoost(float healthBoost)
