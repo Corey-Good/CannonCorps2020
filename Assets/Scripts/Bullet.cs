@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
 using UnityEngine;
 
 /************************************************************************/
@@ -14,41 +13,67 @@ public class Bullet : MonoBehaviour
     public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
     //public ParticleSystem m_ExplosionParticles;         // Reference to the particles that will play on explosion.
     public AudioSource m_ExplosionAudio;                // Reference to the audio that will play on explosion.
-    public float m_MaxDamage = 100f;                    // The amount of damage done if the explosion is centred on a tank.
+    public float m_MaxDamage = 25f;                    // The amount of damage done if the explosion is centred on a tank.
     public float m_ExplosionForce = 1000f;              // The amount of force added to a tank at the centre of the explosion.
     public float m_MaxLifeTime = 2f;                    // The time in seconds before the shell is removed.
     public float m_ExplosionRadius = 5f;                // The maximum distance away from the explosion tanks can be and are still affected.
 
+    private Player player;
+    private PhotonView photonView;
+    public GameObject bullet;
+    private TmManager tm;
+
 
     private void Start()
     {
+        photonView = GetComponentInParent<PhotonView>();
+        if(!photonView.IsMine) { return; }
         // If it isn't destroyed by then, destroy the shell after it's lifetime.
-        Destroy(gameObject, m_MaxLifeTime);
+        //Destroy(gameObject, m_MaxLifeTime);
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (photonView.IsMine && collision.gameObject.tag == "PlayerGO")
+        {
+            player.ScoreCurrent += 10;
+            if(player.gameState == Player.GameState.TB)
+            {
+                //TmManager.UpdateTeamScores(player.teamCode, 10);
+            }
+        }
+        else
+        {
+            PhotonNetwork.Destroy(bullet);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entered an object");
-        // Collect all the colliders in a sphere from the shell's current position to a radius of the explosion radius.
+
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
         foreach (Collider collider in colliders)
         {
-            Rigidbody target = collider.GetComponent<Rigidbody>();
-            if (!target)
-                continue;
-            Debug.Log("Found a rigibody");
-            PlayerController targetHealth = target.GetComponentInParent<PlayerController>();
-            if(targetHealth == null)
-            {
-                continue;
-            }
-            float damage = CalculateDamage(target.position);
-            Debug.Log("Dealing damage: " + damage);
+            PlayerController tankController = collider.GetComponentInParent<PlayerController>();
 
-            targetHealth.DealDamage(damage);
-            Debug.Log("Health should go down");
+            if (!tankController)
+                continue;
+
+            if (photonView.IsMine) 
+            {
+                player.ScoreCurrent += 10; 
+            }
+            else
+            {
+                //float damage = CalculateDamage(collider.GetComponent<Rigidbody>().position);
+
+                //tankController.DealDamage(damage);
+                Debug.Log("Taking away health!!!");
+            }
+
 
         }
 

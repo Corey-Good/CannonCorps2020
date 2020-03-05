@@ -196,7 +196,8 @@ public class UIManager : MonoBehaviourPunCallbacks
         Cursor.lockState = CursorLockMode.None;
 
         // Move back to main menu, unload the UI scene (this must be done last)
-        PhotonNetwork.LoadLevel(0);
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene(0);
         SceneManager.UnloadSceneAsync(1);
     }
 }

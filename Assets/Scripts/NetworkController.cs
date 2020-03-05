@@ -20,7 +20,7 @@ public class NetworkController : MonoBehaviourPunCallbacks, ILobbyCallbacks
     public Text connectionStatus;
 
     // Attempt to connect to the main server useing preset settings
-    private void Awake()
+    private void Update()
     {
         if (!PhotonNetwork.IsConnected)
         {
