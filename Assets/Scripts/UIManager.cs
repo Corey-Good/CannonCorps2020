@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     #endregion    
 
     public RectTransform transitionPanel;
+    public GameObject hitIndicator;
 
     void Awake()
     {
@@ -103,6 +104,11 @@ public class UIManager : MonoBehaviourPunCallbacks
         if(player.leaveGame)
         {
             StartCoroutine(SwitchScene());
+        }
+
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            FlashHit();
         }
     }
 
@@ -199,5 +205,15 @@ public class UIManager : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(0);
         SceneManager.UnloadSceneAsync(1);
+    }
+
+    public void FlashHit()
+    {
+        RectTransform[] edges = hitIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 1, 0.75f);
+            LeanTween.alpha(edge, 0, 1f);
+        }
     }
 }
