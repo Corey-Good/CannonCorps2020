@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
-/* Date Created:       02/23/20                                         */
-/* Last Modified Date: 02/25/20                                         */
-/* Modified By:        Jaben Calas                                      */
+/* Date Created:       2/23/2020                                        */
+/* Last Modified Date: 2/26/2020                                        */
+/* Modified By:        M. Agamalian                                     */
 /************************************************************************/
 
 using Photon.Pun;
@@ -18,7 +18,15 @@ public class PauseMenuAnimations : MonoBehaviour
     public GameObject optionsMenu;
     public GameObject controlsMenu;
     public GameObject infoMenu;
+    public static RectTransform transitionPanel;
+    private Player player;
 
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+    }
+
+    // Lock the mouse, pause the game, and open the pause menu and vice versa
     public void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -26,18 +34,17 @@ public class PauseMenuAnimations : MonoBehaviour
             if (GameIsPaused)
             {
                 Cursor.lockState = CursorLockMode.Locked;
-
                 Resume();
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
-
                 Pause();
             }
         }
     }
 
+    // Open the pause menu
     public void Pause()
     {
         Cursor.visible = true;
@@ -49,6 +56,7 @@ public class PauseMenuAnimations : MonoBehaviour
         infoMenu.SetActive(false);
     }
 
+    // Close all menus and resume the game
     public void Resume()
     {
         GameIsPaused = false;
@@ -59,6 +67,7 @@ public class PauseMenuAnimations : MonoBehaviour
         infoMenu.SetActive(false);
     }
 
+    // Switch to the options menu
     public void Options()
     {
         Cursor.visible = true;
@@ -70,6 +79,7 @@ public class PauseMenuAnimations : MonoBehaviour
         infoMenu.SetActive(false);
     }
 
+    // Switch to the Controls menu
     public void Controls()
     {
         Cursor.visible = true;
@@ -81,6 +91,7 @@ public class PauseMenuAnimations : MonoBehaviour
         infoMenu.SetActive(false);
     }
 
+    // Switch to the Info menu
     public void Info()
     {
         Cursor.visible = true;
@@ -92,36 +103,25 @@ public class PauseMenuAnimations : MonoBehaviour
         infoMenu.SetActive(true);
     }
 
+    // Exit for the game and switch to the main menu
     public void Quit()
     {
         GameIsPaused = false;
-        StartCoroutine(DisconnectAndLoad());
+        player.leaveGame = true;
     }
 
+    // Scale the menu as an animation
     public void OpenPauseMenu(GameObject Menu)
     {
         Menu.SetActive(true);
-
         Menu.transform.localScale = new Vector3(0, 0, 0);
-
-        LeanTween.scale(Menu, new Vector3(1, 1, 1), 0.5f);
+        LeanTween.scale(Menu, Vector3.one, 0.5f);
     }
 
+    // Scale the menue as an animation
     public void ClosePauseMenu(GameObject Menu)
     {
-        LeanTween.scale(Menu, new Vector3(0, 0, 0), 0.5f);
-
+        LeanTween.scale(Menu, Vector3.zero, 0.5f);
         Invoke("turnOffMenu", 0.5f);
-    }
-
-    private IEnumerator DisconnectAndLoad()
-    {
-        Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
-        PhotonNetwork.LeaveRoom();
-        while (PhotonNetwork.InRoom)
-            yield return null;
-        Cursor.lockState = CursorLockMode.None;
-        SceneManager.UnloadSceneAsync(2);
-        PhotonNetwork.LoadLevel(0);
     }
 }

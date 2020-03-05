@@ -39,6 +39,8 @@ public class Tank : MonoBehaviour, ITakeDamage
             Destroy(gameObject);
         }
         CreateTank();
+
+        tankColor = Color.white;
     }
     public void CreateTank(string tankModelChosen = "baseTank")
     {
@@ -46,39 +48,39 @@ public class Tank : MonoBehaviour, ITakeDamage
         {
             case "cartoonTank":
                 //tankColor = tankColorChosen;
-                healthMax = 100;
-                healthCurrent = 100;
+                healthMax = 95;
+                healthCurrent = 95;
                 healthRegen = 5;
-                speedRotation = 10;
-                speedMovement = 25;
+                speedRotation = 9;
+                speedMovement = 22.5f;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                reloadTime = 2f;
+                reloadTime = 1.75f;
                 tankModel = "cartoonTank";
                 break;
 
             case "futureTank":
                 //tankColor = tankColorChosen;
-                healthMax = 100;
-                healthCurrent = 100;
+                healthMax = 80;
+                healthCurrent = 80;
                 healthRegen = 5;
                 speedRotation = 10;
-                speedMovement = 25;
+                speedMovement = 30f;
                 bulletSpeed = 50;
                 bulletDamage = 20;
-                reloadTime = 1.8f;
+                reloadTime = 1.45f;
                 tankModel = "futureTank";
                 break;
 
             case "Catapult":
                // tankColor = tankColorChosen;
-                healthMax = 100;
-                healthCurrent = 100;
-                healthRegen = 5;
-                speedRotation = 10;
-                speedMovement = 25;
-                bulletSpeed = 50;
-                bulletDamage = 20;
+                healthMax = 90f;
+                healthCurrent = 90f;
+                healthRegen = 5f;
+                speedRotation = 12f;
+                speedMovement = 18.75f;
+                bulletSpeed = 50f;
+                bulletDamage = 20f;
                 reloadTime = 3f;
                 tankModel = "Catapult";
                 break;
@@ -88,8 +90,8 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthMax = 100;
                 healthCurrent = 100;
                 healthRegen = 5;
-                speedRotation = 10;
-                speedMovement = 25;
+                speedRotation = 9;
+                speedMovement = 15;
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 reloadTime = 2f;
