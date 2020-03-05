@@ -22,23 +22,27 @@ public class FfaManager : MonoBehaviour
     #endregion
 
     void Awake()
-    {        
+    {
+        
+        PhotonNetwork.IsMessageQueueRunning = true;
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
-        // Load the UI scene on top of the curremt scene
-        SceneManager.LoadScene(1, LoadSceneMode.Additive);
-
         //Spawn the player at a random location
         SpawnPlayer();
 
+        // Load the UI scene on top of the curremt scene
+        SceneManager.LoadScene(1, LoadSceneMode.Additive);
+
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
-        PhotonNetwork.IsMessageQueueRunning = true;
+
+        tank.healthCurrent = tank.healthMax;
+
     }
     void Start()
     {
-        LeanTween.alpha(panel, 0, 1);
+        LeanTween.alpha(panel, 0, 1.5f);
     }
 
     // Update is called once per frame
@@ -50,6 +54,7 @@ public class FfaManager : MonoBehaviour
             // Triggers the leave function in UIManager
             player.leaveGame = true;
             firstCall = false;
+            GameObject.FindGameObjectWithTag("PlayerGO").SetActive(false);
         }
 
         if(Input.GetKeyDown(KeyCode.T))

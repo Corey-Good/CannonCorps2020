@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 20485667654297509}
   - component: {fileID: 6113459420375525031}
   - component: {fileID: 7645503101804211105}
+  - component: {fileID: 933218677158580011}
   m_Layer: 0
   m_Name: futureTank
   m_TagString: PlayerGO
@@ -361,6 +362,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: daa4e11fa85cd094991aa31e2563b1e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &933218677158580011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6695345589345639273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7880837375835147117
@@ -561,12 +574,12 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.7
+      value: -8.27
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.1
+      value: -0.21
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}

@@ -207,7 +207,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (headPositionLag.magnitude > 5.0f)
         {
             tankHead.transform.position = headPosition;
-            Debug.Log("The Head is being teleported!!");
         }
         else if (headPositionLag.magnitude < 0.11f)
         {
