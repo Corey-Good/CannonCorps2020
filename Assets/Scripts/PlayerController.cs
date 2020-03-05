@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
     public bool bulletActive = false;
+    private float reloadBoost = 1.0f;
+    private float originalReloadBoost = 1.0f;
 
     public Animator fireAnimation;
     public Camera tankCamera;
@@ -136,10 +138,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             // Increase time and update the reloadBar progress
             timeElapsed += Time.deltaTime;
-            tank.reloadProgress = timeElapsed / tank.reloadTime;
+            tank.reloadProgress = timeElapsed / (tank.reloadTime * reloadBoost);
 
             // When a bullet is reloaded, reset timer
-            if (timeElapsed >= tank.reloadTime)
+            if (timeElapsed >= (tank.reloadTime * reloadBoost))
             {
                 timeElapsed = 0f;
                 bulletActive = false;
@@ -255,6 +257,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         healthBoost = -healthBoost;
         tank.damageTaken(healthBoost);
+    }
+
+    public void SetReloadBoostOn(float newReloadBoost)
+    {
+        originalReloadBoost = reloadBoost;
+        reloadBoost = newReloadBoost;
+    }
+
+    public void SetReloadBoostOff()
+    {
+        reloadBoost = originalReloadBoost;
     }
     
     IEnumerator DelayStart()
