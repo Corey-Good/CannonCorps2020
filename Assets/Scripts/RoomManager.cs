@@ -28,6 +28,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public GameObject LobbyView;
     public RectTransform transitionPanel;
+    public TextMeshProUGUI ffaButtonText;
+    public TextMeshProUGUI ttButtonText;
 
     private void Awake()
     {
@@ -37,6 +39,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void FreeForAllButtonOnClick()
     {
         player.gameState = Player.GameState.FFA;
+        ffaButtonText.text = "Loading...";
         CreateRoom(roomCountFFA, 25);
     }
 
@@ -55,6 +58,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public void TutorialButtonOnClick()
     {
         player.gameState = Player.GameState.TT;
+        ttButtonText.text = "Loading...";
         CreateRoom(roomCountTT, 1);
     }
 

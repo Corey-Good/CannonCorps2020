@@ -21,6 +21,7 @@ public class Bullet : MonoBehaviour
     private Player player;
     private PhotonView photonView;
     public GameObject bullet;
+    private TmManager tm;
 
 
     private void Start()
@@ -39,7 +40,7 @@ public class Bullet : MonoBehaviour
             player.ScoreCurrent += 10;
             if(player.gameState == Player.GameState.TB)
             {
-                TmManager.UpdateTeamScores(player.teamCode, 10);
+                //TmManager.UpdateTeamScores(player.teamCode, 10);
             }
         }
         else
