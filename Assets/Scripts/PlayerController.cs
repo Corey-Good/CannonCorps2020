@@ -21,6 +21,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
     private bool speedBoostOn = false;
+    public enum BulletType
+    {
+        Normal,
+        FreezeBullet
+    }
+
+    private BulletType currentBulletType;
+    private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
 
     public Animator fireAnimation;
     public Camera tankCamera;
@@ -96,12 +104,29 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                fireMechanism.FireBullet();
+                switch (currentBulletType)
+                {
+                    case BulletType.Normal:
+                        fireMechanism.FireBullet();
+                        break;
+                    case BulletType.FreezeBullet:
+                        fireMechanism.FireFreezeBullet();
+                        break;
+                        
+                }
+                    
             }
             if (fireAnimation != null)
             {
                 fireAnimation.SetTrigger("LaunchCatapult");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            currentBulletType += 1;
+            if ((int)currentBulletType == numberOfBulletTypes)
+                currentBulletType = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.H))
