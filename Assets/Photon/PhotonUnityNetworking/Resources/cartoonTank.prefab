@@ -539,8 +539,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6.9767213, y: 4.338965, z: 7.794858}
-  m_Center: {x: 0.071139075, y: 2.088866, z: -0.006919967}
+  m_Size: {x: 6.9767213, y: 3.8528454, z: 7.794858}
+  m_Center: {x: 0.071139075, y: 1.8458062, z: -0.006919967}
 --- !u!114 &2230221406688881177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,12 +686,12 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.8
+      value: -10.57
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
@@ -738,6 +738,11 @@ PrefabInstance:
       propertyPath: bulletForce
       value: 4500
       objectReference: {fileID: 0}
+    - target: {fileID: 5105257522059346093, guid: f02cfd86085a34746b77d0a046be105b,
+        type: 3}
+      propertyPath: tankCamera
+      value: 
+      objectReference: {fileID: 2230221407868787452}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f02cfd86085a34746b77d0a046be105b, type: 3}
 --- !u!4 &6924144322360523276 stripped

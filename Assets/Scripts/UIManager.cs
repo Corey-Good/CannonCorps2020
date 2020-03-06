@@ -41,6 +41,9 @@ public class UIManager : MonoBehaviourPunCallbacks
     #endregion    
 
     public RectTransform transitionPanel;
+    public GameObject hitIndicator;
+    public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
+    public List<RectTransform> rectPoints = new List<RectTransform>();
 
     void Awake()
     {
@@ -103,6 +106,18 @@ public class UIManager : MonoBehaviourPunCallbacks
         if(player.leaveGame)
         {
             StartCoroutine(SwitchScene());
+        }
+
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            FlashHit();
+            tank.tankHit = false;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            Debug.Log("Showing Points");
+            ShowPoints();
         }
     }
 
@@ -199,5 +214,28 @@ public class UIManager : MonoBehaviourPunCallbacks
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(0);
         SceneManager.UnloadSceneAsync(1);
+    }
+
+    public void FlashHit()
+    {
+        RectTransform[] edges = hitIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 1, 0.75f);
+            LeanTween.alpha(edge, 0, 1f);
+        }
+    }
+
+    public void ShowPoints()
+    {
+        int randomInt = Random.Range(0, 3);
+        StartCoroutine(MoveText(randomInt));
+    }
+
+    IEnumerator MoveText(int index)
+    {
+        textPoints[index].text = "+10";
+        yield return new WaitForSeconds(1.2f);
+        textPoints[index].text = "";
     }
 }

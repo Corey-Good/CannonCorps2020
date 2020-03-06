@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour
     private PhotonView photonView;
     public GameObject bullet;
     private TmManager tm;
-
+    float speed = 150f;
 
     private void Start()
     {
@@ -33,113 +33,98 @@ public class Bullet : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
 
+    private void Update()
+    {
+        transform.position += transform.forward * speed * Time.deltaTime;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.name);
         if (photonView.IsMine && collision.gameObject.tag == "PlayerGO")
         {
             player.ScoreCurrent += 10;
-            if(player.gameState == Player.GameState.TB)
+            if (player.gameState == Player.GameState.TB)
             {
                 //TmManager.UpdateTeamScores(player.teamCode, 10);
             }
         }
         else
         {
-            PhotonNetwork.Destroy(bullet);
+            //PhotonNetwork.Destroy(collision.gameObject);
         }
+        PhotonNetwork.Destroy(gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
+    //private void OnTriggerEnter(Collider other)
+    //{
 
 
-        Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
+    //    Collider[] colliders = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_TankMask);
 
-        foreach (Collider collider in colliders)
-        {
-            PlayerController tankController = collider.GetComponentInParent<PlayerController>();
+    //    foreach (Collider collider in colliders)
+    //    {
+    //        PlayerController tankController = collider.GetComponentInParent<PlayerController>();
 
-            if (!tankController)
-                continue;
+    //        if (!tankController)
+    //            continue;
 
-            if (photonView.IsMine) 
-            {
-                player.ScoreCurrent += 10; 
-            }
-            else
-            {
-                //float damage = CalculateDamage(collider.GetComponent<Rigidbody>().position);
+    //        if (photonView.IsMine) 
+    //        {
+    //            player.ScoreCurrent += 10; 
+    //        }
+    //        else
+    //        {
+    //            //float damage = CalculateDamage(collider.GetComponent<Rigidbody>().position);
 
-                //tankController.DealDamage(damage);
-                Debug.Log("Taking away health!!!");
-            }
-
-
-        }
-
-       // // Go through all the colliders...
-       // for (int i = 0; i < colliders.Length; i++)
-       // {
-       //     // ... and find their rigidbody.
-       //     Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
-
-       //     // If they don't have a rigidbody, go on to the next collider.
-       //     if (!targetRigidbody)
-       //         continue;
-
-       //     // Add an explosion force.
-       //     targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
-
-       //     // Find the TankHealth script associated with the rigidbody.
-       //     PlayerController targetHealth = targetRigidbody.GetComponent<PlayerController>();
-
-       //     // If there is no TankHealth script attached to the gameobject, go on to the next collider.
-       //     if (!targetHealth)
-       //         continue;
-
-       //     // Calculate the amount of damage the target should take based on it's distance from the shell.
-       //     float damage = CalculateDamage(targetRigidbody.position);
-
-       //     // Deal this damage to the tank.
-       //     targetHealth.DealDamage(damage);
-       // }
-
-       // // Unparent the particles from the shell.
-       // //m_ExplosionParticles.transform.parent = null;
-
-       // // Play the particle system.
-       //// m_ExplosionParticles.Play();
-
-       // // Play the explosion sound effect.
-       // if(m_ExplosionAudio != null)
-       // { m_ExplosionAudio.Play(); }
-        
-
-       // // Once the particles have finished, destroy the gameobject they are on.
-       //// Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
-
-       // // Destroy the shell.
-        Destroy(gameObject);
-    }
+    //            //tankController.DealDamage(damage);
+    //            Debug.Log("Taking away health!!!");
+    //        }
 
 
-    private float CalculateDamage(Vector3 targetPosition)
-    {
-        // Create a vector from the shell to the target.
-        Vector3 explosionToTarget = targetPosition - transform.position;
+    //    }
 
-        // Calculate the distance from the shell to the target.
-        float explosionDistance = explosionToTarget.magnitude;
+    // // Go through all the colliders...
+    // for (int i = 0; i < colliders.Length; i++)
+    // {
+    //     // ... and find their rigidbody.
+    //     Rigidbody targetRigidbody = colliders[i].GetComponent<Rigidbody>();
 
-        // Calculate the proportion of the maximum distance (the explosionRadius) the target is away.
-        float relativeDistance = (m_ExplosionRadius - explosionDistance) / m_ExplosionRadius;
+    //     // If they don't have a rigidbody, go on to the next collider.
+    //     if (!targetRigidbody)
+    //         continue;
 
-        // Calculate damage as this proportion of the maximum possible damage.
-        float damage = relativeDistance * m_MaxDamage;
+    //     // Add an explosion force.
+    //     targetRigidbody.AddExplosionForce(m_ExplosionForce, transform.position, m_ExplosionRadius);
 
-        // Make sure that the minimum damage is always 0.
-        damage = Mathf.Max(0f, damage);
+    //     // Find the TankHealth script associated with the rigidbody.
+    //     PlayerController targetHealth = targetRigidbody.GetComponent<PlayerController>();
 
-        return damage;
-    }
+    //     // If there is no TankHealth script attached to the gameobject, go on to the next collider.
+    //     if (!targetHealth)
+    //         continue;
+
+    //     // Calculate the amount of damage the target should take based on it's distance from the shell.
+    //     float damage = CalculateDamage(targetRigidbody.position);
+
+    //     // Deal this damage to the tank.
+    //     targetHealth.DealDamage(damage);
+    // }
+
+    // // Unparent the particles from the shell.
+    // //m_ExplosionParticles.transform.parent = null;
+
+    // // Play the particle system.
+    //// m_ExplosionParticles.Play();
+
+    // // Play the explosion sound effect.
+    // if(m_ExplosionAudio != null)
+    // { m_ExplosionAudio.Play(); }
+
+
+    // // Once the particles have finished, destroy the gameobject they are on.
+    //// Destroy(m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
+
+    // // Destroy the shell.
+
 }
