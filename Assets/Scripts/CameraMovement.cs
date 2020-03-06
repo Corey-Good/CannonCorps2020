@@ -42,7 +42,7 @@ public class CameraMovement : MonoBehaviourPun
         }
         if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 1))
         {
-            ZoomCamera();
+            //ZoomCamera();
         }
     }
 
@@ -59,13 +59,14 @@ public class CameraMovement : MonoBehaviourPun
     public void LookAtCameraTarget()
     {
         cameraTransform.transform.LookAt(target);
+        target.transform.position = new Vector3(target.transform.position.x, target.transform.position.y + Input.GetAxis("Mouse Y") * 0.15f, target.transform.position.z);
     }
 
     // Set the camera at the appropriate distance from the target
     public void SetCameraTarget()
     {
         target.position = new Vector3(player.transform.position.x, 
-									 (player.transform.position.y + cameraTargetOffset), 
+									 (target.transform.position.y), 
 									  player.transform.position.z);
     }
 

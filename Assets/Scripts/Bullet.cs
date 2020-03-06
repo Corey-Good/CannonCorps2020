@@ -40,6 +40,7 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.name);
         if (photonView.IsMine && collision.gameObject.tag == "PlayerGO")
         {
             player.ScoreCurrent += 10;
@@ -50,8 +51,9 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            PhotonNetwork.Destroy(bullet);
+            //PhotonNetwork.Destroy(collision.gameObject);
         }
+        PhotonNetwork.Destroy(gameObject);
     }
 
     //private void OnTriggerEnter(Collider other)
