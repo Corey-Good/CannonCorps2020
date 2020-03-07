@@ -247,7 +247,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     IEnumerator DelayFire()
     {
-        yield return new WaitForSeconds(0.415f);
+        yield return new WaitForSeconds(0.3f);
         fireMechanism.FireBullet();
 
     }
