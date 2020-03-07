@@ -112,5 +112,6 @@ MonoBehaviour:
   expiresImmediately: 0
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
-  rotateMultiplier: 24
+  powerUpMeshRenderer: {fileID: 0}
+  rotateMultiplier: 16
   speedMultiplier: 3

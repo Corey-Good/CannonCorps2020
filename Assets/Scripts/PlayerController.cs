@@ -75,7 +75,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         movementForce = tank.speedMovement;
         movementMultiplier = 1f;
+        originalMovementMultiplier = movementMultiplier;
         rotateMultiplier = 8f;
+        originalRotateMultiplier = rotateMultiplier;
         rotateSpeed = tank.speedRotation;
     }
 
@@ -256,9 +258,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             return;
         }
-        originalMovementMultiplier = movementMultiplier;
+
         movementMultiplier = newMovementMultiplier;
-        originalRotateMultiplier = rotateMultiplier;
         rotateMultiplier = newRotateMultiplier;
         speedBoostOn = true;
     }

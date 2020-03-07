@@ -10,6 +10,7 @@ public class FreezePowerUp : PowerUp
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
+        playerBrain.SetSpeedBoostOff();
         playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier);
         StartCoroutine(FreezeTimer());
     }

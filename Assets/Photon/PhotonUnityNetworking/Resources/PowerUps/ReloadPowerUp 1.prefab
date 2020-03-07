@@ -143,7 +143,8 @@ MonoBehaviour:
   expiresImmediately: 0
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
-  reloadBoost: 0.5
+  powerUpMeshRenderer: {fileID: 0}
+  reloadBoost: 0.1
 --- !u!1 &3284822688508218286
 GameObject:
   m_ObjectHideFlags: 0
