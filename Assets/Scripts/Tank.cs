@@ -81,7 +81,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 speedMovement = 18.75f;
                 bulletSpeed = 50f;
                 bulletDamage = 20f;
-                reloadTime = 3f;
+                reloadTime = 3.8f;
                 tankModel = "catapult";
                 break;
 
