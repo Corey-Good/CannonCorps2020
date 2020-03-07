@@ -53,6 +53,8 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
+        Cursor.visible = false;
+
         // Get the instance of the Tank and Player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
