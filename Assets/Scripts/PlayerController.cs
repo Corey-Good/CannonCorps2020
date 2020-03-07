@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             if (fireAnimation != null)
             {
+                Debug.Log("Firing the Catapult!!!");
                 fireAnimation.SetTrigger("LaunchCatapult");
             }
         }
