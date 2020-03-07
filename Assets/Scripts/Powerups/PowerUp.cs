@@ -11,14 +11,14 @@ public class PowerUp : MonoBehaviour
     public bool expiresImmediately;
     public GameObject specialEffect;
     public AudioClip soundEffect;
-
+    Vector3 powerUpOffset = new Vector3(0.0f, -20.0f, 0.0f);
     ///<summary>
     ///Keep a reference to the player that collected
     ///</summary>
     protected PlayerController playerBrain;
     //Should PlayerBrain just be mashed in with Player?
 
-    protected MeshRenderer powerUpMeshRenderer;
+    public MeshRenderer powerUpMeshRenderer;
 
     protected enum PowerUpState
     {
@@ -70,7 +70,7 @@ public class PowerUp : MonoBehaviour
         // We move the power up game object to be under the player that collected it, this isn't essential for functionality
         // but is neater in the gameObject hierarchy
         gameObject.transform.parent = playerBrain.gameObject.transform;
-        gameObject.transform.position = playerBrain.gameObject.transform.position;
+        gameObject.transform.position = playerBrain.gameObject.transform.position + powerUpOffset;
 
         // Collection effects
         PowerUpEffects();

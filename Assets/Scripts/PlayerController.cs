@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion bodyRotation;
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
-    public bool bulletActive = false;
+    public bool readyToFire = true;
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
     private bool speedBoostOn = false;
@@ -94,32 +94,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             MovePlayer();            
         }
         
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && !bulletActive)
+        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && readyToFire)
         {
-            bulletActive = true;
-            
-            if(tank.tankModel == "Catapult")
+            if (tank.tankModel == "Catapult")
             {
                 StartCoroutine(DelayStart());
             }
-            else
-            {
-                switch (currentBulletType)
-                {
-                    case BulletType.Normal:
-                        fireMechanism.FireBullet();
-                        break;
-                    case BulletType.FreezeBullet:
-                        fireMechanism.FireFreezeBullet();
-                        break;
-                        
-                }
-                    
-            }
+
             if (fireAnimation != null)
             {
                 fireAnimation.SetTrigger("LaunchCatapult");
             }
+            readyToFire = fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -160,7 +146,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void ReloadBullet()
     {
-        if (bulletActive)
+        if (!readyToFire)
         {
             // Increase time and update the reloadBar progress
             timeElapsed += Time.deltaTime;
@@ -170,7 +156,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             if (timeElapsed >= (tank.reloadTime * reloadBoost))
             {
                 timeElapsed = 0f;
-                bulletActive = false;
+                readyToFire = true;
             }
         }
     }

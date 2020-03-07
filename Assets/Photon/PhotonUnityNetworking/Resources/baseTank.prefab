@@ -468,7 +468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753ab758de7c8994e96caed1dc0fdad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletActive: 0
+  readyToFire: 1
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}
