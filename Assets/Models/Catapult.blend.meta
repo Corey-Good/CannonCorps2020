@@ -6,9 +6,6 @@ ModelImporter:
   - first:
       74: 67304543795663962
     second: Catapult_Fireing_Action|Catapult_Fireing_Action
-  - first:
-      74: -293957118932627063
-    second: Catapult_Fireing_Action|Catapult_Reloading_Action
   externalObjects: {}
   materials:
     importMaterials: 1

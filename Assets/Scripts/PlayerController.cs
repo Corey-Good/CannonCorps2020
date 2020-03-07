@@ -85,16 +85,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
            && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) || (TutorialMode.tutorialStep > TutorialMode.step5))
            && (!bulletActive))
         {
-            bulletActive = true;
-            
+            bulletActive = true;            
+
             if(tank.tankModel == "catapult")
             {
-                StartCoroutine(DelayStart());
+                StartCoroutine(DelayFire());
             }
             else
             {
                 fireMechanism.FireBullet();
             }
+
 
             if (fireAnimation != null)
             {
@@ -103,10 +104,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            tank.healthCurrent -= 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    tank.healthCurrent -= 10;
+        //}
+
         ReloadBullet();
     }
 
@@ -238,15 +240,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
     }
 
-    IEnumerator DelayStart()
-    {
-        yield return new WaitForSeconds(0.75f);
-        fireMechanism.FireBullet();
-    }
-
     public void DealDamage(float damage)
     {
         tank.damageTaken(damage);
+    }
+
+    IEnumerator DelayFire()
+    {
+        yield return new WaitForSeconds(0.415f);
+        fireMechanism.FireBullet();
+
     }
 }
 
