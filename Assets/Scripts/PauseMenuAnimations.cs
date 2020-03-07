@@ -60,6 +60,7 @@ public class PauseMenuAnimations : MonoBehaviour
     public void Resume()
     {
         GameIsPaused = false;
+        Cursor.visible = false;
 
         pauseMenu.SetActive(false);
         optionsMenu.SetActive(false);

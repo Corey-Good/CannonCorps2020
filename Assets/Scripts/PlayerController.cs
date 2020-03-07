@@ -6,6 +6,7 @@
 /************************************************************************/
 using UnityEngine;
 using Photon.Pun;
+using System.Collections;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
@@ -82,11 +83,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         
         if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && !bulletActive)
         {
-            bulletActive = true;
+            bulletActive = true;            
+
             fireMechanism.FireBullet();
+
+
             if (fireAnimation != null)
             {
-                fireAnimation.SetTrigger("LaunchCatapult");
+                Debug.Log("Firing the Catapult!!!");
+                fireAnimation.SetTrigger("Fire");
             }
         }
 
@@ -94,6 +99,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tank.healthCurrent -= 10;
         }
+
         ReloadBullet();
     }
 
@@ -198,7 +204,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (headPositionLag.magnitude > 5.0f)
         {
             tankHead.transform.position = headPosition;
-            Debug.Log("The Head is being teleported!!");
         }
         else if (headPositionLag.magnitude < 0.11f)
         {
@@ -226,6 +231,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
     }
 
+    public void DealDamage(float damage)
+    {
+        tank.damageTaken(damage);
+    }
 }
 
 

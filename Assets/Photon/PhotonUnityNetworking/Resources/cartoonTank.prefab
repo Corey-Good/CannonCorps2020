@@ -134,7 +134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2230221407868787455}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.14113991, y: 26, z: 13.6}
+  m_LocalPosition: {x: -0.14113991, y: 34, z: 28.8}
   m_LocalScale: {x: 2.6838882, y: 10.992721, z: 2.6838877}
   m_Children: []
   m_Father: {fileID: 8309353711642522945}
@@ -467,6 +467,7 @@ GameObject:
   - component: {fileID: 6712007613005419527}
   - component: {fileID: 3295546767960242153}
   - component: {fileID: 2740232424074851490}
+  - component: {fileID: 8435605354913108422}
   m_Layer: 0
   m_Name: cartoonTank
   m_TagString: PlayerGO
@@ -538,8 +539,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 6.9767213, y: 3.1302128, z: 7.794857}
-  m_Center: {x: 0.0711391, y: 1.4844894, z: -0.006919861}
+  m_Size: {x: 6.9767213, y: 3.8528454, z: 7.794858}
+  m_Center: {x: 0.071139075, y: 1.8458062, z: -0.006919967}
 --- !u!114 &2230221406688881177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,6 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d955963883d164899402d8f227adc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  verticalSensitivity: 0.15
   tankCamera: {fileID: 2230221407868787452}
   target: {fileID: 2230221407669820628}
   cameraTransform: {fileID: 2230221407868787450}
@@ -652,6 +654,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa4e11fa85cd094991aa31e2563b1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8435605354913108422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7913593773546420872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2796177064505064098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -672,12 +686,12 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.1
+      value: -11.24
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.6
+      value: 4.7
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
@@ -724,6 +738,11 @@ PrefabInstance:
       propertyPath: bulletForce
       value: 4500
       objectReference: {fileID: 0}
+    - target: {fileID: 5105257522059346093, guid: f02cfd86085a34746b77d0a046be105b,
+        type: 3}
+      propertyPath: tankCamera
+      value: 
+      objectReference: {fileID: 2230221407868787452}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f02cfd86085a34746b77d0a046be105b, type: 3}
 --- !u!4 &6924144322360523276 stripped

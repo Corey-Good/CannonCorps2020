@@ -56,7 +56,7 @@ public class ColorChanger : MonoBehaviourPun
                 }
             }
         }
-        if (tankName == "Catapult")
+        if (tankName == "catapult")
         {
             Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
 
@@ -120,7 +120,7 @@ public class ColorChanger : MonoBehaviourPun
                 }
             }
         }
-        if (tankName == "Catapult")
+        if (tankName == "catapult")
         {
             Renderer[] rends = gameObject.GetComponentsInChildren<Renderer>();
             foreach (Renderer rend in rends)

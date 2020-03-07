@@ -31,11 +31,7 @@ public class CustomizeCharacter : MonoBehaviour
     void Start()
     {
         tankInstance = GetTankInstance();
-        tankModels[0].SetActive(true);
-        tankModels[1].SetActive(false);
-        tankModels[2].SetActive(false);
-        tankModels[3].SetActive(false);
-
+        SetDefaultModel();
         UpdateDefault();
 
     }
@@ -133,7 +129,7 @@ public class CustomizeCharacter : MonoBehaviour
                 }
             }
         }
-        if (tankModels[model].name == "Catapult")
+        if (tankModels[model].name == "catapult")
         {
             Renderer[] rends = tankModels[model].GetComponentsInChildren<Renderer>();
 
@@ -153,5 +149,39 @@ public class CustomizeCharacter : MonoBehaviour
         g_value = G.value;
         b_value = B.value;
         r_value = R.value;
+    }
+
+    void SetDefaultModel()
+    {
+        tankModels[0].SetActive(false);
+        tankModels[1].SetActive(false);
+        tankModels[2].SetActive(false);
+        tankModels[3].SetActive(false);
+
+        if (tankInstance.tankModel == "baseTank")
+        {
+            tankModels[0].SetActive(true);
+            model = 0;
+        }
+        else if (tankInstance.tankModel == "cartoonTank")
+        {
+            tankModels[1].SetActive(true);
+            model = 1;
+        }
+        else if (tankInstance.tankModel == "catapult")
+        {
+            tankModels[2].SetActive(true);
+            model = 2;
+        }
+        else if (tankInstance.tankModel == "futureTank")
+        {
+            tankModels[3].SetActive(true);
+            model = 3;
+        }
+        else
+        {
+            tankModels[0].SetActive(true);
+            model = 0;
+        }
     }
 }

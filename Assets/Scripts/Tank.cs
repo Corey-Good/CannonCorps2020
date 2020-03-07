@@ -25,6 +25,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     public GameObject tankProjectile { get; set; }
     public Color tankColor { get; set; }
     public static Tank tankInstance { get; set; }
+    public bool tankHit = false;
 
 
     void Awake()
@@ -71,7 +72,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 tankModel = "futureTank";
                 break;
 
-            case "Catapult":
+            case "catapult":
                // tankColor = tankColorChosen;
                 healthMax = 90f;
                 healthCurrent = 90f;
@@ -81,7 +82,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50f;
                 bulletDamage = 20f;
                 reloadTime = 3f;
-                tankModel = "Catapult";
+                tankModel = "catapult";
                 break;
 
             case "baseTank":
