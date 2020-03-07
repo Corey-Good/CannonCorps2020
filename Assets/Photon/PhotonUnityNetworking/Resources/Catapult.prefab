@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 7977160805330542827}
   - component: {fileID: 7977160805330542824}
   m_Layer: 0
-  m_Name: Catapult
+  m_Name: catapult
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -339,7 +339,7 @@ Animator:
   m_GameObject: {fileID: 7977160805330542819}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
-  m_Controller: {fileID: 9100000, guid: 960ebbc834bd3014696ee48eefe61eb5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 740c8fd992ad252438c15f57061c1ee2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
