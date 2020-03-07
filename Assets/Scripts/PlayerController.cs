@@ -76,12 +76,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 3))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > TutorialMode.step3))
         {
             MovePlayer();            
         }
-        
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && !bulletActive)
+
+        if (Input.GetMouseButtonDown(0)
+           && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) || (TutorialMode.tutorialStep > TutorialMode.step5))
+           && (!bulletActive))
         {
             bulletActive = true;
             

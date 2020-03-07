@@ -9,8 +9,6 @@ TagManager:
   - PlayerClass
   - PlayerGO
   - TankModel
-  - TutorialUI
-  - Wall
   - UIManager
   layers:
   - Default
