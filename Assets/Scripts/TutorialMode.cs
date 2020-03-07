@@ -7,6 +7,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 public class TutorialMode : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class TutorialMode : MonoBehaviour
     bool readyForNextStep = false;
 
     public static int tutorialStep = 1;
-    public static float delayTime = 2.0f;
+    //public static float delayTime = 2.0f;
 
     public GameObject PlayerUI;
     public GameObject TutorialUI;
@@ -44,7 +45,7 @@ public class TutorialMode : MonoBehaviour
 
     private Player player;
     private bool firstCall = true;
-    private bool waitForPanel = false;
+    //private bool waitForPanel = false;
     private string sceneName;
     private int lastStep = step8;
 
@@ -59,8 +60,6 @@ public class TutorialMode : MonoBehaviour
         wall2 = GameObject.Find("SecondWall");
         panel = GameObject.Find("Panel");
         block = GameObject.Find("Block");
-
-        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
         #endregion
 
         #region Changes GameUI to TutorialUI
@@ -73,6 +72,7 @@ public class TutorialMode : MonoBehaviour
             TutorialModeOn = true;
         }
         #endregion
+        StartCoroutine(StepOne());
     }
 
     void Update()
@@ -82,39 +82,25 @@ public class TutorialMode : MonoBehaviour
         #region Moves tutorial to the next slide on GameUI
         if (sceneName == "Tutorial")
         {
-            GuideText();
+            TutorialUIText();
         }
 
-
-
-        //if (readyForNextStep)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.Space)) ; // && (!waitForPanel))
-        //    {
-                
-        //    }
-        //}
-        //else
-        //{
-        //    promptText.gameObject.SetActive(false);
-        //}
-
-
-
-        //if (readyForNextStep)
-        //{
-        //    Invoke("NextStep", 1.5f);
-        //    readyForNextStep = false;
-        //}
-        //else
-        //{
-        //    promptText.gameObject.SetActive(false);
-        //}
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (readyForNextStep)
+            {
+                tutorialStep++;
+                readyForNextStep = false;
+            }
+        }
+        else
+        {
+            
+        }
         #endregion
     }
 
-    void GuideText()
+    void TutorialUIText()
     {
         switch (tutorialStep)
         {
@@ -122,12 +108,13 @@ public class TutorialMode : MonoBehaviour
             case step1:
                 headingText.text = "Welcome to the training camp!";
                 subtitleText.text = "Here you will learn the basic skills required in battle.";
+
                 break;
             #endregion
 
             #region Step 2
             case step2:
-                headingText.text = "Use your mouse wheel to zoom in or out.";
+                headingText.text = "Use your mouse wheel to zoom in or out."; // zoom no longer functioning
                 subtitleText.text = "";
                 break;
             #endregion
@@ -153,7 +140,6 @@ public class TutorialMode : MonoBehaviour
             case step5:
                 // Debug.Log("Working!");
                 wall.LeanMoveLocalY(-5, 1.5f);
-                waitForPanel = true;
 
                 headingText.text = "Move to the designated location.";
                 subtitleText.text = "";
@@ -193,13 +179,55 @@ public class TutorialMode : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        waitForPanel = false;
+        //waitForPanel = false;
         tutorialStep++;
     }
 
-    void NextStep()
+    //void ChangePromptText()
+    //{
+    //    promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
+    //}
+
+    //void RemovePromptText()
+    //{
+    //    promptText.text = "";
+    //}
+
+    IEnumerator StepOne()
     {
-        promptText.gameObject.SetActive(true);
-        tutorialStep++;
+        headingText.text = "Welcome to the training camp!";
+        subtitleText.text = "Here you will learn the basic skills required in battle.";
+        yield return new WaitForSeconds(3.5f);
+        tutorialStep = 2;
+        readyForNextStep = true;
+    }
+
+    IEnumerator ChangePromptText()
+    {
+        yield return new WaitForSeconds(2.0f);
+        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
+    }
+
+    //void ReadyForNextStep()
+    //{
+    //    readyForNextStep = true;
+    //}
+    //void NotReadyForNextStep()
+    //{
+    //    readyForNextStep = false;
+    //}
+
+    //IEnumerator DelayNextStep()
+    //{
+    //    ReadyForNextStep();
+    //    yield return new WaitForSeconds(0.415f);
+    //    NotReadyForNextStep();
+    //}
+
+    IEnumerator ReadyForNextStep()
+    {
+
+        yield return new WaitForSeconds(0.415f);
+
     }
 }
