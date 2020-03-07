@@ -553,6 +553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d955963883d164899402d8f227adc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  verticalSensitivity: 0.15
   tankCamera: {fileID: 2230221407868787452}
   target: {fileID: 2230221407669820628}
   cameraTransform: {fileID: 2230221407868787450}
@@ -574,7 +575,6 @@ MonoBehaviour:
   tankCamera: {fileID: 2230221407868787452}
   tankBody: {fileID: 7913593773546420872}
   tankHead: {fileID: 2843716220429221424}
-  tank: {fileID: 0}
 --- !u!114 &4906086164031970392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,12 +686,12 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.57
+      value: -11.24
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.8
+      value: 4.7
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}

@@ -1,5 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/************************************************************************/
+/* Author:             Corey Good                                     */
+/* Date Created:       3/5/2020                                       */
+/* Last Modified Date: 3/6/2020                                        */
+/* Modified By:        Corey Good                                     */
+/************************************************************************/
 using UnityEngine;
 using Photon.Pun;
 
@@ -18,11 +22,5 @@ public class FireMechanism : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        //tankCamera.transform.Rotate(Input.mouseScrollDelta[1] * -50 * Time.deltaTime, 0, 0f);
-
     }
 }

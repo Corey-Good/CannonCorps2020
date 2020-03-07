@@ -5,7 +5,6 @@ public class CollisionDetection : MonoBehaviour
 {
     private PhotonView photonView;
     private Tank tank;
-    private UIManager ui;
     private void Awake()
     {
         photonView = GetComponentInParent<PhotonView>();

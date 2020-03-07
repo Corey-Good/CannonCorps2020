@@ -72,7 +72,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 tankModel = "futureTank";
                 break;
 
-            case "Catapult":
+            case "catapult":
                // tankColor = tankColorChosen;
                 healthMax = 90f;
                 healthCurrent = 90f;
@@ -82,7 +82,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletSpeed = 50f;
                 bulletDamage = 20f;
                 reloadTime = 3f;
-                tankModel = "Catapult";
+                tankModel = "catapult";
                 break;
 
             case "baseTank":

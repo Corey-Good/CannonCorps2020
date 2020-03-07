@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿/************************************************************************/
+/* Author:             Corey Good                                     */
+/* Date Created:       ??                                      */
+/* Last Modified Date: 3/6/2020                                        */
+/* Modified By:        Corey Good                                     */
+/************************************************************************/
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
@@ -108,7 +114,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             StartCoroutine(SwitchScene());
         }
 
-        if(Input.GetKeyDown(KeyCode.Y))
+        if(Input.GetKeyDown(KeyCode.G) || tank.tankHit)
         {
             FlashHit();
             tank.tankHit = false;
@@ -190,7 +196,6 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         UpdateTable();
     }
-
 
     private IEnumerator SwitchScene()
     {

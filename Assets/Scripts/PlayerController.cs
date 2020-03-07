@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float rotateSpeed;
     #endregion  
 
-    public Tank tank;
+    private Tank tank;
     private Player player;
 
     // Start is called before the first frame update
@@ -85,7 +85,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             bulletActive = true;
             
-            if(tank.tankModel == "Catapult")
+            if(tank.tankModel == "catapult")
             {
                 StartCoroutine(DelayStart());
             }
@@ -93,6 +93,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 fireMechanism.FireBullet();
             }
+
             if (fireAnimation != null)
             {
                 fireAnimation.SetTrigger("LaunchCatapult");
