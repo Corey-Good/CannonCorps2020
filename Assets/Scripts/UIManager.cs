@@ -114,17 +114,16 @@ public class UIManager : MonoBehaviourPunCallbacks
             StartCoroutine(SwitchScene());
         }
 
-        if(Input.GetKeyDown(KeyCode.G) || tank.tankHit)
+        if(tank.tankHit)
         {
             FlashHit();
             tank.tankHit = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            Debug.Log("Showing Points");
-            ShowPoints();
-        }
+        //if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    ShowPoints();
+        //}
     }
 
     private void UpdateTable()

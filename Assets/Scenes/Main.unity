@@ -4484,7 +4484,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 530861149}
+      - m_Target: {fileID: 533382725}
         m_MethodName: OpenMenu
         m_Mode: 1
         m_Arguments:
@@ -11144,7 +11144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1439308493
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12520,7 +12520,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1558195443
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12583,9 +12583,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 533382723}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 533382725}
+        m_MethodName: CloseMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

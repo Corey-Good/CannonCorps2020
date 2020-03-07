@@ -63,10 +63,10 @@ public class SmManager : MonoBehaviour
             RespawnPlayer();            
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            player.ScoreCurrent += 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    player.ScoreCurrent += 10;
+        //}
 
         // If a shark leaves the game for some reason, decrease the shark count
         if (player.leaveGame && deathCount > 1)

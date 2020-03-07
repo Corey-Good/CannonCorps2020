@@ -85,7 +85,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             bulletActive = true;            
 
-            fireMechanism.FireBullet();
+            if(tank.tankModel == "catapult")
+            {
+                StartCoroutine(DelayFire());
+            }
+            else
+            {
+                fireMechanism.FireBullet();
+            }
 
 
             if (fireAnimation != null)
@@ -95,10 +102,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            tank.healthCurrent -= 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    tank.healthCurrent -= 10;
+        //}
 
         ReloadBullet();
     }
@@ -234,6 +241,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void DealDamage(float damage)
     {
         tank.damageTaken(damage);
+    }
+
+    IEnumerator DelayFire()
+    {
+        yield return new WaitForSeconds(0.415f);
+        fireMechanism.FireBullet();
+
     }
 }
 

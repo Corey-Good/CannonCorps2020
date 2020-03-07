@@ -79,10 +79,10 @@ public class TmManager : MonoBehaviour
             firstCall = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            player.ScoreCurrent += 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    player.ScoreCurrent += 10;
+        //}
     }
 
     // Grab a random spawn point code
