@@ -26,7 +26,7 @@ public class TutorialMode : MonoBehaviour
     // Affects CameraMovement, TurretRotation, and PlayerController
     public  static int      currentStep;
 
-    public static bool tutorialModeOn;
+    public  static bool     tutorialModeOn;
             
     public  GameObject      PlayerUI;
     public  GameObject      TutorialUI;
@@ -42,7 +42,7 @@ public class TutorialMode : MonoBehaviour
 
     private Player          player;
     private int             lastStep;
-    private float delayTime = 2.0f;
+    private float           delayTime = 5.0f;
     private bool            firstCall      = true;
     private bool            promptComplete = false;
     private string          sceneName;
@@ -85,16 +85,9 @@ public class TutorialMode : MonoBehaviour
         {
             TutorialUIText();
         }
-
-        //if (promptComplete)
-        //{
-        //    if (Input.GetKeyDown(KeyCode.Space))
-        //    {
-        //        currentStep++;
-        //        promptComplete = false;
-        //    }
-        //}
         #endregion
+
+        StartCoroutine(NextStep());
     }
 
     void TutorialUIText()
@@ -105,8 +98,6 @@ public class TutorialMode : MonoBehaviour
             case step1:
                 headingText.text  = "Welcome to the training camp!";
                 subtitleText.text = "Here you will learn the basic skills required in battle.";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
@@ -114,8 +105,6 @@ public class TutorialMode : MonoBehaviour
             case step2:
                 headingText.text  = "Use your mouse to control the camera.";
                 subtitleText.text = "The turret follows the camera as you move it.";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
@@ -126,19 +115,14 @@ public class TutorialMode : MonoBehaviour
                                         KeyBindings.forwardKey, KeyBindings.leftKey,
                                         KeyBindings.backwardKey, KeyBindings.rightKey);
                 subtitleText.text = "";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
             #region Step 4
             case step4:
                 wall.LeanMoveLocalY(-5, 1.5f);
-
                 headingText.text  = "Move to the designated location.";
                 subtitleText.text = "";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
@@ -146,19 +130,14 @@ public class TutorialMode : MonoBehaviour
             case step5:
                 headingText.text  = "5";
                 subtitleText.text = "5";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
             #region Step 6
             case step6:
                 wall2.LeanMoveLocalY(-5, 1.5f);
-
                 headingText.text  = "Aim at the [target] and {click} to fire.";
                 subtitleText.text = "";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
@@ -166,8 +145,6 @@ public class TutorialMode : MonoBehaviour
             case step7:
                 headingText.text  = "7";
                 subtitleText.text = "7";
-
-                StartCoroutine(NextStep());
                 break;
             #endregion
 
@@ -175,8 +152,6 @@ public class TutorialMode : MonoBehaviour
             case step8:
                 headingText.text  = "CONGRATULATIONS!";
                 subtitleText.text = "You have successfully completed the tutorial.";
-
-                StartCoroutine(NextStep());
                 break;
                 #endregion
         }
@@ -198,7 +173,6 @@ public class TutorialMode : MonoBehaviour
     IEnumerator NextStep()
     {
         yield return new WaitForSeconds(delayTime);
-        currentStep++;
-        promptText.gameObject.SetActive(true);
+        currentStep = 2;
     }
 }
