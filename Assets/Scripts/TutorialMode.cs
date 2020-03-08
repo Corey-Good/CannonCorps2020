@@ -4,22 +4,25 @@
 /* Last Modified Date: 03/03/20                                         */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using Photon.Pun;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class TutorialMode : MonoBehaviour
 {
     #region Symbolic Constants
-    public const int step1 = 1;
-    public const int step2 = 2;
-    public const int step3 = 3;
-    public const int step4 = 4;
-    public const int step5 = 5;
-    public const int step6 = 6;
-    public const int step7 = 7;
-    public const int step8 = 8;
+    public const int step1 = 10;
+    public const int step2 = 20;
+    public const int step3 = 30;
+    public const int step4 = 40;
+    public const int step5 = 50;
+    public const int step6 = 60;
+    public const int step7 = 70;
+    public const int step8 = 80;
     #endregion
 
     #region Variables
@@ -44,8 +47,16 @@ public class TutorialMode : MonoBehaviour
     private int             lastStep;
     private float           delayTime = 5.0f;
     private bool            firstCall      = true;
-    private bool            promptComplete = false;
     private string          sceneName;
+    #endregion
+
+    #region Game Timer
+    public static double matchTimer = 0;
+    private int minute;
+    private int second;
+    private double startTime;
+    private double matchLength = 80;
+    private double timer;
     #endregion
 
     void Awake()
@@ -76,18 +87,25 @@ public class TutorialMode : MonoBehaviour
         promptText.gameObject.SetActive(false);
         promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
         #endregion
+
+        SetTimer();
+        matchTimer = 0;
     }
 
-    void Update()
+    void FixedUpdate()
     {
+        UpdateTimer();
+
+        Debug.Log(timer);
+
         #region Moves tutorial to the next slide on GameUI
         if (sceneName == "Tutorial")
         {
             TutorialUIText();
         }
-        #endregion
 
-        StartCoroutine(NextStep());
+        currentStep = (int)matchLength;
+        #endregion
     }
 
     void TutorialUIText()
@@ -174,5 +192,33 @@ public class TutorialMode : MonoBehaviour
     {
         yield return new WaitForSeconds(delayTime);
         currentStep = 2;
+    }
+
+    public void SetTimer()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startTime = PhotonNetwork.Time;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartTime", startTime } });
+        }
+        else
+        {
+            try
+            {
+                startTime = (double)PhotonNetwork.CurrentRoom.CustomProperties["StartTime"];
+            }
+            catch
+            {
+                startTime = PhotonNetwork.Time;
+            }
+        }
+    }
+
+    public void UpdateTimer()
+    {
+        matchTimer = PhotonNetwork.Time - startTime;
+        timer = matchLength + matchTimer;
+        second = (int)(timer % 60.0f);
+        minute = (int)(timer / 60.0f);
     }
 }
