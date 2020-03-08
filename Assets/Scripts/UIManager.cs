@@ -35,8 +35,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Game Timer
     public TextMeshProUGUI gameTimer;
     public static double matchTimer = 0;
-    private int    minute;
-    private int    second;
+    private int minute;
+    private int second;
     private double startTime;
     private double matchLength = 300;
     #endregion
@@ -111,12 +111,12 @@ public class UIManager : MonoBehaviourPunCallbacks
             playerTable.SetActive(!playerTable.activeSelf);
         }
 
-        if(player.leaveGame)
+        if (player.leaveGame)
         {
             StartCoroutine(SwitchScene());
         }
 
-        if(tank.tankHit)
+        if (tank.tankHit)
         {
             FlashHit();
             tank.tankHit = false;
@@ -173,7 +173,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             catch
             {
                 startTime = PhotonNetwork.Time;
-            }           
+            }
         }
     }
 
@@ -202,7 +202,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         player.leaveGame = false;
         player.returning = true;
-        TutorialMode.TutorialModeOn = false;
+        TutorialMode.tutorialModeOn = false;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         yield return new WaitForSeconds(1);
