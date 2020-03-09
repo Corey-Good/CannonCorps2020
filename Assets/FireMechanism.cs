@@ -22,5 +22,9 @@ public class FireMechanism : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
         }
+        else
+        {
+            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, gameObject.transform.rotation);
+        }
     }
 }
