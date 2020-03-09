@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 670323618193709697}
   - component: {fileID: -1749033928175059287}
   - component: {fileID: 1996661107570654809}
+  - component: {fileID: 5676082927774461696}
   m_Layer: 0
   m_Name: Catapult
   m_TagString: PlayerGO
@@ -220,8 +221,8 @@ MonoBehaviour:
   bulletActive: 0
   fireAnimation: {fileID: 2177514303465030681}
   tankCamera: {fileID: 2177514302449444839}
-  tankBody: {fileID: 0}
-  tankHead: {fileID: 0}
+  tankBody: {fileID: 6867105607875887944}
+  tankHead: {fileID: 4942006708219695288}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +327,18 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &5676082927774461696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2177514303472334809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4942006708219695288
 GameObject:
   m_ObjectHideFlags: 0
