@@ -79,6 +79,12 @@ public class TmManager : MonoBehaviour
             firstCall = false;
         }
 
+        if(player.gotPoints)
+        {
+            player.gotPoints = false;
+            UpdateTeamScores(player.teamCode, 10);
+        }
+
         //if (Input.GetKeyDown(KeyCode.T))
         //{
         //    player.ScoreCurrent += 10;

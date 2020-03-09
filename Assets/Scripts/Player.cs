@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 
     public bool returning = false;
 
+    public bool gotPoints = false;
+
     private static Player playerInstance;
 
     public enum GameState

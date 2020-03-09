@@ -43,6 +43,7 @@ public class Bullet : MonoBehaviour
         {
             // Update the player's score
             player.ScoreCurrent += 10;
+            player.gotPoints = true;
 
             // Show the points to the player
             //UIManager.ShowPoints();
