@@ -13,11 +13,12 @@ public class TutorialMode : MonoBehaviour
 {
     #region Symbolic Constants
     public const int step1 = 00;
-    public const int step2 = 04;
+    public const int step2 = 05;
     public const int step3 = 10;
-    public const int step4 = 17;
-    public const int step5 = 77;
-    public const int step6 = 127;
+    public const int step4 = 15;
+    public const int step5 = 60;
+    public const int step6 = 120;
+    public const int step7 = 140;
     #endregion
 
     #region Variables
@@ -67,10 +68,9 @@ public class TutorialMode : MonoBehaviour
         block           = GameObject.Find("Block");
                         
         currentStep     = step1;
-        lastStep        = step6;
+        lastStep        = step7;
 
         firstCall       = true;
-
         tutorialModeOn  = false;
 
         gameTimer       = 0;
@@ -81,11 +81,11 @@ public class TutorialMode : MonoBehaviour
     void FixedUpdate()
     {
         #region Debug
-        //Debug.Log(gameTimer);
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    startTime += -5;
-        //}
+        Debug.Log(gameTimer);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            startTime += -5;
+        }
         #endregion
 
         #region Handles GameTimer
