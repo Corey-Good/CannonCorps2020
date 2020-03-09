@@ -13,11 +13,11 @@ public class TutorialMode : MonoBehaviour
 {
     #region Symbolic Constants
     public const int step1 = 00;
-    public const int step2 = 05;
+    public const int step2 = 04;
     public const int step3 = 10;
-    public const int step4 = 15;
-    public const int step5 = 60;
-    public const int step6 = 90;
+    public const int step4 = 17;
+    public const int step5 = 77;
+    public const int step6 = 127;
     #endregion
 
     #region Variables
@@ -36,17 +36,14 @@ public class TutorialMode : MonoBehaviour
 
     public  TextMeshProUGUI headingText;
     public  TextMeshProUGUI subtitleText;
-    public  TextMeshProUGUI promptText;
 
     private Player          player;
     private int             lastStep;
     private bool            firstCall;
     private string          sceneName;
-    #endregion
 
-    #region GameTimer
-    private double startTime;
-    private int    gameTimer;
+    public static int startTime;
+    public static int gameTimer;
     #endregion
 
     void Awake()
@@ -76,16 +73,21 @@ public class TutorialMode : MonoBehaviour
 
         tutorialModeOn  = false;
 
-        promptText.gameObject.SetActive(false);
-        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
-
         gameTimer       = 0;
-        startTime       = PhotonNetwork.Time;
+        startTime       = (int)PhotonNetwork.Time;
         #endregion
     }
 
     void FixedUpdate()
     {
+        #region Debug
+        //Debug.Log(gameTimer);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    startTime += -5;
+        //}
+        #endregion
+
         #region Handles GameTimer
         gameTimer = (int)(PhotonNetwork.Time - startTime);
 
@@ -134,23 +136,25 @@ public class TutorialMode : MonoBehaviour
                 headingText.text  = "Move to the designated location.";
                 subtitleText.text = "";
                 break;
-            #endregion
-
-            #region Step 5
-            case step5:
-                wall2.LeanMoveLocalY(-5, 1.5f);
-                headingText.text  = "Aim at the [target] and {click} to fire.";
-                subtitleText.text = "";
-                break;
-            #endregion
-
-            #region Step 6
-            case step6:
-                headingText.text  = "CONGRATULATIONS!";
-                subtitleText.text = "You have successfully completed the tutorial.";
-                break;
                 #endregion
         }
+
+        #region Step 5
+        if (gameTimer > step5)
+        {
+            wall2.LeanMoveLocalY(-5, 1.5f);
+            headingText.text = "Aim at the block and click to fire.";
+            subtitleText.text = "";
+        }
+        #endregion
+
+        #region Step 6
+        if (gameTimer > step6)
+        {
+            headingText.text = "CONGRATULATIONS!";
+            subtitleText.text = "You have successfully completed the tutorial.";
+        }
+        #endregion
 
         #region Moves player to MainMenu after completing tutorial
         if (currentStep > lastStep && firstCall)
