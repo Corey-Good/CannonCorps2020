@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Classes
     private Tank tank;
     private Player player;
+    private PlayerController playerController;
     #endregion
 
     #region Player Info
@@ -18,6 +19,9 @@ public class UIManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI playerScoreText;
     public Slider healthBar;
     public Slider reloadBar;
+    public Image bulletIcon;
+    public Image freezeBulletIcon;
+    
     #endregion
 
     #region Table of Players
@@ -50,6 +54,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Get the instance of the Tank and Player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
 
         // Set default values
         playerScoreText.text = "0";
@@ -83,8 +88,24 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
+        
         reloadBar.value = tank.reloadProgress;
+        //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
+
+        switch (playerController.currentBulletType)
+        {
+            case PlayerController.BulletType.Normal:
+                bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                bulletIcon.fillAmount = tank.reloadProgress;
+                freezeBulletIcon.CrossFadeAlpha(0.3f, 2.0f, false);
+                break;
+            case PlayerController.BulletType.FreezeBullet:
+                freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                freezeBulletIcon.fillAmount = tank.reloadProgress;
+                bulletIcon.CrossFadeAlpha(0.3f, 2.0f, false);
+                break;
+        }
 
         if (player.gameState == Player.GameState.SM)
         {

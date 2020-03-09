@@ -5500,6 +5500,8 @@ MonoBehaviour:
   playerScoreText: {fileID: 1118772910}
   healthBar: {fileID: 2131061433}
   reloadBar: {fileID: 389335518}
+  bulletIcon: {fileID: 1258920879}
+  freezeBulletIcon: {fileID: 1853054253}
   playerTable: {fileID: 658031795}
   playerListing: {fileID: 7040387558038990153, guid: f88d8ef43c5420c49b408408a6e2ad6f,
     type: 3}

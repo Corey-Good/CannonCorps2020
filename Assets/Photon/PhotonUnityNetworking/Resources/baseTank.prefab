@@ -469,6 +469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   readyToFire: 1
+  currentBulletType: 0
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}

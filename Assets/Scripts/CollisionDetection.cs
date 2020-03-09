@@ -6,6 +6,8 @@ public class CollisionDetection : MonoBehaviour
     private PhotonView photonView;
     private Tank tank;
     private UIManager ui;
+    public bool shieldBoostOn;
+
     private void Awake()
     {
         photonView = GetComponentInParent<PhotonView>();
@@ -17,8 +19,17 @@ public class CollisionDetection : MonoBehaviour
         Debug.Log(collision.gameObject.tag);
         if(photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
-            tank.healthCurrent -= 10f;
-            tank.tankHit = true;
+            if (shieldBoostOn)
+            {
+                shieldBoostOn = false;
+                return;
+            }
+            else
+            {
+                tank.damageTaken(10f);
+                tank.tankHit = true;
+            }
+            
 
         }
     }

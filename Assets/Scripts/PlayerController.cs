@@ -21,13 +21,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
     private bool speedBoostOn = false;
+    
     public enum BulletType
     {
         Normal,
         FreezeBullet
     }
 
-    private BulletType currentBulletType;
+    public BulletType currentBulletType;
     private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
 
     public Animator fireAnimation;
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public Tank tank;
     private Player player;
+    private CollisionDetection collisionDetection;
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +73,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        collisionDetection = GetComponent<CollisionDetection>();
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
@@ -287,6 +290,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         reloadBoost = originalReloadBoost;
     }
+
+    public void SetShieldBoostOn()
+    {
+        collisionDetection.shieldBoostOn = true;
+    }
     
     IEnumerator DelayStart()
     {
@@ -294,10 +302,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         fireMechanism.FireBullet();
     }
 
-    public void DealDamage(float damage)
-    {
-        tank.damageTaken(damage);
-    }
+    /* Using collision detection script instead */
+    //public void DealDamage(float damage)
+    //{
+    //    if(shieldBoostOn)
+    //    {
+    //        shieldBoostOn = false;
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        tank.damageTaken(damage);
+    //    }
+        
+    //}
 }
 
 
