@@ -33,6 +33,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        Cursor.visible = true;
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
     }
 
