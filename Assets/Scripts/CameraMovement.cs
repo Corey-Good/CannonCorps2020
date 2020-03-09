@@ -41,7 +41,7 @@ public class CameraMovement : MonoBehaviourPun
         {
             return;
         }
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > TutorialMode.step1))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step1))
         {
             //ZoomCamera();
         }
