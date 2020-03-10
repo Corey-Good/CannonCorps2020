@@ -91,7 +91,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 healthCurrent = 100;
                 healthRegen = 5;
                 speedRotation = 9;
-                speedMovement = 15;
+                speedMovement = 50;
                 bulletSpeed = 50;
                 bulletDamage = 20;
                 reloadTime = 2f;
