@@ -220,6 +220,7 @@ MonoBehaviour:
   PlayerNames: {fileID: 637148249}
   playerListingPrefab: {fileID: 3200725627273235626, guid: 0a28eddcbf1561f458148b6a573ed637,
     type: 3}
+  readyUpButton: {fileID: 1837163255}
   transitionPanel: {fileID: 1439308493}
   minPlayers: 2
 --- !u!114 &16211547
@@ -12674,7 +12675,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1439308493
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15350,7 +15351,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0.19607843}
     m_PressedColor: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 0.39215687}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 0.19607843}
-    m_DisabledColor: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
+    m_DisabledColor: {r: 0.553, g: 0.553, b: 0.553, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -15371,10 +15372,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 16211546}
         m_MethodName: ReadyUp
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1837163255}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

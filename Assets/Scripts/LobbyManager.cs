@@ -27,9 +27,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject LobbyView;
     public GameObject PlayerNames;
     public GameObject playerListingPrefab;
+    public Button readyUpButton;
     public RectTransform transitionPanel;
     private List<GameObject> playerListings = new List<GameObject>();
-    private float lobbyTimer = 30f;
+    private float lobbyTimer = 5f;
     private bool beginCountDown = false;
     #endregion
 
@@ -91,9 +92,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         player.gameState = Player.GameState.Lobby;
+        readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready Up";
+        readyUpButton.enabled = true;
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
         EmptyPlayerList();
+
     }
 
     private void UpdatePlayerList()
@@ -195,7 +199,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel(scene);
     }
 
-    public void ReadyUp(Button btn)
+    public void ReadyUp()
     {
         Debug.Log("CLicked ready up");
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
@@ -217,7 +221,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         }
 
-        btn.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
-        btn.enabled = false;
+        readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
+        readyUpButton.enabled = false;
     }
 }
