@@ -51,17 +51,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         if(lobbyTimer <= 0)
         {
-            beginCountDown = false;
-            lobbyTimer = 5f;
-            lobbyStatus.text = "";
             SetUpGame();
+            beginCountDown = false;
+            lobbyStatus.text = "";
         }
-
     }
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", false } });
 
         UpdatePlayerList();
@@ -133,26 +130,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void UpdateLobbyStatus()
     {
         playerCount.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
-        Photon.Realtime.Player[] players =  PhotonNetwork.PlayerList;
-        int readyPlayers = 0;
-        foreach (Photon.Realtime.Player player in players)
-        {
-            if((bool)player.CustomProperties["Ready"])
-            {
-                readyPlayers++;
-            }
-        }
-
-        if(readyPlayers >= minPlayers)
-        {
-            beginCountDown = true;
-            lobbyTimer = 5f;
-        }
-        else
-        {
-            beginCountDown = false;
-            lobbyStatus.text = "Waiting for players...";
-        }
     }
 
     private void SetUpGame()
@@ -209,32 +186,35 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void ReadyUp(Button btn)
     {
+        Debug.Log("Entering Ready up");
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
+        Debug.Log("Set play property");
+
         int readyPlayers = 0;
         Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
+        Debug.Log("Got player List");
         foreach (Photon.Realtime.Player player in players)
         {
             if ((bool)player.CustomProperties["Ready"])
             {
+                Debug.Log("Checking player");
                 readyPlayers++;
+                Debug.Log("Player is ready");
             }
         }
-
-        if (readyPlayers >= minPlayers)
+        Debug.Log("exiting check");
+        if (readyPlayers > minPlayers)
         {
-            beginCountDown = true;
-            lobbyTimer = 5f;
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+            Debug.Log("Set room property");
+
         }
-       
-        btn.enabled = false;
-        Debug.Log("Readied Up!");
-        UpdateLobbyStatus();
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
-        SetUpGame();
-
+        Debug.Log("This shouldnt be showing up");
+        beginCountDown = true;
+        lobbyTimer = 5f;
     }
 }
