@@ -58,6 +58,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
         {
+            Debug.Log("Countdown should start soon");
             BeginCountDown();
         }
     }
@@ -195,6 +196,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void ReadyUp(Button btn)
     {
+        Debug.Log("CLicked ready up");
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
 
         int readyPlayers = 0;
@@ -206,12 +208,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 readyPlayers++;
             }
         }
-
-        if (readyPlayers > minPlayers)
+        Debug.Log("Ready players is: " + readyPlayers);
+        if (readyPlayers >= minPlayers)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+            Debug.Log("Setting this value to true");
 
         }
+
+        btn.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
     }
 
     public void BeginCountDown()
