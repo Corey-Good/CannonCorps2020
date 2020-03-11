@@ -18,6 +18,15 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
     public bool readyToFire = true;
+
+    public float numOfFreezeBullets;
+    public float numOfDynamiteBullets;
+    public float numOfLaserBullets;
+    public float maxNumOfFreezeBullets = 10;
+    public float maxNumOfDynamiteBullets = 5;
+    public float maxNumOfLaserBullets = 15;
+
+
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
     private bool speedBoostOn = false;
@@ -25,9 +34,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public enum BulletType
     {
         Normal,
-        FreezeBullet
+        FreezeBullet,
+        DynamiteBullet,
+        LaserBullet
     }
 
+    
     public BulletType currentBulletType;
     private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
 
@@ -111,12 +123,44 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 fireAnimation.SetTrigger("LaunchCatapult");
             }
             readyToFire = fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+            if(!readyToFire)
+            {
+                switch(currentBulletType)
+                {
+                    case BulletType.FreezeBullet:
+                        numOfFreezeBullets -= 1.0f;
+                        if (numOfFreezeBullets == 0.0f)
+                            currentBulletType = BulletType.Normal;
+                        break;
+                    case BulletType.DynamiteBullet:
+                        numOfDynamiteBullets -= 1.0f;
+                        if (numOfDynamiteBullets == 0.0f)
+                            currentBulletType = BulletType.Normal;
+                        break;
+                    case BulletType.LaserBullet:
+                        numOfLaserBullets -= 1.0f;
+                        if (numOfLaserBullets == 0.0f)
+                            currentBulletType = BulletType.Normal;
+                        break;
+                }
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             currentBulletType += 1;
-            if ((int)currentBulletType == numberOfBulletTypes)
+            
+            if (numOfFreezeBullets == 0.0f)
+                if((int)currentBulletType == 1)
+                    currentBulletType += 1;
+            if (numOfDynamiteBullets == 0.0f)
+                if ((int)currentBulletType == 2)
+                    currentBulletType += 1;
+            if (numOfLaserBullets == 0.0f)
+                if ((int)currentBulletType == 3)
+                    currentBulletType += 1;
+
+            if ((int)currentBulletType >= numberOfBulletTypes)
                 currentBulletType = 0;
         }
 
@@ -295,7 +339,34 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         collisionDetection.shieldBoostOn = true;
     }
-    
+
+    public void CollectFreezeBullets(float freezeBullets)
+    {
+        numOfFreezeBullets += freezeBullets;
+        if (numOfFreezeBullets >= maxNumOfFreezeBullets)
+        {
+            numOfFreezeBullets = maxNumOfFreezeBullets;
+        }
+    }
+
+    public void CollectDynamiteBullets(float dynamiteBullets)
+    {
+        numOfDynamiteBullets += dynamiteBullets;
+        if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
+        {
+            numOfDynamiteBullets = maxNumOfDynamiteBullets;
+        }
+    }
+
+    public void CollectLaserBullets(float laserBullets)
+    {
+        numOfLaserBullets += laserBullets;
+        if (numOfLaserBullets >= maxNumOfLaserBullets)
+        {
+            numOfLaserBullets = maxNumOfLaserBullets;
+        }
+    }
+
     IEnumerator DelayStart()
     {
         yield return new WaitForSeconds(0.75f);

@@ -18,6 +18,10 @@ public class FireMechanism : MonoBehaviour
                     return FireBullet();
                 case PlayerController.BulletType.FreezeBullet:
                     return FireFreezeBullet();
+                case PlayerController.BulletType.DynamiteBullet:
+                    return FireDynamiteBullet();
+                case PlayerController.BulletType.LaserBullet:
+                    return FireLaserBullet();
                 default:
                     return true;
             }
@@ -31,6 +35,39 @@ public class FireMechanism : MonoBehaviour
 
     public bool FireBullet()
     { 
+        RaycastHit hit;
+
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        {
+            Vector3 direction = hit.point - gameObject.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public bool FireDynamiteBullet()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        {
+            Vector3 direction = hit.point - gameObject.transform.position;
+            Quaternion rotation = Quaternion.LookRotation(direction);
+            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public bool FireLaserBullet()
+    {
         RaycastHit hit;
 
         if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))

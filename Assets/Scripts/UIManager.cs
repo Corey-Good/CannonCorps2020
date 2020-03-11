@@ -21,6 +21,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     public Slider reloadBar;
     public Image bulletIcon;
     public Image freezeBulletIcon;
+    public Image dynamiteBulletIcon;
+    public Image laserBulletIcon;
     
     #endregion
 
@@ -93,17 +95,48 @@ public class UIManager : MonoBehaviourPunCallbacks
         //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
+        bulletIcon.fillAmount = tank.reloadProgress;
+        freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
+        dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
+        laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
+
         switch (playerController.currentBulletType)
         {
             case PlayerController.BulletType.Normal:
                 bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
-                bulletIcon.fillAmount = tank.reloadProgress;
-                freezeBulletIcon.CrossFadeAlpha(0.3f, 2.0f, false);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
                 break;
             case PlayerController.BulletType.FreezeBullet:
                 freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
-                freezeBulletIcon.fillAmount = tank.reloadProgress;
-                bulletIcon.CrossFadeAlpha(0.3f, 2.0f, false);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+            case PlayerController.BulletType.DynamiteBullet:
+                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+            case PlayerController.BulletType.LaserBullet:
+                laserBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
                 break;
         }
 
