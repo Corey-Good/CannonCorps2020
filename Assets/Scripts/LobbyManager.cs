@@ -57,7 +57,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             SetUpGame();
         }
 
-        if(PhotonNetwork.CurrentRoom.IsOpen && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
         {
             SetUpGame();
         }
