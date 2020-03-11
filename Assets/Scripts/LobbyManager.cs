@@ -57,19 +57,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             SetUpGame();
         }
 
-        if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
-        {
-            SetUpGame();
-        }
     }
 
     public override void OnJoinedRoom()
     {
-        UpdatePlayerList();
-        UpdateLobbyStatus();
-
         PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", false } });
+
+        UpdatePlayerList();
+        UpdateLobbyStatus();
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -232,6 +228,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
        
         btn.enabled = false;
+        Debug.Log("Readied Up!");
         UpdateLobbyStatus();
     }
 
