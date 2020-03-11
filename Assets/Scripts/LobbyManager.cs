@@ -45,6 +45,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if(beginCountDown)
         {
+            Debug.Log("Timer should be moving");
             lobbyTimer -= Time.deltaTime;
             lobbyStatus.text = "Starting game in " + lobbyTimer.ToString("00");
         }
@@ -56,10 +57,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             lobbyStatus.text = "";
         }
 
-        if(PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        if(!beginCountDown && PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
         {
             Debug.Log("Countdown should start soon");
-            BeginCountDown();
+            beginCountDown = true;
         }
     }
 
@@ -217,11 +218,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
 
         btn.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
-    }
-
-    public void BeginCountDown()
-    {
-        beginCountDown = true;
-        lobbyTimer = 5f;
+        btn.enabled = false;
     }
 }
