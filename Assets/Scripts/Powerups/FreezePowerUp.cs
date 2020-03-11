@@ -6,12 +6,14 @@ public class FreezePowerUp : PowerUp
 {
     public float rotateMultiplier = 0f;
     public float speedMultiplier = 0f;
+    public float Damage = -5.0f;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
         playerBrain.SetSpeedBoostOff();
         playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier);
+        playerBrain.SetHealthBoost(Damage);
         StartCoroutine(FreezeTimer());
     }
 

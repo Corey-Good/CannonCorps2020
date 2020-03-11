@@ -58,7 +58,7 @@ public class FireMechanism : MonoBehaviour
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
+            GameObject bullet = PhotonNetwork.Instantiate("DynamiteBullet", gameObject.transform.position, rotation);
             return false;
         }
         else
@@ -74,7 +74,7 @@ public class FireMechanism : MonoBehaviour
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
+            GameObject bullet = PhotonNetwork.Instantiate("LaserBullet", gameObject.transform.position, rotation);
             return false;
         }
         else
