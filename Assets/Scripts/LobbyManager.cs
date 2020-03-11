@@ -56,6 +56,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             SetUpGame();
             beginCountDown = false;
             lobbyStatus.text = "";
+            lobbyTimer = 5f;
         }
 
         if(!beginCountDown && PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
@@ -93,7 +94,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         player.gameState = Player.GameState.Lobby;
         readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready Up";
-        readyUpButton.enabled = true;
+        readyUpButton.interactable = true;
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
         EmptyPlayerList();
@@ -222,6 +223,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
 
         readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
-        readyUpButton.enabled = false;
+        readyUpButton.interactable = false;
     }
 }
