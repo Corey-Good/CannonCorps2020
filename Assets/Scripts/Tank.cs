@@ -27,6 +27,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     public          GameObject  tankProjectile { get; set; }
     public          Color       tankColor      { get; set; }
     public static   Tank        tankInstance   { get; set; }
+    public bool tankHit = false;
     #endregion
 
     void Awake()
@@ -161,7 +162,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     private void SendPlayerHurtMessages()
     {
         // Send message to any listeners
-        if(EventSystemListeners.main.listeners != null)
+        if (EventSystemListeners.main.listeners != null)
         {
             foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
             {
@@ -171,7 +172,8 @@ public class Tank : MonoBehaviour, ITakeDamage
                     );
             }
         }
-        
+    }
+
     // Calculate the tank statistic based on its ranking relative to the other tanks
     public float CalculateStat(float max, float min, float position)
     {

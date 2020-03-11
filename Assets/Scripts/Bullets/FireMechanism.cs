@@ -8,32 +8,32 @@ public class FireMechanism : MonoBehaviour
     public float bulletForce;
     public Camera tankCamera;
 
-    public bool ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
+    public void ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
     {
         if(readyToFire)
         {
             switch (currentBulletType)
             {
                 case PlayerController.BulletType.Normal:
-                    return FireBullet();
+                    FireBullet();
+                    break;
                 case PlayerController.BulletType.FreezeBullet:
-                    return FireFreezeBullet();
+                    FireFreezeBullet();
+                    break;
                 case PlayerController.BulletType.DynamiteBullet:
-                    return FireDynamiteBullet();
+                    FireDynamiteBullet();
+                    break;
                 case PlayerController.BulletType.LaserBullet:
-                    return FireLaserBullet();
-                default:
-                    return true;
+                    FireLaserBullet();
+                    break;
+                    
             }
         }
-        else
-        {
-            return true;
-        }
+
 
     }
 
-    public bool FireBullet()
+    public void FireBullet()
     { 
         RaycastHit hit;
 
@@ -42,15 +42,14 @@ public class FireMechanism : MonoBehaviour
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
-            return false;
         }
         else
         {
-            return true;
+            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, gameObject.transform.rotation);
         }
     }
 
-    public bool FireDynamiteBullet()
+    public void FireDynamiteBullet()
     {
         RaycastHit hit;
 
@@ -59,14 +58,14 @@ public class FireMechanism : MonoBehaviour
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("DynamiteBullet", gameObject.transform.position, rotation);
-            return false;
+            
         }
         else
         {
-            return true;
+            GameObject bullet = PhotonNetwork.Instantiate("DynamiteBullet", gameObject.transform.position, gameObject.transform.rotation);
         }
     }
-    public bool FireLaserBullet()
+    public void FireLaserBullet()
     {
         RaycastHit hit;
 
@@ -75,15 +74,15 @@ public class FireMechanism : MonoBehaviour
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("LaserBullet", gameObject.transform.position, rotation);
-            return false;
+            
         }
         else
         {
-            return true;
+            GameObject bullet = PhotonNetwork.Instantiate("LaserBullet", gameObject.transform.position, gameObject.transform.rotation);
         }
     }
 
-    public bool FireFreezeBullet()
+    public void FireFreezeBullet()
     {
         RaycastHit hit;
 
@@ -92,11 +91,11 @@ public class FireMechanism : MonoBehaviour
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, rotation);
-            return false;
+            
         }
         else
         {
-            return true;
+            GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, gameObject.transform.rotation);
         }
     }
 }

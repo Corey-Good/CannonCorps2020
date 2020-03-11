@@ -113,9 +113,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
            && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5))
-           && (!bulletActive))
+           && (readyToFire))
         {
-            bulletActive = true;            
+            readyToFire = false;            
 
             if(tank.tankModel == "catapult")
             {
@@ -132,7 +132,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 Debug.Log("Firing the Catapult!!!");
                 fireAnimation.SetTrigger("Fire");
             }
-            readyToFire = fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+            fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
             if(!readyToFire)
             {
                 switch(currentBulletType)
@@ -378,7 +378,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    IEnumerator DelayStart()
+
     public void DealDamage(float damage)
     {
         tank.damageTaken(damage);
