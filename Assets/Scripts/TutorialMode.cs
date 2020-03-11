@@ -81,7 +81,6 @@ public class TutorialMode : MonoBehaviour
     void FixedUpdate()
     {
         #region Debug
-        Debug.Log(gameTimer);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             startTime += -5;

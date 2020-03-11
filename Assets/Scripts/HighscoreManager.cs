@@ -52,8 +52,6 @@ public class HighscoreManager : MonoBehaviour
                 continue;
             string playerName = score.playerName.Replace("+", " ");
 
-            Debug.Log(playerName + ": " + playerScore);
-
             // Create and add a player listing
             GameObject tempListing = Instantiate(playerScoreListing);
             Text[] tempText = tempListing.GetComponentsInChildren<Text>();
