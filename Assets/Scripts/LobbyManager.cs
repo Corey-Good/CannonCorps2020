@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using ExitGames.Client.Photon;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
@@ -55,12 +56,20 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             lobbyStatus.text = "";
             SetUpGame();
         }
+
+        if((bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        {
+            SetUpGame();
+        }
     }
 
     public override void OnJoinedRoom()
     {
         UpdatePlayerList();
         UpdateLobbyStatus();
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
+        PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", false } });
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -128,7 +137,17 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private void UpdateLobbyStatus()
     {
         playerCount.text = PhotonNetwork.CurrentRoom.PlayerCount.ToString() + "/" + PhotonNetwork.CurrentRoom.MaxPlayers.ToString();
-        if(PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers)
+        Photon.Realtime.Player[] players =  PhotonNetwork.PlayerList;
+        int readyPlayers = 0;
+        foreach (Photon.Realtime.Player player in players)
+        {
+            if((bool)player.CustomProperties["Ready"])
+            {
+                readyPlayers++;
+            }
+        }
+
+        if(readyPlayers >= minPlayers)
         {
             beginCountDown = true;
             lobbyTimer = 5f;
@@ -190,5 +209,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         LeanTween.alpha(transitionPanel, 1, 1);
         yield return new WaitForSeconds(1f);
         PhotonNetwork.LoadLevel(scene);
+    }
+
+    public void ReadyUp(Button btn)
+    {
+        PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+        btn.enabled = false;
+        UpdateLobbyStatus();
+    }
+
+    public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
+    {
+        UpdateLobbyStatus();
     }
 }
