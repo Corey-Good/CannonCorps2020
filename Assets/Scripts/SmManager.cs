@@ -25,6 +25,7 @@ public class SmManager : MonoBehaviour
 
     void Awake()
     {
+        PhotonNetwork.IsMessageQueueRunning = true;
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();

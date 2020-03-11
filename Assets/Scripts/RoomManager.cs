@@ -78,10 +78,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
         else if (player.gameState == Player.GameState.SM)
         {
+            PhotonNetwork.IsMessageQueueRunning = false;
             LobbyView.SetActive(true);
         }
         else if (player.gameState == Player.GameState.TB)
         {
+            PhotonNetwork.IsMessageQueueRunning = false;
             LobbyView.SetActive(true);
         }
         else if(player.gameState == Player.GameState.TT)
