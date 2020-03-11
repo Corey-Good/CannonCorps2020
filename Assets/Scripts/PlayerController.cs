@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             MovePlayer();            
         }
 
-        if (Input.GetMouseButtonDown(0)
+        if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
            && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5))
            && (!bulletActive))
         {

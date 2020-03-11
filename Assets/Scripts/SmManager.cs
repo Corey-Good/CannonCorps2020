@@ -88,8 +88,17 @@ public class SmManager : MonoBehaviour
             tank.healthCurrent = tank.healthMax;
         }
 
-        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        int count = 0;
+        foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if(player == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
+            {
+                tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
+            }
+
+            count++;
+        }        
+        
         tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 

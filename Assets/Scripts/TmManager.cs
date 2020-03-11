@@ -114,8 +114,17 @@ public class TmManager : MonoBehaviour
     void SpawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
-        int spawnPoint = GetSpawnPoint(player.teamCode);
-        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+
+        int count = 0;
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if (player == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
+            {
+                tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
+            }
+
+            count++;
+        }
         tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 

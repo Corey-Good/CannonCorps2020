@@ -59,7 +59,16 @@ public class CameraMovement : MonoBehaviourPun
     // Sometimes, your code documents itself
     public void LookAtCameraTarget()
     {
-        float mouseInput = Input.GetAxis("Mouse Y") * verticalSensitivity;
+        float mouseInput;
+        if(KeyBindings.YisInverted)
+        {
+            mouseInput = Input.GetAxis("Mouse Y") * -verticalSensitivity;
+        }
+        else
+        {
+            mouseInput = Input.GetAxis("Mouse Y") * verticalSensitivity;
+        }
+            
         // Set the new target position height based on mouse input 
         if(!(PauseMenuAnimations.GameIsPaused))
         { 
