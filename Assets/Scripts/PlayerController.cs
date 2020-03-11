@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float rotateSpeed;
     #endregion  
 
-    public Tank tank;
+    private Tank tank;
     private Player player;
     private CollisionDetection collisionDetection;
 
@@ -106,21 +106,31 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         }
 
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > 3))
+        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step3))
         {
             MovePlayer();            
         }
-        
-        if(Input.GetMouseButtonDown(0) && !(PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) && readyToFire)
+
+        if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
+           && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5))
+           && (!bulletActive))
         {
-            if (tank.tankModel == "Catapult")
+            bulletActive = true;            
+
+            if(tank.tankModel == "catapult")
             {
-                StartCoroutine(DelayStart());
+                StartCoroutine(DelayFire());
             }
+            else
+            {
+                fireMechanism.FireBullet();
+            }
+
 
             if (fireAnimation != null)
             {
-                fireAnimation.SetTrigger("LaunchCatapult");
+                Debug.Log("Firing the Catapult!!!");
+                fireAnimation.SetTrigger("Fire");
             }
             readyToFire = fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
             if(!readyToFire)
@@ -164,10 +174,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 currentBulletType = 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.H))
-        {
-            tank.healthCurrent -= 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    tank.healthCurrent -= 10;
+        //}
+
         ReloadBullet();
     }
 
@@ -368,9 +379,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     IEnumerator DelayStart()
+    public void DealDamage(float damage)
     {
-        yield return new WaitForSeconds(0.75f);
-        fireMechanism.FireBullet();
+        tank.damageTaken(damage);
     }
 
     /* Using collision detection script instead */
@@ -387,6 +398,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     //    }
         
     //}
+    IEnumerator DelayFire()
+    {
+        yield return new WaitForSeconds(0.3f);
+        fireMechanism.FireBullet();
+
+    }
 }
 
 

@@ -12,7 +12,8 @@ public class TmManager : MonoBehaviour
     #endregion
 
     #region Spawn Locations
-    public GameObject[] spawnlocations = new GameObject[5];
+    public GameObject[] redSpawnlocations = new GameObject[5];
+    public GameObject[] blueSpawnlocations = new GameObject[5];
     #endregion
 
     #region Team Scores
@@ -30,6 +31,7 @@ public class TmManager : MonoBehaviour
 
     void Awake()
     {
+        PhotonNetwork.IsMessageQueueRunning = true;
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
@@ -79,37 +81,44 @@ public class TmManager : MonoBehaviour
             firstCall = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
+        if(player.gotPoints)
         {
-            player.ScoreCurrent += 10;
+            player.gotPoints = false;
+            UpdateTeamScores(player.teamCode, 10);
         }
+
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    player.ScoreCurrent += 10;
+        //}
     }
 
     // Grab a random spawn point code
-    int GetSpawnPoint(int teamCode)
-    {
-        int spawnPoint = 0;
 
-        if (teamCode == 0)
-        {
-            // Get a spawnpoint from the first half of the array
-            spawnPoint = Random.Range(0, (int)spawnlocations.Length / 2 - 1);
-        }
-        else if (teamCode == 1)
-        {
-            // Get a spawnpoint from the second half of the array
-            spawnPoint = Random.Range((int)spawnlocations.Length / 2, spawnlocations.Length - 1);
-        }
-
-        return spawnPoint;
-    }
 
     // Spawn the player at a random spawnpoint in the map
     void SpawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
-        int spawnPoint = GetSpawnPoint(player.teamCode);
-        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+
+        int redCount = 0;
+        int blueCount = 0;
+        foreach (Photon.Realtime.Player networkPlayer in PhotonNetwork.PlayerList)
+        {
+            if (networkPlayer == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
+            {
+                if(player.teamCode == 0)
+                {
+                    tankObject = PhotonNetwork.Instantiate(tank.tankModel, redSpawnlocations[redCount].transform.position, redSpawnlocations[redCount].transform.rotation);
+                    redCount++;
+                }
+                else if(player.teamCode == 1)
+                {
+                    tankObject = PhotonNetwork.Instantiate(tank.tankModel, blueSpawnlocations[blueCount].transform.position, blueSpawnlocations[blueCount].transform.rotation);
+                    blueCount++;
+                }                
+            }            
+        }
         tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 
@@ -117,7 +126,16 @@ public class TmManager : MonoBehaviour
     void RespawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
-        tankObject.transform.position = spawnlocations[GetSpawnPoint(player.teamCode)].transform.position;
+        if (player.teamCode == 0)
+        {
+            int spawnPoint = Random.Range(0, redSpawnlocations.Length - 1);
+            tankObject = PhotonNetwork.Instantiate(tank.tankModel, redSpawnlocations[spawnPoint].transform.position, redSpawnlocations[spawnPoint].transform.rotation);
+        }
+        else if (player.teamCode == 1)
+        {
+            int spawnPoint = Random.Range(0, blueSpawnlocations.Length - 1);
+            tankObject = PhotonNetwork.Instantiate(tank.tankModel, blueSpawnlocations[spawnPoint].transform.position, blueSpawnlocations[spawnPoint].transform.rotation);
+        }
     }
 
     public void UpdateTeamScores(int teamCode, int pointsEarned)

@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+﻿/************************************************************************/
+/* Author:             Corey Good                                     */
+/* Date Created:       ??                                      */
+/* Last Modified Date: 3/6/2020                                        */
+/* Modified By:        Corey Good                                     */
+/************************************************************************/
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
@@ -35,8 +41,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Game Timer
     public TextMeshProUGUI gameTimer;
     public static double matchTimer = 0;
-    private int    minute;
-    private int    second;
+    private int minute;
+    private int second;
     private double startTime;
     private double matchLength = 300;
     #endregion
@@ -53,6 +59,8 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     void Awake()
     {
+        Cursor.visible = false;
+
         // Get the instance of the Tank and Player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
@@ -157,22 +165,21 @@ public class UIManager : MonoBehaviourPunCallbacks
             playerTable.SetActive(!playerTable.activeSelf);
         }
 
-        if(player.leaveGame)
+        if (player.leaveGame)
         {
             StartCoroutine(SwitchScene());
         }
 
-        if(Input.GetKeyDown(KeyCode.Y))
+        if (tank.tankHit)
         {
             FlashHit();
             tank.tankHit = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            Debug.Log("Showing Points");
-            ShowPoints();
-        }
+        //if(Input.GetKeyDown(KeyCode.Y))
+        //{
+        //    ShowPoints();
+        //}
     }
 
     private void UpdateTable()
@@ -220,7 +227,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             catch
             {
                 startTime = PhotonNetwork.Time;
-            }           
+            }
         }
     }
 
@@ -245,12 +252,11 @@ public class UIManager : MonoBehaviourPunCallbacks
         UpdateTable();
     }
 
-
     private IEnumerator SwitchScene()
     {
         player.leaveGame = false;
         player.returning = true;
-        TutorialMode.TutorialModeOn = false;
+        TutorialMode.tutorialModeOn = false;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         yield return new WaitForSeconds(1);

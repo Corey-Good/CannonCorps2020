@@ -129,7 +129,7 @@ public class CustomizeCharacter : MonoBehaviour
                 }
             }
         }
-        if (tankModels[model].name == "Catapult")
+        if (tankModels[model].name == "catapult")
         {
             Renderer[] rends = tankModels[model].GetComponentsInChildren<Renderer>();
 
@@ -168,7 +168,7 @@ public class CustomizeCharacter : MonoBehaviour
             tankModels[1].SetActive(true);
             model = 1;
         }
-        else if (tankInstance.tankModel == "Catapult")
+        else if (tankInstance.tankModel == "catapult")
         {
             tankModels[2].SetActive(true);
             model = 2;

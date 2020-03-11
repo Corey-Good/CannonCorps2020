@@ -25,6 +25,7 @@ public class SmManager : MonoBehaviour
 
     void Awake()
     {
+        PhotonNetwork.IsMessageQueueRunning = true;
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
@@ -63,10 +64,10 @@ public class SmManager : MonoBehaviour
             RespawnPlayer();            
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            player.ScoreCurrent += 10;
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    player.ScoreCurrent += 10;
+        //}
 
         // If a shark leaves the game for some reason, decrease the shark count
         if (player.leaveGame && deathCount > 1)
@@ -88,8 +89,17 @@ public class SmManager : MonoBehaviour
             tank.healthCurrent = tank.healthMax;
         }
 
-        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        int count = 0;
+        foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if(player == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
+            {
+                tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
+            }
+
+            count++;
+        }        
+        
         tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 

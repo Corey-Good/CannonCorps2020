@@ -173,12 +173,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8de74245da21834448d861ad18d802ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnlocations:
+  redSpawnlocations:
   - {fileID: 667847532}
   - {fileID: 2075824734}
   - {fileID: 1795104516}
   - {fileID: 1365422873}
   - {fileID: 549142930}
+  blueSpawnlocations:
   - {fileID: 1491177125}
   - {fileID: 598639762}
   - {fileID: 2092657448}
@@ -819,7 +820,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &667847532
 GameObject:
