@@ -51,7 +51,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if(lobbyTimer <= 0)
         {
             beginCountDown = false;
-            lobbyTimer = 30f;
+            lobbyTimer = 5f;
             lobbyStatus.text = "";
             SetUpGame();
         }
@@ -131,7 +131,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if(PhotonNetwork.CurrentRoom.PlayerCount >= minPlayers)
         {
             beginCountDown = true;
-            lobbyTimer = 30f;
+            lobbyTimer = 5f;
         }
         else
         {
