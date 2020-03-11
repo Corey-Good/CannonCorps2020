@@ -57,7 +57,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             SetUpGame();
         }
 
-        if((bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        if(PhotonNetwork.CurrentRoom.IsOpen && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
         {
             SetUpGame();
         }
@@ -214,13 +214,30 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void ReadyUp(Button btn)
     {
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+        int readyPlayers = 0;
+        Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
+        foreach (Photon.Realtime.Player player in players)
+        {
+            if ((bool)player.CustomProperties["Ready"])
+            {
+                readyPlayers++;
+            }
+        }
+
+        if (readyPlayers >= minPlayers)
+        {
+            beginCountDown = true;
+            lobbyTimer = 5f;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+        }
+       
         btn.enabled = false;
         UpdateLobbyStatus();
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
     {
-        UpdateLobbyStatus();
+        SetUpGame();
+
     }
 }
