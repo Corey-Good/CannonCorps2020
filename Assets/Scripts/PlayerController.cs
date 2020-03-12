@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
            && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5))
            && (readyToFire))
         {
-            readyToFire = false;            
+                      
 
             if(tank.tankModel == "catapult")
             {
@@ -123,16 +123,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
             else
             {
-                fireMechanism.FireBullet();
+                fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+                readyToFire = false;
             }
 
+            
 
             if (fireAnimation != null)
             {
                 Debug.Log("Firing the Catapult!!!");
                 fireAnimation.SetTrigger("Fire");
             }
-            fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+            
             if(!readyToFire)
             {
                 switch(currentBulletType)
