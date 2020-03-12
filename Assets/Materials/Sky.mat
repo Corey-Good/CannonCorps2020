@@ -26,5 +26,5 @@ Material:
     - _SunSize: 1
     - _SunSizeConvergence: 7.2
     m_Colors:
-    - _GroundColor: {r: 1, g: 1, b: 1, a: 1}
+    - _GroundColor: {r: 0.12959209, g: 0.469, b: 0.23038594, a: 1}
     - _SkyTint: {r: 0.4575472, g: 0.58272856, b: 1, a: 1}
