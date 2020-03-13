@@ -55,7 +55,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             SetUpGame();
             beginCountDown = false;
-            lobbyStatus.text = "";
+            lobbyStatus.gameObject.SetActive(false);
             lobbyTimer = 5f;
         }
 

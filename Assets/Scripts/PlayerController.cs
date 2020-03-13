@@ -254,10 +254,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankBody.transform.position = bodyPosition;
         }
-        else if (bodyPositionLag.magnitude < 0.11f)
-        {
-            // do nothing
-        }
+        //else if (bodyPositionLag.magnitude < 0.11f)
+        //{
+        //    // do nothing
+        //}
         else
         {
             Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
@@ -269,10 +269,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankBody.transform.rotation = bodyRotation;
         }
-        else if (bodyRotationLag.magnitude < 0.11f)
-        {
-            // do nothing
-        }
+        //else if (bodyRotationLag.magnitude < 0.11f)
+        //{
+        //    // do nothing
+        //}
         else
         {
             Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
@@ -284,10 +284,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankHead.transform.position = headPosition;
         }
-        else if (headPositionLag.magnitude < 0.11f)
-        {
-            // do nothing
-        }
+        //else if (headPositionLag.magnitude < 0.11f)
+        //{
+        //    // do nothing
+        //}
         else
         {
             Vector3.MoveTowards(tankHead.transform.position, headPosition, lagAdjustSpeed * Time.deltaTime);
@@ -299,10 +299,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             tankHead.transform.rotation = headRotation;
         }
-        else if (headRotationLag.magnitude < 0.11f)
-        {
-            // do nothing
-        }
+        //else if (headRotationLag.magnitude < 0.11f)
+        //{
+        //    // do nothing
+        //}
         else
         {
             Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
