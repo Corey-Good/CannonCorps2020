@@ -10,6 +10,7 @@ TagManager:
   - PlayerGO
   - TankModel
   - UIManager
+  - Listener
   layers:
   - Default
   - TransparentFX

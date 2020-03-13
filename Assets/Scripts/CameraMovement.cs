@@ -54,6 +54,7 @@ public class CameraMovement : MonoBehaviourPun
             return;
         SetCameraTarget();
         LookAtCameraTarget();
+        ZoomCamera();
     }
 
     // Sometimes, your code documents itself

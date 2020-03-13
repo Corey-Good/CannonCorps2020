@@ -296,7 +296,7 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     public void ShowPoints()
     {
-        int randomInt = Random.Range(0, 3);
+        int randomInt = Random.Range(0, textPoints.Count);
         StartCoroutine(MoveText(randomInt));
     }
 
