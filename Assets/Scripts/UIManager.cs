@@ -175,10 +175,11 @@ public class UIManager : MonoBehaviourPunCallbacks
             tank.tankHit = false;
         }
 
-        //if(Input.GetKeyDown(KeyCode.Y))
-        //{
-        //    ShowPoints();
-        //}
+        if (player.gotPoints)
+        {
+            ShowPoints();
+            player.gotPoints = false;
+        }
     }
 
     private void UpdateTable()

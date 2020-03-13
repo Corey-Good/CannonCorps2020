@@ -117,7 +117,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 speedMovement = CalculateStat(speedMovementMax, speedMovementMin, thirdPosition );
                 bulletSpeed   = 50;
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  firstPosition );
-                reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    fourthPosition);
+                reloadTime    = 3.8f;
                 tankModel     = "catapult";
                 tankProjectile = "RockBullet";
                 break;
