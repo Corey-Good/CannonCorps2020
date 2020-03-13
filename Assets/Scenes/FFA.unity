@@ -792,6 +792,7 @@ GameObject:
   - component: {fileID: 2033546600}
   - component: {fileID: 2033546599}
   - component: {fileID: 2033546598}
+  - component: {fileID: 2033546601}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -821,9 +822,9 @@ Terrain:
   serializedVersion: 5
   m_TerrainData: {fileID: 15600000, guid: a990e128ea1052446810b2848d731ac2, type: 2}
   m_TreeDistance: 5000
-  m_TreeBillboardDistance: 50
+  m_TreeBillboardDistance: 2000
   m_TreeCrossFadeLength: 5
-  m_TreeMaximumFullLODCount: 50
+  m_TreeMaximumFullLODCount: 0
   m_DetailObjectDistance: 250
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
@@ -856,3 +857,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &2033546601
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033546597}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
