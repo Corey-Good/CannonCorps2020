@@ -63,16 +63,23 @@ public class SmManager : MonoBehaviour
             RespawnPlayer();            
         }
 
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //    player.ScoreCurrent += 10;
-        //}
-
         // If a shark leaves the game for some reason, decrease the shark count
-        if (player.leaveGame && deathCount > 1)
+        if (player.leaveGame && (deathCount >= 1 || tank.tankModel == "futureTank"))
         {
             int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount - 1 } });
+        }
+
+        if((int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"] == 0)
+        {
+            if(PhotonNetwork.IsMasterClient)
+            {
+                tank.tankModel = "futureTank";
+                RespawnPlayer();
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", 1 } });
+                int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
+
+            }
         }
     }
 
