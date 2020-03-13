@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public Image freezeBulletIcon;
     public Image dynamiteBulletIcon;
     public Image laserBulletIcon;
+    public Image reloadIcon;
     
     #endregion
 
@@ -102,6 +103,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
+        reloadIcon.fillAmount = playerController.reloadBoostTimer;
         bulletIcon.fillAmount = tank.reloadProgress;
         freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);

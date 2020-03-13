@@ -13,6 +13,11 @@ public interface IPlayerEvents : IEventSystemHandler
     void OnPlayerReachedExit(GameObject exit);
 }
 
+public interface IPowerUpEvents: IEventSystemHandler
+{
+    void OnReloadBoostExpired();
+    void OnReloadBoostOn();
+}
 interface ITakeDamage
 {
     void damageTaken(float damage);

@@ -7,6 +7,7 @@
 using UnityEngine;
 using Photon.Pun;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
@@ -26,7 +27,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public float maxNumOfDynamiteBullets = 5;
     public float maxNumOfLaserBullets = 15;
 
-
+    private bool reloadBoostTimerRunning = false;
+    public float reloadBoostTimer = 0.0f;
     private float reloadBoost = 1.0f;
     private float originalReloadBoost = 1.0f;
     private bool speedBoostOn = false;
@@ -176,6 +178,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 currentBulletType = 0;
         }
 
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            reloadBoostTimerRunning = !reloadBoostTimerRunning;
+        }
+
+        if(reloadBoostTimerRunning)
+        {
+            reloadBoostTimer -= Time.deltaTime;
+            if (reloadBoostTimer <= 0.0f)
+                SendReloadPowerUpExpiredMessage();
+        }
+
         //if (Input.GetKeyDown(KeyCode.H))
         //{
         //    tank.healthCurrent -= 10;
@@ -312,6 +326,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion
     }
 
+    #region Powerups
     public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
     {
         if (speedBoostOn)
@@ -345,10 +360,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             
     }
 
-    public void SetReloadBoostOn(float newReloadBoost)
+    public void SetReloadBoostOn(float newReloadBoost, float newReloadTimer)
     {
         if (photonView.IsMine)
         {
+            reloadBoostTimer = newReloadTimer;
             originalReloadBoost = reloadBoost;
             reloadBoost = newReloadBoost;
         }
@@ -366,7 +382,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (photonView.IsMine)
             collisionDetection.shieldBoostOn = true;
     }
+    #endregion
 
+    #region Collect Bullets
     public void CollectFreezeBullets(float freezeBullets)
     {
         if (photonView.IsMine)
@@ -405,7 +423,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
             
     }
-
+    #endregion
+    private void SendReloadPowerUpExpiredMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnReloadBoostExpired()            // 4
+                    );
+            }
+        }
+    }
 
     public void DealDamage(float damage)
     {

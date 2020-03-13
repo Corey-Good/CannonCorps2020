@@ -177,3 +177,4 @@ MonoBehaviour:
   m_MaxLifeTime: 2
   m_ExplosionRadius: 5
   bullet: {fileID: 3910180448835655434}
+  speed: 150
