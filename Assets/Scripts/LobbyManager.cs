@@ -222,7 +222,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (readyPlayers >= minPlayers)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
-            Debug.Log("Setting this value to true");
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
 
         }
 
