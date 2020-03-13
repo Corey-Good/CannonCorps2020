@@ -7,7 +7,12 @@ public class FireMechanism : MonoBehaviour
 {
     public float bulletForce;
     public Camera tankCamera;
+    private Tank tank;
 
+    private void Awake()
+    {
+        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+    }
     public void ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
     {
         if(readyToFire)
@@ -25,8 +30,7 @@ public class FireMechanism : MonoBehaviour
                     break;
                 case PlayerController.BulletType.LaserBullet:
                     FireLaserBullet();
-                    break;
-                    
+                    break;                    
             }
         }
 
@@ -41,11 +45,11 @@ public class FireMechanism : MonoBehaviour
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, rotation);
+            GameObject bullet = PhotonNetwork.Instantiate(tank.tankProjectile, gameObject.transform.position, rotation);
         }
         else
         {
-            GameObject bullet = PhotonNetwork.Instantiate("Bullet", gameObject.transform.position, gameObject.transform.rotation);
+            GameObject bullet = PhotonNetwork.Instantiate(tank.tankProjectile, gameObject.transform.position, gameObject.transform.rotation);
         }
     }
 
