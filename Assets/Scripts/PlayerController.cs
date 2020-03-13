@@ -326,58 +326,84 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void SetSpeedBoostOff()
     {
-        movementMultiplier = originalMovementMultiplier;
-        rotateMultiplier = originalRotateMultiplier;
-        speedBoostOn = false;
+        if(photonView.IsMine)
+        {
+            movementMultiplier = originalMovementMultiplier;
+            rotateMultiplier = originalRotateMultiplier;
+            speedBoostOn = false;
+        }
+
     }
 
     public void SetHealthBoost(float healthBoost)
     {
-        healthBoost = -healthBoost;
-        tank.damageTaken(healthBoost);
+        if (photonView.IsMine)
+        {
+            healthBoost = -healthBoost;
+            tank.damageTaken(healthBoost);
+        }
+            
     }
 
     public void SetReloadBoostOn(float newReloadBoost)
     {
-        originalReloadBoost = reloadBoost;
-        reloadBoost = newReloadBoost;
+        if (photonView.IsMine)
+        {
+            originalReloadBoost = reloadBoost;
+            reloadBoost = newReloadBoost;
+        }
+            
     }
 
     public void SetReloadBoostOff()
     {
-        reloadBoost = originalReloadBoost;
+        if (photonView.IsMine)
+            reloadBoost = originalReloadBoost;
     }
 
     public void SetShieldBoostOn()
     {
-        collisionDetection.shieldBoostOn = true;
+        if (photonView.IsMine)
+            collisionDetection.shieldBoostOn = true;
     }
 
     public void CollectFreezeBullets(float freezeBullets)
     {
-        numOfFreezeBullets += freezeBullets;
-        if (numOfFreezeBullets >= maxNumOfFreezeBullets)
+        if (photonView.IsMine)
         {
-            numOfFreezeBullets = maxNumOfFreezeBullets;
+            numOfFreezeBullets += freezeBullets;
+            if (numOfFreezeBullets >= maxNumOfFreezeBullets)
+            {
+                numOfFreezeBullets = maxNumOfFreezeBullets;
+            }
         }
+
     }
 
     public void CollectDynamiteBullets(float dynamiteBullets)
     {
-        numOfDynamiteBullets += dynamiteBullets;
-        if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
+        if (photonView.IsMine)
         {
-            numOfDynamiteBullets = maxNumOfDynamiteBullets;
+            numOfDynamiteBullets += dynamiteBullets;
+            if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
+            {
+                numOfDynamiteBullets = maxNumOfDynamiteBullets;
+            }
         }
+            
     }
 
     public void CollectLaserBullets(float laserBullets)
     {
-        numOfLaserBullets += laserBullets;
-        if (numOfLaserBullets >= maxNumOfLaserBullets)
+        if (photonView.IsMine)
         {
-            numOfLaserBullets = maxNumOfLaserBullets;
+            numOfLaserBullets += laserBullets;
+            if (numOfLaserBullets >= maxNumOfLaserBullets)
+            {
+                numOfLaserBullets = maxNumOfLaserBullets;
+            }
         }
+            
     }
 
 
