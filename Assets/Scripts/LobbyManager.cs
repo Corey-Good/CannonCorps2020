@@ -34,7 +34,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     private bool beginCountDown = false;
     #endregion
 
-    private int minPlayers = 2;
+    private int minPlayers = 1;
 
     private void Awake()
     {
@@ -63,6 +63,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             beginCountDown = true;
             lobbyTimer = 5f;
+        }
+        else if(PhotonNetwork.InRoom && !(bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        {
+            beginCountDown = false;
+            lobbyTimer = 5f;
+            lobbyStatus.text = "Waiting for players";
         }
     }
 
@@ -227,9 +233,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
                 PhotonNetwork.CurrentRoom.IsOpen = true;
-                beginCountDown = false;
-                lobbyTimer = 5f;
-                lobbyStatus.text = "Waiting for players";
             }
 
         }
