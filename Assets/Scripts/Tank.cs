@@ -154,7 +154,7 @@ public class Tank : MonoBehaviour, ITakeDamage
 
         if (healthCurrent <= 0.0f)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 
