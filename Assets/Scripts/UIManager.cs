@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerScoreText;
     public Slider healthBar;
-    public Slider reloadBar;
+    public Image reloadDial;
     public Image bulletIcon;
     public Image freezeBulletIcon;
     public Image dynamiteBulletIcon;
@@ -98,8 +98,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
-        
-        reloadBar.value = tank.reloadProgress;
+        reloadDial.fillAmount = tank.reloadProgress;
         //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
@@ -160,7 +159,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
 
         // Display the list of players 
-        if (Input.GetKeyUp(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             playerTable.SetActive(!playerTable.activeSelf);
         }
@@ -194,7 +193,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             scoreListings.Clear();
         }
 
-        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        foreach (Photon.Realtime.Player photonPlayer in PhotonNetwork.PlayerList)
         {
             // Create and add a player listing
             GameObject tempListing = Instantiate(playerListing);
@@ -204,8 +203,16 @@ public class UIManager : MonoBehaviourPunCallbacks
             scoreListings.Add(tempListing);
 
             // Set the players name
-            Text tempText = tempListing.GetComponentInChildren<Text>();
-            tempText.text = player.NickName;
+            TextMeshProUGUI tempText = tempListing.GetComponentInChildren<TextMeshProUGUI>();
+            tempText.text = photonPlayer.NickName;
+            if(string.Equals(photonPlayer.NickName, player.PlayerName))
+            {
+                tempText.color = Color.white;
+            }
+            else
+            {
+                tempText.color = Color.black;
+            }
         }
     }
 

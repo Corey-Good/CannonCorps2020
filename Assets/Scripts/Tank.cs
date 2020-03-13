@@ -105,7 +105,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  fourthPosition);
                 reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    firstPosition );
                 tankModel     = "futureTank";
-                tankProjectile = "LaserBullet";
+                tankProjectile = "SphereLazer";
                 break;
 
             case "catapult":

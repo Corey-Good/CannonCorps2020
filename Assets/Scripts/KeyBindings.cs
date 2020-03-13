@@ -37,6 +37,8 @@ public class KeyBindings : MonoBehaviour
     public   TextMeshProUGUI backwardButton;
     public   TextMeshProUGUI leftButton;
     public   TextMeshProUGUI rightButton;
+    public   TextMeshProUGUI invertXButton;
+    public   TextMeshProUGUI invertYButton;
 
     public GameObject closeButton;
 
@@ -51,6 +53,10 @@ public class KeyBindings : MonoBehaviour
         leftButton.    text = leftKey.    ToString();
         rightButton.   text = rightKey.   ToString();
         #endregion
+
+        invertXButton.text = XisInverted ? "INVERTED" : "NORMAL";
+        invertYButton.text = YisInverted ? "INVERTED" : "NORMAL";
+
     }
 
     private void Update()
@@ -72,32 +78,32 @@ public class KeyBindings : MonoBehaviour
         objectName      = text.name;
     }
 
-    public void InvertX(TextMeshProUGUI text)
+    public void InvertX()
     {
         if (XisInverted)
         {
             XisInverted = false;
-            text.text = "NORMAL";
+            invertXButton.text = "NORMAL";
 
         }
         else
         {
             XisInverted = true;
-            text.text = "INVERTED";
+            invertXButton.text = "INVERTED";
         }
     }
 
-    public void InvertY(TextMeshProUGUI text)
+    public void InvertY()
     {
         if (YisInverted)
         {
             YisInverted = false;
-            text.text = "NORMAL";
+            invertYButton.text = "NORMAL";
         }
         else
         {
             YisInverted = true;
-            text.text = "INVERTED";
+            invertYButton.text = "INVERTED";
         }
     }
 
