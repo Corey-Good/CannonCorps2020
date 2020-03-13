@@ -24,7 +24,7 @@ public class Tank : MonoBehaviour, ITakeDamage
     public float                reloadTime     { get; set; }
     public float                reloadProgress { get; set; }
     public string               tankModel      { get; set; }
-    public          GameObject  tankProjectile { get; set; }
+    public          string  tankProjectile { get; set; }
     public          Color       tankColor      { get; set; }
     public static   Tank        tankInstance   { get; set; }
     public bool tankHit = false;
@@ -91,6 +91,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  thirdPosition );
                 reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    secondPosition);
                 tankModel     = "cartoonTank";
+                tankProjectile = "Bullet";
                 break;
 
             case "futureTank":
@@ -104,6 +105,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  fourthPosition);
                 reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    firstPosition );
                 tankModel     = "futureTank";
+                tankProjectile = "SphereLazer";
                 break;
 
             case "catapult":
@@ -115,8 +117,9 @@ public class Tank : MonoBehaviour, ITakeDamage
                 speedMovement = CalculateStat(speedMovementMax, speedMovementMin, thirdPosition );
                 bulletSpeed   = 50;
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  firstPosition );
-                reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    fourthPosition);
+                reloadTime    = 3.8f;
                 tankModel     = "catapult";
+                tankProjectile = "RockBullet";
                 break;
 
             case "baseTank":
@@ -130,6 +133,7 @@ public class Tank : MonoBehaviour, ITakeDamage
                 bulletDamage  = CalculateStat(bulletDamageMax,  bulletDamageMin,  secondPosition);
                 reloadTime    = CalculateStat(reloadTimeMax,    reloadTimeMin,    thirdPosition );
                 tankModel     = "baseTank";
+                tankProjectile = "Bullet";
                 break;
         }
     }
@@ -150,7 +154,7 @@ public class Tank : MonoBehaviour, ITakeDamage
 
         if (healthCurrent <= 0.0f)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 

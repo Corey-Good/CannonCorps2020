@@ -55,7 +55,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         {
             SetUpGame();
             beginCountDown = false;
-            lobbyStatus.text = "";
+            lobbyStatus.gameObject.SetActive(false);
             lobbyTimer = 5f;
         }
 
@@ -114,7 +114,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         }
 
         // List the current players in the room
-        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        foreach (Photon.Realtime.Player photonPlayer in PhotonNetwork.PlayerList)
         {
             count += 1;
             // Create and add a player listing
@@ -126,7 +126,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
             // Set the players name
             Text tempText = tempListing.GetComponentInChildren<Text>();
-            tempText.text = count.ToString() + " " + player.NickName;
+            tempText.text = count.ToString() + " " + photonPlayer.NickName;
+            if (string.Equals(photonPlayer.NickName, player.PlayerName))
+            {
+                tempText.color = Color.white;
+            }
         }
     }
 
@@ -218,7 +222,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (readyPlayers >= minPlayers)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
-            Debug.Log("Setting this value to true");
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
 
         }
 
