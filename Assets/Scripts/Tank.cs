@@ -28,6 +28,10 @@ public class Tank : MonoBehaviour, ITakeDamage
     public          Color       tankColor      { get; set; }
     public static   Tank        tankInstance   { get; set; }
     public bool tankHit = false;
+    public KeyCode forwardKey;
+    public KeyCode backwardKey;
+    public KeyCode leftKey;
+    public KeyCode rightKey;
     #endregion
 
     void Awake()

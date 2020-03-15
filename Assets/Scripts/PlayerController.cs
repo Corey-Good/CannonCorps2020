@@ -185,20 +185,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void MovePlayer()
     {
         // Move play forwards and backwards, 
-        if (Input.GetKey(forwardMovement))
+        if (Input.GetKey(KeyBindings.forwardKey))
         {
             transform.position += transform.forward * Time.deltaTime * movementForce * movementMultiplier;
         }
-        else if (Input.GetKey(backwardMovement))
+        else if (Input.GetKey(KeyBindings.backwardKey))
         {
             transform.position += -transform.forward * Time.deltaTime * movementForce * movementMultiplier;
         }
 
-        if (Input.GetKey(rightMovement))
+        if (Input.GetKey(KeyBindings.rightKey))
         {
             transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
-        else if (Input.GetKey(leftMovement))
+        else if (Input.GetKey(KeyBindings.leftKey))
         {
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
