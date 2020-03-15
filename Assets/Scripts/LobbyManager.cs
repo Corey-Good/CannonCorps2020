@@ -29,6 +29,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject playerListingPrefab;
     public Button readyUpButton;
     public RectTransform transitionPanel;
+    public TMP_ColorGradient greenGradient;
     private List<GameObject> playerListings = new List<GameObject>();
     private float lobbyTimer = 5f;
     private bool beginCountDown = false;
@@ -130,11 +131,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             playerListings.Add(tempListing);
 
             // Set the players name
-            Text tempText = tempListing.GetComponentInChildren<Text>();
+            TextMeshProUGUI tempText = tempListing.GetComponentInChildren<TextMeshProUGUI>();
             tempText.text = count.ToString() + " " + photonPlayer.NickName;
             if (string.Equals(photonPlayer.NickName, player.PlayerName))
             {
-                tempText.color = Color.white;
+                tempText.colorGradientPreset = greenGradient;
             }
         }
     }
