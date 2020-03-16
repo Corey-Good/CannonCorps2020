@@ -1,4 +1,11 @@
-﻿using Photon.Pun;
+﻿/************************************************************************/
+/* Author:  */
+/* Date Created: */
+/* Last Modified Date: */
+/* Modified By: */
+/************************************************************************/
+
+using Photon.Pun;
 using UnityEngine;
 
 public class CollisionDetection : MonoBehaviour
@@ -14,10 +21,9 @@ public class CollisionDetection : MonoBehaviour
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
     }
 
-    private void OnCollisionEnter (Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
-        if(photonView.IsMine && collision.gameObject.tag == "Bullet")
+        if (photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
             if (shieldBoostOn)
             {
@@ -29,8 +35,6 @@ public class CollisionDetection : MonoBehaviour
                 tank.damageTaken(10f);
                 tank.tankHit = true;
             }
-            
-
         }
     }
 }

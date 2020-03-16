@@ -5,10 +5,7 @@
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
 
-using Photon.Pun;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PauseMenuAnimations : MonoBehaviour
 {
@@ -34,11 +31,13 @@ public class PauseMenuAnimations : MonoBehaviour
             if (GameIsPaused)
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
                 Resume();
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
                 Pause();
             }
         }
@@ -47,7 +46,6 @@ public class PauseMenuAnimations : MonoBehaviour
     // Open the pause menu
     public void Pause()
     {
-        Cursor.visible = true;
         GameIsPaused = true;
 
         pauseMenu.SetActive(true);

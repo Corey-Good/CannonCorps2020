@@ -4,6 +4,7 @@
 /* Last Modified Date: 02/26/2020                                       */
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
+
 using UnityEngine;
 
 public class TurretRotation : MonoBehaviour
@@ -13,7 +14,7 @@ public class TurretRotation : MonoBehaviour
     // Every frame, sync the turrent rotation to the movement of the mouse
     private void Update()
     {
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step2))
+        if (((!PauseMenuAnimations.GameIsPaused)/* && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step2)*/))
         {
             if (KeyBindings.XisInverted)
             {
