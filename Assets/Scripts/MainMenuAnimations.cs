@@ -4,6 +4,7 @@
 /* Last Modified Date: 2/26/2020                                        */
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
+
 using UnityEngine;
 
 public class MainMenuAnimations : MonoBehaviour
@@ -19,7 +20,7 @@ public class MainMenuAnimations : MonoBehaviour
         //    CloseMenu();
         //}
     }
-    
+
     // Scale the menu to look like an animation
     public void OpenMenu()
     {

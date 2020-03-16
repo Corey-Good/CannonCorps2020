@@ -5,70 +5,75 @@
 /* Modified By:        Jaben Calas                                      */
 /************************************************************************/
 
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 public class KeyBindings : MonoBehaviour
 {
     #region Variables
-    public   static bool     CustomKeys      = false;
+
+    public static bool CustomKeys = false;
 
     public static bool XisInverted = false;
     public static bool YisInverted = false;
 
-    private bool            lookingForKey   = false;
-    private  bool            lookingForClick = false;
+    private bool lookingForKey = false;
 
-    public   static int      clickIndex      = 0;
+    public static int clickIndex = 0;
+    public static KeyCode forwardKey = KeyCode.W;
+    public static KeyCode backwardKey = KeyCode.S;
+    public static KeyCode leftKey = KeyCode.A;
+    public static KeyCode rightKey = KeyCode.D;
+    private List<KeyCode> currentKeys = new List<KeyCode>() { KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D };
 
-    public   static KeyCode  forwardKey      =  KeyCode.W;
-    public   static KeyCode  backwardKey     =  KeyCode.S;
-    public   static KeyCode  leftKey         =  KeyCode.A;
-    public   static KeyCode  rightKey        =  KeyCode.D;
+    private string keyHit;
+    private string objectName;
 
-    private  string          keyHit;
-    private  string          objectName;
+    public TextMeshProUGUI forwardButton;
+    public TextMeshProUGUI backwardButton;
+    public TextMeshProUGUI leftButton;
+    public TextMeshProUGUI rightButton;
+    public TextMeshProUGUI invertXButton;
+    public TextMeshProUGUI invertYButton;
 
-    public   TextMeshProUGUI forwardButton;
-    public   TextMeshProUGUI backwardButton;
-    public   TextMeshProUGUI leftButton;
-    public   TextMeshProUGUI rightButton;
+    public GameObject closeButton;
 
-    public   TextMeshProUGUI fireButton;
-
-
-    #endregion
+    #endregion Variables
 
     private void Start()
     {
         #region Key Text Initialization
-        forwardButton. text = forwardKey. ToString();
+
+        forwardButton.text = forwardKey.ToString();
         backwardButton.text = backwardKey.ToString();
-        leftButton.    text = leftKey.    ToString();
-        rightButton.   text = rightKey.   ToString();
-        #endregion
+        leftButton.text = leftKey.ToString();
+        rightButton.text = rightKey.ToString();
 
-        //Note: Modify to accommodate FiringMechanism
-        if (clickIndex == 0)
-            fireButton.text = "LeftClick";
-        else if (clickIndex == 1)
-            fireButton.text = "RightClick";
+        #endregion Key Text Initialization
+
+        invertXButton.text = XisInverted ? "INVERTED" : "NORMAL";
+        invertYButton.text = YisInverted ? "INVERTED" : "NORMAL";
     }
 
-    public  void OnClick(TextMeshProUGUI text)
+    private void Update()
     {
-        text.text       = "Hit Key";
-        lookingForKey   = true;
-        objectName      = text.name;
+        if (CannotLeave())
+        {
+            closeButton.SetActive(false);
+        }
+        else
+        {
+            closeButton.SetActive(true);
+        }
     }
 
-    public  void OnMouseClick(TextMeshProUGUI text)
+    public void OnClick(TextMeshProUGUI text)
     {
-        text.text       = "Click Mouse";
-        lookingForClick = true;
-        objectName      = text.name;
+        text.text = "Hit Key";
+        lookingForKey = true;
+        objectName = text.name;
     }
 
     public void InvertX()
@@ -76,10 +81,12 @@ public class KeyBindings : MonoBehaviour
         if (XisInverted)
         {
             XisInverted = false;
+            invertXButton.text = "NORMAL";
         }
         else
         {
             XisInverted = true;
+            invertXButton.text = "INVERTED";
         }
     }
 
@@ -88,13 +95,24 @@ public class KeyBindings : MonoBehaviour
         if (YisInverted)
         {
             YisInverted = false;
+            invertYButton.text = "NORMAL";
         }
         else
         {
             YisInverted = true;
+            invertYButton.text = "INVERTED";
         }
     }
 
+    public void SetPrimaryFire(TMP_Dropdown dropdown)
+    {
+        clickIndex = dropdown.value;
+    }
+
+    public bool CannotLeave()
+    {
+        return currentKeys.Contains(KeyCode.None);
+    }
 
     public void OnGUI()
     {
@@ -104,52 +122,71 @@ public class KeyBindings : MonoBehaviour
         if (e.isKey && lookingForKey)
         {
             e.keyCode = getKeyPress();
-            keyHit    = e.keyCode.ToString();
+            if (currentKeys.Contains(e.keyCode))
+            {
+                //Set warning text = Key is already used
+                switch (currentKeys.IndexOf(e.keyCode))
+                {
+                    case 0:
+                        forwardButton.text = "NONE";
+                        forwardKey = KeyCode.None;
+                        currentKeys[0] = forwardKey;
+                        break;
+
+                    case 1:
+                        backwardButton.text = "NONE";
+                        backwardKey = KeyCode.None;
+                        currentKeys[1] = backwardKey;
+                        break;
+
+                    case 2:
+                        leftButton.text = "NONE";
+                        leftKey = KeyCode.None;
+                        currentKeys[2] = leftKey;
+                        break;
+
+                    case 3:
+                        rightButton.text = "NONE";
+                        rightKey = KeyCode.None;
+                        currentKeys[3] = rightKey;
+                        break;
+                }
+            }
+
+            keyHit = e.keyCode.ToString();
 
             switch (objectName)
             {
                 case "ForwardText":
-                    forwardButton.text  = keyHit;
-                    forwardKey          = e.keyCode;
+                    forwardButton.text = keyHit;
+                    forwardKey = e.keyCode;
+                    currentKeys[0] = forwardKey;
                     break;
 
                 case "BackwardText":
                     backwardButton.text = keyHit;
-                    backwardKey         = e.keyCode;
+                    backwardKey = e.keyCode;
+                    currentKeys[1] = backwardKey;
                     break;
 
                 case "LeftText":
-                    leftButton.text     = keyHit;
-                    leftKey             = e.keyCode;
+                    leftButton.text = keyHit;
+                    leftKey = e.keyCode;
+                    currentKeys[2] = leftKey;
                     break;
 
                 case "RightText":
-                    rightButton.text    = keyHit;
-                    rightKey            = e.keyCode;
+                    rightButton.text = keyHit;
+                    rightKey = e.keyCode;
+                    currentKeys[3] = rightKey;
                     break;
             }
             lookingForKey = false;
             CustomKeys = true;
         }
-
-        //Note: Modify to accommodate FiringMechanism
-        if (e.isMouse && lookingForClick)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                clickIndex = 0;
-                fireButton.text = "LeftClick";
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                clickIndex = 1;
-                fireButton.text = "RightClick";
-            }
-            lookingForClick = false;
-            CustomKeys = true;
-        }
     }
-    KeyCode getKeyPress()
+
+    private KeyCode getKeyPress()
     {
         KeyCode keyHit = KeyCode.None;
 

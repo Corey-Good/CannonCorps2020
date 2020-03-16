@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 670323618193709697}
   - component: {fileID: -1749033928175059287}
   - component: {fileID: 1996661107570654809}
+  - component: {fileID: 5676082927774461696}
   m_Layer: 0
   m_Name: Catapult
   m_TagString: PlayerGO
@@ -217,11 +218,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753ab758de7c8994e96caed1dc0fdad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletActive: 0
+  readyToFire: 1
+  numOfFreezeBullets: 0
+  numOfDynamiteBullets: 0
+  numOfLaserBullets: 0
+  maxNumOfFreezeBullets: 10
+  maxNumOfDynamiteBullets: 5
+  maxNumOfLaserBullets: 15
+  currentBulletType: 0
   fireAnimation: {fileID: 2177514303465030681}
   tankCamera: {fileID: 2177514302449444839}
-  tankBody: {fileID: 0}
-  tankHead: {fileID: 0}
+  tankBody: {fileID: 6867105607875887944}
+  tankHead: {fileID: 4942006708219695288}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +334,19 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &5676082927774461696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2177514303472334809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldBoostOn: 0
 --- !u!1 &4942006708219695288
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,7 +375,8 @@ Transform:
   m_LocalRotation: {x: -0.8376746, y: -0, z: -0, w: 0.5461696}
   m_LocalPosition: {x: 0.0012776535, y: 4.955452, z: 1.7943165}
   m_LocalScale: {x: 0.5594462, y: 0.7555554, z: 0.9361876}
-  m_Children: []
+  m_Children:
+  - {fileID: 564238987561821469}
   m_Father: {fileID: 2177514303472233465}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -385,6 +407,85 @@ MeshRenderer:
   m_Materials:
   - {fileID: 8481279119928274143, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   - {fileID: 6201864105307463516, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!1 &5539708759768589392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 564238987561821469}
+  - component: {fileID: 2100139875161783635}
+  - component: {fileID: 1167704371385649389}
+  m_Layer: 0
+  m_Name: Rock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &564238987561821469
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5539708759768589392}
+  m_LocalRotation: {x: 0.20612508, y: -0, z: -0, w: 0.97852564}
+  m_LocalPosition: {x: -0.96, y: 8.48, z: 0.33}
+  m_LocalScale: {x: 1.1719111, y: 0.8404889, z: 0.72755426}
+  m_Children: []
+  m_Father: {fileID: 6210613793459949604}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &2100139875161783635
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5539708759768589392}
+  m_Mesh: {fileID: -5495902117074765545, guid: 3d6af95cd57cad545876c3bd0592450a, type: 3}
+--- !u!23 &1167704371385649389
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5539708759768589392}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: -876546973899608171, guid: 3d6af95cd57cad545876c3bd0592450a, type: 3}
+  - {fileID: -876546973899608171, guid: 3d6af95cd57cad545876c3bd0592450a, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -63,16 +63,23 @@ public class SmManager : MonoBehaviour
             RespawnPlayer();            
         }
 
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //    player.ScoreCurrent += 10;
-        //}
-
         // If a shark leaves the game for some reason, decrease the shark count
-        if (player.leaveGame && deathCount > 1)
+        if (player.leaveGame && (deathCount >= 1 || tank.tankModel == "futureTank"))
         {
             int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount - 1 } });
+        }
+
+        if((int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"] == 0)
+        {
+            if(PhotonNetwork.IsMasterClient)
+            {
+                tank.tankModel = "futureTank";
+                RespawnPlayer();
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", 1 } });
+                int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
+
+            }
         }
     }
 
@@ -88,8 +95,17 @@ public class SmManager : MonoBehaviour
             tank.healthCurrent = tank.healthMax;
         }
 
-        int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[spawnPoint].transform.position, spawnlocations[spawnPoint].transform.rotation);
+        int count = 0;
+        foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            if(player == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
+            {
+                tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
+            }
+
+            count++;
+        }        
+        
         tankPhotonView = tankObject.GetComponent<PhotonView>();
     }
 

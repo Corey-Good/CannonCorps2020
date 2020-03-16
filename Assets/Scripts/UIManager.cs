@@ -17,13 +17,19 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Classes
     private Tank tank;
     private Player player;
+    private PlayerController playerController;
     #endregion
 
     #region Player Info
     public TextMeshProUGUI playerName;
     public TextMeshProUGUI playerScoreText;
     public Slider healthBar;
-    public Slider reloadBar;
+    public Image reloadDial;
+    public Image bulletIcon;
+    public Image freezeBulletIcon;
+    public Image dynamiteBulletIcon;
+    public Image laserBulletIcon;
+    
     #endregion
 
     #region Table of Players
@@ -35,8 +41,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     #region Game Timer
     public TextMeshProUGUI gameTimer;
     public static double matchTimer = 0;
-    private int    minute;
-    private int    second;
+    private int minute;
+    private int second;
     private double startTime;
     private double matchLength = 300;
     #endregion
@@ -58,6 +64,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Get the instance of the Tank and Player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
 
         // Set default values
         playerScoreText.text = "0";
@@ -91,8 +98,54 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
-        reloadBar.value = tank.reloadProgress;
+        reloadDial.fillAmount = tank.reloadProgress;
+        //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
+
+        bulletIcon.fillAmount = tank.reloadProgress;
+        freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
+        dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
+        laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
+
+        switch (playerController.currentBulletType)
+        {
+            case PlayerController.BulletType.Normal:
+                bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+            case PlayerController.BulletType.FreezeBullet:
+                freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+            case PlayerController.BulletType.DynamiteBullet:
+                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (laserBulletIcon.fillAmount != 0.0f)
+                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+            case PlayerController.BulletType.LaserBullet:
+                laserBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                if (freezeBulletIcon.fillAmount != 0.0f)
+                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (dynamiteBulletIcon.fillAmount != 0.0f)
+                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                if (bulletIcon.fillAmount != 0.0f)
+                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                break;
+        }
 
         if (player.gameState == Player.GameState.SM)
         {
@@ -106,26 +159,27 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
 
         // Display the list of players 
-        if (Input.GetKeyUp(KeyCode.P))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             playerTable.SetActive(!playerTable.activeSelf);
         }
 
-        if(player.leaveGame)
+        if (player.leaveGame)
         {
             StartCoroutine(SwitchScene());
         }
 
-        if(tank.tankHit)
+        if (tank.tankHit)
         {
             FlashHit();
             tank.tankHit = false;
         }
 
-        //if(Input.GetKeyDown(KeyCode.Y))
-        //{
-        //    ShowPoints();
-        //}
+        if (player.gotPoints)
+        {
+            ShowPoints();
+            player.gotPoints = false;
+        }
     }
 
     private void UpdateTable()
@@ -140,7 +194,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             scoreListings.Clear();
         }
 
-        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        foreach (Photon.Realtime.Player photonPlayer in PhotonNetwork.PlayerList)
         {
             // Create and add a player listing
             GameObject tempListing = Instantiate(playerListing);
@@ -150,8 +204,16 @@ public class UIManager : MonoBehaviourPunCallbacks
             scoreListings.Add(tempListing);
 
             // Set the players name
-            Text tempText = tempListing.GetComponentInChildren<Text>();
-            tempText.text = player.NickName;
+            TextMeshProUGUI tempText = tempListing.GetComponentInChildren<TextMeshProUGUI>();
+            tempText.text = photonPlayer.NickName;
+            if(string.Equals(photonPlayer.NickName, player.PlayerName))
+            {
+                tempText.color = Color.white;
+            }
+            else
+            {
+                tempText.color = Color.black;
+            }
         }
     }
 
@@ -173,7 +235,7 @@ public class UIManager : MonoBehaviourPunCallbacks
             catch
             {
                 startTime = PhotonNetwork.Time;
-            }           
+            }
         }
     }
 
@@ -202,7 +264,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         player.leaveGame = false;
         player.returning = true;
-        TutorialMode.TutorialModeOn = false;
+        TutorialMode.tutorialModeOn = false;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         yield return new WaitForSeconds(1);
@@ -234,7 +296,7 @@ public class UIManager : MonoBehaviourPunCallbacks
 
     public void ShowPoints()
     {
-        int randomInt = Random.Range(0, 3);
+        int randomInt = Random.Range(0, textPoints.Count);
         StartCoroutine(MoveText(randomInt));
     }
 

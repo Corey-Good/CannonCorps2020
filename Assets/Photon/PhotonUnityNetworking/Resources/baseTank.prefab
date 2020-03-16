@@ -469,7 +469,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753ab758de7c8994e96caed1dc0fdad0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletActive: 0
+  readyToFire: 1
+  numOfFreezeBullets: 0
+  numOfDynamiteBullets: 0
+  numOfLaserBullets: 0
+  maxNumOfFreezeBullets: 10
+  maxNumOfDynamiteBullets: 5
+  maxNumOfLaserBullets: 15
+  currentBulletType: 0
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}
@@ -550,6 +557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shieldBoostOn: 0
 --- !u!1 &9124562359191819413
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,7 +661,7 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.51
+      value: -4.23
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}

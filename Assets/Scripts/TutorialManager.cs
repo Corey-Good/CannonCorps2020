@@ -1,23 +1,33 @@
-﻿using Photon.Pun;
-using System.Collections;
-using System.Collections.Generic;
+﻿/************************************************************************/
+/* Author:  */
+/* Date Created: */
+/* Last Modified Date: */
+/* Modified By: */
+/************************************************************************/
+
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
     #region Classes
+
     private Tank tank;
     private Player player;
-    #endregion
+
+    #endregion Classes
 
     #region Spawn Locations
+
     public GameObject[] spawnlocations = new GameObject[1];
-    #endregion
+
+    #endregion Spawn Locations
+
     private PhotonView tankPhotonView;
     public RectTransform panel;
 
-    void Awake()
+    private void Awake()
     {
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
@@ -31,13 +41,14 @@ public class TutorialManager : MonoBehaviour
 
         tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered, tank.tankModel, tank.tankColor.r, tank.tankColor.g, tank.tankColor.b);
     }
-    void Start()
+
+    private void Start()
     {
         LeanTween.alpha(panel, 0, 1);
     }
 
     // Spawn the player at a random spawnpoint in the map
-    void SpawnPlayer()
+    private void SpawnPlayer()
     {
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);

@@ -4,20 +4,44 @@
 /* Last Modified Date: 2/27/2020                                        */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
-using UnityEngine;
+
 using Photon.Pun;
 using System.Collections;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
+
     private Vector3 headPosition;
     private Vector3 bodyPosition;
     private Quaternion headRotation;
     private Quaternion bodyRotation;
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
-    public bool bulletActive = false;
+    public bool readyToFire = true;
+
+    public float numOfFreezeBullets;
+    public float numOfDynamiteBullets;
+    public float numOfLaserBullets;
+    public float maxNumOfFreezeBullets = 10;
+    public float maxNumOfDynamiteBullets = 5;
+    public float maxNumOfLaserBullets = 15;
+
+    private float reloadBoost = 1.0f;
+    private float originalReloadBoost = 1.0f;
+    private bool speedBoostOn = false;
+
+    public enum BulletType
+    {
+        Normal,
+        FreezeBullet,
+        DynamiteBullet,
+        LaserBullet
+    }
+
+    public BulletType currentBulletType;
+    private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
 
     public Animator fireAnimation;
     public Camera tankCamera;
@@ -25,110 +49,137 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public GameObject tankHead;
 
     private FireMechanism fireMechanism;
-    #endregion
 
-    #region Movement Keys
-    KeyCode forwardMovement;
-    KeyCode backwardMovement;
-    KeyCode leftMovement;
-    KeyCode rightMovement;
-    #endregion
+    #endregion Variables
 
     #region Movement Speeds
+
     private float movementForce;
     private float movementMultiplier;
+    private float originalMovementMultiplier;
+    private float originalRotateMultiplier;
     private float rotateMultiplier;
     private float rotateSpeed;
-    #endregion  
+    #endregion Movement Speeds
 
     private Tank tank;
     private Player player;
+    private CollisionDetection collisionDetection;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        #region Key Function Initialization
-        forwardMovement  = KeyBindings.forwardKey;
-        backwardMovement = KeyBindings.backwardKey;
-        leftMovement     = KeyBindings.leftKey;
-        rightMovement    = KeyBindings.rightKey;
-        #endregion
-
         //playerState = states.Stationary;
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        collisionDetection = GetComponent<CollisionDetection>();
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
         movementMultiplier = 1f;
+        originalMovementMultiplier = movementMultiplier;
         rotateMultiplier = 8f;
+        originalRotateMultiplier = rotateMultiplier;
         rotateSpeed = tank.speedRotation;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-
         if (!photonView.IsMine)
         {
             LagAdjust();
             return;
         }
 
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn)) || (TutorialMode.tutorialStep > TutorialMode.step3))
+        if (((!PauseMenuAnimations.GameIsPaused)/* && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step3)*/))
         {
-            MovePlayer();            
+            MovePlayer();
+            if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
+               && ((!PauseMenuAnimations.GameIsPaused) /*&& (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5)*/)
+               && (readyToFire))
+            {
+                readyToFire = false;
+
+                if (tank.tankModel == "catapult")
+                {
+                    StartCoroutine(DelayFire());
+                }
+                else
+                {
+                    fireMechanism.FireBullet();
+                }
+
+                if (fireAnimation != null)
+                {
+                    fireAnimation.SetTrigger("Fire");
+                }
+                fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+                if (!readyToFire)
+                {
+                    switch (currentBulletType)
+                    {
+                        case BulletType.FreezeBullet:
+                            numOfFreezeBullets -= 1.0f;
+                            if (numOfFreezeBullets == 0.0f)
+                                currentBulletType = BulletType.Normal;
+                            break;
+
+                        case BulletType.DynamiteBullet:
+                            numOfDynamiteBullets -= 1.0f;
+                            if (numOfDynamiteBullets == 0.0f)
+                                currentBulletType = BulletType.Normal;
+                            break;
+
+                        case BulletType.LaserBullet:
+                            numOfLaserBullets -= 1.0f;
+                            if (numOfLaserBullets == 0.0f)
+                                currentBulletType = BulletType.Normal;
+                            break;
+                    }
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                currentBulletType += 1;
+
+                if (numOfFreezeBullets == 0.0f)
+                    if ((int)currentBulletType == 1)
+                        currentBulletType += 1;
+                if (numOfDynamiteBullets == 0.0f)
+                    if ((int)currentBulletType == 2)
+                        currentBulletType += 1;
+                if (numOfLaserBullets == 0.0f)
+                    if ((int)currentBulletType == 3)
+                        currentBulletType += 1;
+
+                if ((int)currentBulletType >= numberOfBulletTypes)
+                    currentBulletType = 0;
+            }
         }
-
-        if (Input.GetMouseButtonDown(0)
-           && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.TutorialModeOn) || (TutorialMode.tutorialStep > TutorialMode.step5))
-           && (!bulletActive))
-        {
-            bulletActive = true;            
-
-            if(tank.tankModel == "catapult")
-            {
-                StartCoroutine(DelayFire());
-            }
-            else
-            {
-                fireMechanism.FireBullet();
-            }
-
-
-            if (fireAnimation != null)
-            {
-                Debug.Log("Firing the Catapult!!!");
-                fireAnimation.SetTrigger("Fire");
-            }
-        }
-
-        //if (Input.GetKeyDown(KeyCode.H))
-        //{
-        //    tank.healthCurrent -= 10;
-        //}
 
         ReloadBullet();
     }
 
     private void MovePlayer()
     {
-        // Move play forwards and backwards, 
-        if (Input.GetKey(forwardMovement))
+        // Move play forwards and backwards,
+        if (Input.GetKey(KeyBindings.forwardKey))
         {
             transform.position += transform.forward * Time.deltaTime * movementForce * movementMultiplier;
         }
-        else if (Input.GetKey(backwardMovement))
+        else if (Input.GetKey(KeyBindings.backwardKey))
         {
             transform.position += -transform.forward * Time.deltaTime * movementForce * movementMultiplier;
         }
 
-        if (Input.GetKey(rightMovement))
+        if (Input.GetKey(KeyBindings.rightKey))
         {
             transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
-        else if (Input.GetKey(leftMovement))
+        else if (Input.GetKey(KeyBindings.leftKey))
         {
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
@@ -136,17 +187,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void ReloadBullet()
     {
-        if (bulletActive)
+        if (!readyToFire)
         {
             // Increase time and update the reloadBar progress
             timeElapsed += Time.deltaTime;
-            tank.reloadProgress = timeElapsed / tank.reloadTime;
+            tank.reloadProgress = timeElapsed / (tank.reloadTime * reloadBoost);
 
             // When a bullet is reloaded, reset timer
-            if (timeElapsed >= tank.reloadTime)
+            if (timeElapsed >= (tank.reloadTime * reloadBoost))
             {
                 timeElapsed = 0f;
-                bulletActive = false;
+                readyToFire = true;
             }
         }
     }
@@ -167,19 +218,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             headPosition = (Vector3)stream.ReceiveNext();
             headRotation = (Quaternion)stream.ReceiveNext();
         }
-
     }
 
     public void LagAdjust()
     {
         #region CalculateLag
+
         var bodyPositionLag = tankBody.transform.position - bodyPosition;
         var bodyRotationLag = tankBody.transform.rotation.eulerAngles - bodyRotation.eulerAngles;
         var headPositionLag = tankHead.transform.position - headPosition;
         var headRotationLag = tankHead.transform.rotation.eulerAngles - headRotation.eulerAngles;
-        #endregion
+
+        #endregion CalculateLag
 
         #region AdjustBodyPosition
+
         if (bodyPositionLag.magnitude > 5f)
         {
             tankBody.transform.position = bodyPosition;
@@ -192,9 +245,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             Vector3.MoveTowards(tankBody.transform.position, bodyPosition, lagAdjustSpeed * Time.deltaTime);
         }
-        #endregion
+
+        #endregion AdjustBodyPosition
 
         #region AdjustBodyRotation
+
         if (bodyRotationLag.magnitude > 5.0f)
         {
             tankBody.transform.rotation = bodyRotation;
@@ -207,9 +262,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             Quaternion.RotateTowards(tankBody.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
         }
-        #endregion
+
+        #endregion AdjustBodyRotation
 
         #region AdjustHeadPosition
+
         if (headPositionLag.magnitude > 5.0f)
         {
             tankHead.transform.position = headPosition;
@@ -222,9 +279,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             Vector3.MoveTowards(tankHead.transform.position, headPosition, lagAdjustSpeed * Time.deltaTime);
         }
-        #endregion
+
+        #endregion AdjustHeadPosition
 
         #region AdjustHeadRotation
+
         if (headRotationLag.magnitude > 5.0f)
         {
             tankHead.transform.rotation = headRotation;
@@ -237,7 +296,76 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
         }
-        #endregion
+
+        #endregion AdjustHeadRotation
+    }
+
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
+    {
+        if (speedBoostOn)
+        {
+            return;
+        }
+
+        movementMultiplier = newMovementMultiplier;
+        rotateMultiplier = newRotateMultiplier;
+        speedBoostOn = true;
+    }
+
+    public void SetSpeedBoostOff()
+    {
+        movementMultiplier = originalMovementMultiplier;
+        rotateMultiplier = originalRotateMultiplier;
+        speedBoostOn = false;
+    }
+
+    public void SetHealthBoost(float healthBoost)
+    {
+        healthBoost = -healthBoost;
+        tank.damageTaken(healthBoost);
+    }
+
+    public void SetReloadBoostOn(float newReloadBoost)
+    {
+        originalReloadBoost = reloadBoost;
+        reloadBoost = newReloadBoost;
+    }
+
+    public void SetReloadBoostOff()
+    {
+        reloadBoost = originalReloadBoost;
+    }
+
+    public void SetShieldBoostOn()
+    {
+        collisionDetection.shieldBoostOn = true;
+    }
+
+    public void CollectFreezeBullets(float freezeBullets)
+    {
+        numOfFreezeBullets += freezeBullets;
+        if (numOfFreezeBullets >= maxNumOfFreezeBullets)
+        {
+            numOfFreezeBullets = maxNumOfFreezeBullets;
+        }
+    }
+
+    public void CollectDynamiteBullets(float dynamiteBullets)
+    {
+        numOfDynamiteBullets += dynamiteBullets;
+        if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
+        {
+            numOfDynamiteBullets = maxNumOfDynamiteBullets;
+        }
+    }
+
+    public void CollectLaserBullets(float laserBullets)
+    {
+        numOfLaserBullets += laserBullets;
+        if (numOfLaserBullets >= maxNumOfLaserBullets)
+        {
+            numOfLaserBullets = maxNumOfLaserBullets;
+        }
     }
 
     public void DealDamage(float damage)
@@ -245,12 +373,24 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         tank.damageTaken(damage);
     }
 
-    IEnumerator DelayFire()
+    /* Using collision detection script instead */
+    //public void DealDamage(float damage)
+    //{
+    //    if(shieldBoostOn)
+    //    {
+    //        shieldBoostOn = false;
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        tank.damageTaken(damage);
+    //    }
+
+    //}
+
+    private IEnumerator DelayFire()
     {
         yield return new WaitForSeconds(0.3f);
         fireMechanism.FireBullet();
-
     }
 }
-
-

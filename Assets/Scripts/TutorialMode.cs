@@ -1,35 +1,35 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       02/12/20                                         */
-/* Last Modified Date: 03/03/20                                         */
+/* Last Modified Date: 03/08/20                                         */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
+
+using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
-using System.Collections;
 
 public class TutorialMode : MonoBehaviour
 {
     #region Symbolic Constants
-    public const int step1 = 1;
-    public const int step2 = 2;
-    public const int step3 = 3;
-    public const int step4 = 4;
-    public const int step5 = 5;
-    public const int step6 = 6;
-    public const int step7 = 7;
-    public const int step8 = 8;
-    #endregion
+
+    public const int step1 = 00;
+    public const int step2 = 05;
+    public const int step3 = 10;
+    public const int step4 = 15;
+    public const int step5 = 60;
+    public const int step6 = 120;
+    public const int step7 = 140;
+
+    #endregion Symbolic Constants
 
     #region Variables
-    public static bool TutorialModeOn = false; // Affects CameraMovement, TurretRotation, and PlayerController, respectively.
-    //public static bool ActionRequired = false;
-    //public static bool TaskIsComplete = false;
-    bool readyForNextStep = false;
 
-    public static int tutorialStep = 1;
-    //public static float delayTime = 2.0f;
+    // Affects CameraMovement, TurretRotation, and PlayerController
+    public static int currentStep;
+
+    public static bool tutorialModeOn;
 
     public GameObject PlayerUI;
     public GameObject TutorialUI;
@@ -41,193 +41,155 @@ public class TutorialMode : MonoBehaviour
 
     public TextMeshProUGUI headingText;
     public TextMeshProUGUI subtitleText;
-    public TextMeshProUGUI promptText;
 
     private Player player;
-    private bool firstCall = true;
-    //private bool waitForPanel = false;
+    private int lastStep;
+    private bool firstCall;
     private string sceneName;
-    private int lastStep = step8;
 
-    //public  RectTransform   panel;
-    #endregion
+    public static int startTime;
+    public static int gameTimer;
 
-    void Awake()
+    #endregion Variables
+
+    private void Awake()
     {
-        #region Initialize variables
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        wall = GameObject.Find("FirstWall");
-        wall2 = GameObject.Find("SecondWall");
-        panel = GameObject.Find("Panel");
-        block = GameObject.Find("Block");
-        #endregion
-
         #region Changes GameUI to TutorialUI
+
         Scene currentScene = SceneManager.GetActiveScene();
         sceneName = currentScene.name;
         if (sceneName == "Tutorial")
         {
             PlayerUI.SetActive(false);
             TutorialUI.SetActive(true);
-            TutorialModeOn = true;
+            tutorialModeOn = true;
         }
-        #endregion
-        StartCoroutine(StepOne());
+
+        #endregion Changes GameUI to TutorialUI
+
+        #region Initialize variables
+
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        wall = GameObject.Find("Checkpoint (1)");
+        wall2 = GameObject.Find("Checkpoint (2)");
+        panel = GameObject.Find("Panel");
+        block = GameObject.Find("Block");
+
+        currentStep = step1;
+        lastStep = step7;
+
+        firstCall = true;
+        tutorialModeOn = false;
+
+        gameTimer = 0;
+        startTime = (int)PhotonNetwork.Time;
+
+        #endregion Initialize variables
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        //Debug.Log(tutorialStep);
+        #region Debug
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            startTime += -5;
+        }
+
+        #endregion Debug
+
+        #region Handles GameTimer
+
+        gameTimer = (int)(PhotonNetwork.Time - startTime);
+
+        currentStep = gameTimer;
+
+        #endregion Handles GameTimer
 
         #region Moves tutorial to the next slide on GameUI
+
         if (sceneName == "Tutorial")
         {
             TutorialUIText();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (readyForNextStep)
-            {
-                tutorialStep++;
-                readyForNextStep = false;
-            }
-        }
-        else
-        {
-            
-        }
-        #endregion
+        #endregion Moves tutorial to the next slide on GameUI
     }
 
-    void TutorialUIText()
+    private void TutorialUIText()
     {
-        switch (tutorialStep)
+        switch (currentStep)
         {
             #region Step 1
+
             case step1:
                 headingText.text = "Welcome to the training camp!";
                 subtitleText.text = "Here you will learn the basic skills required in battle.";
-
                 break;
-            #endregion
+
+            #endregion Step 1
 
             #region Step 2
-            case step2:
-                headingText.text = "Use your mouse wheel to zoom in or out."; // zoom no longer functioning
-                subtitleText.text = "";
-                break;
-            #endregion
 
-            #region Step 3
-            case step3:
+            case step2:
                 headingText.text = "Use your mouse to control the camera.";
                 subtitleText.text = "The turret follows the camera as you move it.";
                 break;
-            #endregion
 
-            #region Step 4
-            case step4:
+            #endregion Step 2
+
+            #region Step 3
+
+            case step3:
                 headingText.text = string.Format(
                                      "Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
                                         KeyBindings.forwardKey, KeyBindings.leftKey,
                                         KeyBindings.backwardKey, KeyBindings.rightKey);
                 subtitleText.text = "";
                 break;
-            #endregion
 
-            #region Step 5
-            case step5:
-                // Debug.Log("Working!");
+            #endregion Step 3
+
+            #region Step 4
+
+            case step4:
                 wall.LeanMoveLocalY(-5, 1.5f);
-
                 headingText.text = "Move to the designated location.";
                 subtitleText.text = "";
                 break;
-            #endregion
 
-            #region Step 6
-            case step6:
-                headingText.text = "!";
-                subtitleText.text = ".";
-                break;
-            #endregion
-
-            #region Step 7
-            case step7:
-                wall2.LeanMoveLocalY(-5, 1.5f);
-
-                headingText.text = "Aim at the [target] and {click} to fire.";
-                subtitleText.text = "";
-                break;
-            #endregion
-
-            #region Step 8
-            case step8:
-                headingText.text = "CONGRATULATIONS!";
-                subtitleText.text = "You have successfully completed the tutorial.";
-                break;
-                #endregion
+                #endregion Step 4
         }
 
-        if (tutorialStep > lastStep && firstCall)
+        #region Step 5
+
+        if (gameTimer >= step5)
+        {
+            wall2.LeanMoveLocalY(-5, 1.5f);
+            headingText.text = "Aim at the block and click to fire.";
+            subtitleText.text = "";
+        }
+
+        #endregion Step 5
+
+        #region Step 6
+
+        if (gameTimer >= step6)
+        {
+            headingText.text = "CONGRATULATIONS!";
+            subtitleText.text = "You have successfully completed the tutorial.";
+        }
+
+        #endregion Step 6
+
+        #region Moves player to MainMenu after completing tutorial
+
+        if (currentStep > lastStep && firstCall)
         {
             player.leaveGame = true;
             firstCall = false;
         }
-    }
 
-    void OnTriggerEnter(Collider other)
-    {
-        //waitForPanel = false;
-        tutorialStep++;
-    }
-
-    //void ChangePromptText()
-    //{
-    //    promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
-    //}
-
-    //void RemovePromptText()
-    //{
-    //    promptText.text = "";
-    //}
-
-    IEnumerator StepOne()
-    {
-        headingText.text = "Welcome to the training camp!";
-        subtitleText.text = "Here you will learn the basic skills required in battle.";
-        yield return new WaitForSeconds(3.5f);
-        tutorialStep = 2;
-        readyForNextStep = true;
-    }
-
-    IEnumerator ChangePromptText()
-    {
-        yield return new WaitForSeconds(2.0f);
-        promptText.text = string.Format("Press {0} to continue.", KeyCode.Space.ToString().ToLower());
-    }
-
-    //void ReadyForNextStep()
-    //{
-    //    readyForNextStep = true;
-    //}
-    //void NotReadyForNextStep()
-    //{
-    //    readyForNextStep = false;
-    //}
-
-    //IEnumerator DelayNextStep()
-    //{
-    //    ReadyForNextStep();
-    //    yield return new WaitForSeconds(0.415f);
-    //    NotReadyForNextStep();
-    //}
-
-    IEnumerator ReadyForNextStep()
-    {
-
-        yield return new WaitForSeconds(0.415f);
-
+        #endregion Moves player to MainMenu after completing tutorial
     }
 }
