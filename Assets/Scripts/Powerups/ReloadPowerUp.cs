@@ -5,14 +5,15 @@ using UnityEngine;
 public class ReloadPowerUp : PowerUp, IPowerUpEvents
 {
     public float reloadBoost = 0.5f;
-    public float reloadTime = 10.0f;
+    public float reloadTime;
 
 
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
-        playerBrain.SetReloadBoostOn(reloadBoost, reloadTime);
-
+        playerBrain.SetReloadBoostOff();
+        playerBrain.SetReloadBoostOn(reloadBoost);
+        StartListening(this.gameObject);
     }
 
     void IPowerUpEvents.OnReloadBoostExpired()
@@ -22,8 +23,8 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
         {
             return;
         }
-
-        // You expire when player hurt
+        reloadTime = 0.0f;
+        // Expire when timer runs out
         PowerUpHasExpired();
     }
 
@@ -33,9 +34,18 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
         base.PowerUpHasExpired();
     }
 
-    void IPowerUpEvents.OnReloadBoostOn()
+    void IPowerUpEvents.ToggleReloadBoost()
     {
-        reloadTime = playerBrain.reloadBoostTimer;
-        playerBrain.SetReloadBoostOff();
+        if(playerBrain.reloadBoostTimerRunning && playerBrain.reloadBoostTimer > 0.0f)
+        {
+            reloadTime = playerBrain.reloadBoostTimer;
+            playerBrain.SetReloadBoostOff();
+        }
+        else if((!playerBrain.reloadBoostTimerRunning) && playerBrain.reloadBoostTimer > 0.0f)
+        {
+            playerBrain.SetReloadBoostOn(reloadBoost, reloadTime);
+            reloadTime = 0.0f;
+        }
+
     }
 }

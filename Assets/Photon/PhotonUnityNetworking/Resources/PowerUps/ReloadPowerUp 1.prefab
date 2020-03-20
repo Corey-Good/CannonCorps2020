@@ -145,6 +145,7 @@ MonoBehaviour:
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
   reloadBoost: 0.1
+  reloadTime: 10
 --- !u!1 &3284822688508218286
 GameObject:
   m_ObjectHideFlags: 0

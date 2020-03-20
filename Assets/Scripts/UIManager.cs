@@ -103,7 +103,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
-        reloadIcon.fillAmount = playerController.reloadBoostTimer;
+        reloadIcon.fillAmount = (playerController.reloadBoostTimer / playerController.maxReloadBoostTimer);
         bulletIcon.fillAmount = tank.reloadProgress;
         freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);

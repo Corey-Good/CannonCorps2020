@@ -16,7 +16,7 @@ public interface IPlayerEvents : IEventSystemHandler
 public interface IPowerUpEvents: IEventSystemHandler
 {
     void OnReloadBoostExpired();
-    void OnReloadBoostOn();
+    void ToggleReloadBoost();
 }
 interface ITakeDamage
 {

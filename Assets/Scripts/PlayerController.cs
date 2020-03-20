@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float timeElapsed = 0f;
     public bool readyToFire = true;
 
+    #region BulletVariables
     public float numOfFreezeBullets;
     public float numOfDynamiteBullets;
     public float numOfLaserBullets;
@@ -27,12 +28,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public float maxNumOfDynamiteBullets = 5;
     public float maxNumOfLaserBullets = 15;
 
-    private bool reloadBoostTimerRunning = false;
-    public float reloadBoostTimer = 0.0f;
-    private float reloadBoost = 1.0f;
-    private float originalReloadBoost = 1.0f;
-    private bool speedBoostOn = false;
-    
     public enum BulletType
     {
         Normal,
@@ -41,16 +36,27 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         LaserBullet
     }
 
-    
     public BulletType currentBulletType;
     private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
+    #endregion
 
+    public float maxReloadBoostTimer = 10.0f;
+    public bool reloadBoostTimerRunning = false;
+    public float reloadBoostTimer = 0.0f;
+    private float reloadBoost = 1.0f;
+    public bool reloadBoostOn = false;
+    private float originalReloadBoost = 1.0f;
+    private bool speedBoostOn = false;
+
+    #region 
+
+    #endregion
     public Animator fireAnimation;
     public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
 
-    private FireMechanism fireMechanism;
+    
     #endregion
 
     #region Movement Keys
@@ -67,11 +73,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float originalRotateMultiplier;
     private float rotateMultiplier;
     private float rotateSpeed;
-    #endregion  
+    #endregion
 
+    #region Reference Variables
     private Tank tank;
     private Player player;
     private CollisionDetection collisionDetection;
+    private FireMechanism fireMechanism;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -180,14 +189,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            reloadBoostTimerRunning = !reloadBoostTimerRunning;
+            SendReloadToggleMessage();
         }
 
         if(reloadBoostTimerRunning)
         {
             reloadBoostTimer -= Time.deltaTime;
             if (reloadBoostTimer <= 0.0f)
+            {
+                reloadBoostTimer = 0.0f;
                 SendReloadPowerUpExpiredMessage();
+            }
+                
         }
 
         //if (Input.GetKeyDown(KeyCode.H))
@@ -360,21 +373,33 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             
     }
 
-    public void SetReloadBoostOn(float newReloadBoost, float newReloadTimer)
+    public void SetReloadBoostOn(float newReloadBoost)
     {
         if (photonView.IsMine)
         {
-            reloadBoostTimer = newReloadTimer;
-            originalReloadBoost = reloadBoost;
+            reloadBoostTimer = maxReloadBoostTimer;
             reloadBoost = newReloadBoost;
+            reloadBoostTimerRunning = true;
         }
-            
+    }
+
+    public void SetReloadBoostOn(float newReloadBoost, float newReloadTime)
+    {
+        if (photonView.IsMine)
+        {
+            reloadBoostTimer = newReloadTime;
+            reloadBoost = newReloadBoost;
+            reloadBoostTimerRunning = true;
+        }
     }
 
     public void SetReloadBoostOff()
     {
         if (photonView.IsMine)
+        {
             reloadBoost = originalReloadBoost;
+            reloadBoostTimerRunning = false;
+        }
     }
 
     public void SetShieldBoostOn()
@@ -424,7 +449,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             
     }
     #endregion
-    private void SendReloadPowerUpExpiredMessage()
+    public void SendReloadPowerUpExpiredMessage()
     {
         // Send message to any listeners
         if (EventSystemListeners.main.listeners != null)
@@ -434,6 +459,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 ExecuteEvents.Execute<IPowerUpEvents>                   // 2
                     (go, null,                                               // 3
                      (x, y) => x.OnReloadBoostExpired()            // 4
+                    );
+            }
+        }
+    }
+
+    private void SendReloadToggleMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.ToggleReloadBoost()            // 4
                     );
             }
         }

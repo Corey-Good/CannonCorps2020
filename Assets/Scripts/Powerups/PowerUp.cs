@@ -132,7 +132,7 @@ public class PowerUp : MonoBehaviour
     protected virtual void DestroySelfAfterDelay()
     {
         // Arbitrary delay of some seconds to allow particle, audio is all done
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 0.1f);
     }
 
     protected void StartListening(GameObject gameObjectListen)
