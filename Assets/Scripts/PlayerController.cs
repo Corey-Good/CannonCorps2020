@@ -377,6 +377,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (photonView.IsMine)
         {
+            SendReloadPowerUpExpiredMessage();
             reloadBoostTimer = maxReloadBoostTimer;
             reloadBoost = newReloadBoost;
             reloadBoostTimerRunning = true;

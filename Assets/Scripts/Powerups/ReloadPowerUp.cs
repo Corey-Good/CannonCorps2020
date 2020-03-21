@@ -11,7 +11,6 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
-        playerBrain.SetReloadBoostOff();
         playerBrain.SetReloadBoostOn(reloadBoost);
         StartListening(this.gameObject);
     }
