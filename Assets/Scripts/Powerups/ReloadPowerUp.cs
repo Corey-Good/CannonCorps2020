@@ -47,4 +47,12 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
         }
 
     }
+
+    void IPowerUpEvents.OnSpeedBoostExpired()
+    {
+    }
+
+    void IPowerUpEvents.ToggleSpeedBoost()
+    {
+    }
 }

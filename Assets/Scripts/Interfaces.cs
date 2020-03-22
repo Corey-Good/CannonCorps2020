@@ -17,6 +17,8 @@ public interface IPowerUpEvents: IEventSystemHandler
 {
     void OnReloadBoostExpired();
     void ToggleReloadBoost();
+    void OnSpeedBoostExpired();
+    void ToggleSpeedBoost();
 }
 interface ITakeDamage
 {

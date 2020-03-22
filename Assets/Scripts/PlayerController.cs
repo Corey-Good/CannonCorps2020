@@ -64,15 +64,21 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     KeyCode backwardMovement;
     KeyCode leftMovement;
     KeyCode rightMovement;
+    KeyCode switchBulletType = KeyCode.Space;
+    KeyCode activateReloadBoost = KeyCode.Alpha1;
+    KeyCode activateMovementBoost = KeyCode.Alpha2;
     #endregion
 
     #region Movement Speeds
     private float movementForce;
     private float movementMultiplier;
-    private float originalMovementMultiplier;
-    private float originalRotateMultiplier;
+    private float originalMovementMultiplier = 1.0f;
+    private float originalRotateMultiplier = 8.0f;
     private float rotateMultiplier;
     private float rotateSpeed;
+    public float speedBoostTimer;
+    public float maxSpeedBoostTimer = 10.0f;
+    public bool speedBoostTimerRunning = false;
     #endregion
 
     #region Reference Variables
@@ -100,10 +106,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
-        movementMultiplier = 1f;
-        originalMovementMultiplier = movementMultiplier;
-        rotateMultiplier = 8f;
-        originalRotateMultiplier = rotateMultiplier;
+        movementMultiplier = originalMovementMultiplier;
+        rotateMultiplier = originalRotateMultiplier;
         rotateSpeed = tank.speedRotation;
     }
 
@@ -169,7 +173,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(switchBulletType))
         {
             currentBulletType += 1;
             
@@ -187,7 +191,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 currentBulletType = 0;
         }
 
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if(Input.GetKeyDown(activateReloadBoost))
         {
             SendReloadToggleMessage();
         }
@@ -201,6 +205,22 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 SendReloadPowerUpExpiredMessage();
             }
                 
+        }
+
+        if (Input.GetKeyDown(activateMovementBoost))
+        {
+            SendSpeedToggleMessage();
+        }
+
+        if (speedBoostTimerRunning)
+        {
+            speedBoostTimer -= Time.deltaTime;
+            if (speedBoostTimer <= 0.0f)
+            {
+                speedBoostTimer = 0.0f;
+                SendSpeedPowerUpExpiredMessage();
+            }
+
         }
 
         //if (Input.GetKeyDown(KeyCode.H))
@@ -342,14 +362,25 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #region Powerups
     public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
     {
-        if (speedBoostOn)
+        if (photonView.IsMine)
         {
-            return;
+            SendSpeedPowerUpExpiredMessage();
+            speedBoostTimer = maxSpeedBoostTimer;
+            movementMultiplier = newMovementMultiplier;
+            rotateMultiplier = newRotateMultiplier;
+            speedBoostTimerRunning = true;
         }
+    }
 
-        movementMultiplier = newMovementMultiplier;
-        rotateMultiplier = newRotateMultiplier;
-        speedBoostOn = true;
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, float newSpeedTime)
+    {
+        if (photonView.IsMine)
+        {
+            speedBoostTimer = newSpeedTime;
+            movementMultiplier = newMovementMultiplier;
+            rotateMultiplier = newRotateMultiplier;
+            speedBoostTimerRunning = true;
+        }
     }
 
     public void SetSpeedBoostOff()
@@ -358,9 +389,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             movementMultiplier = originalMovementMultiplier;
             rotateMultiplier = originalRotateMultiplier;
-            speedBoostOn = false;
+            speedBoostTimerRunning = false;
         }
-
     }
 
     public void SetHealthBoost(float healthBoost)
@@ -475,6 +505,36 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 ExecuteEvents.Execute<IPowerUpEvents>                   // 2
                     (go, null,                                               // 3
                      (x, y) => x.ToggleReloadBoost()            // 4
+                    );
+            }
+        }
+    }
+
+    public void SendSpeedPowerUpExpiredMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnSpeedBoostExpired()            // 4
+                    );
+            }
+        }
+    }
+
+    private void SendSpeedToggleMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.ToggleSpeedBoost()            // 4
                     );
             }
         }

@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class SpeedPowerUp : PowerUp, IPlayerEvents
+class SpeedPowerUp : PowerUp, IPowerUpEvents
 {
     public float rotateMultiplier = 16f;
     public float speedMultiplier = 3.0f;
+    private float speedTimer;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
-        base.StartListening(this.gameObject);
         playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier);
+        base.StartListening(this.gameObject);
     }
 
     protected override void PowerUpHasExpired()       // Checklist item 2
@@ -20,21 +21,39 @@ class SpeedPowerUp : PowerUp, IPlayerEvents
         base.PowerUpHasExpired();
     }
 
-    void IPlayerEvents.OnPlayerHurt(int newHealth)
+
+    void IPowerUpEvents.OnReloadBoostExpired()
+    {
+    }
+
+    void IPowerUpEvents.ToggleReloadBoost()
+    {
+    }
+
+    void IPowerUpEvents.OnSpeedBoostExpired()
     {
         // You only want to react once collected
         if (powerUpState != PowerUpState.IsCollected)
         {
             return;
         }
-
-        // You expire when player hurt
+        speedTimer = 0.0f;
+        // Expire when timer runs out
         PowerUpHasExpired();
     }
 
-    void IPlayerEvents.OnPlayerReachedExit(GameObject exit)
+    void IPowerUpEvents.ToggleSpeedBoost()
     {
-        
+        if (playerBrain.speedBoostTimerRunning && playerBrain.speedBoostTimer > 0.0f)
+        {
+            speedTimer = playerBrain.speedBoostTimer;
+            playerBrain.SetSpeedBoostOff();
+        }
+        else if ((!playerBrain.speedBoostTimerRunning) && playerBrain.speedBoostTimer > 0.0f)
+        {
+            playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier, speedTimer);
+            speedTimer = 0.0f;
+        }
     }
 }
 

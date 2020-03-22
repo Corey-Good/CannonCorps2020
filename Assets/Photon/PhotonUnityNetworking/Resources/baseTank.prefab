@@ -485,6 +485,9 @@ MonoBehaviour:
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}
   tankHead: {fileID: 9124562359191819413}
+  speedBoostTimer: 0
+  maxSpeedBoostTimer: 10
+  speedBoostTimerRunning: 0
 --- !u!114 &3772726824002750994
 MonoBehaviour:
   m_ObjectHideFlags: 0
