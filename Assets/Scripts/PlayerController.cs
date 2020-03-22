@@ -12,10 +12,7 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-    private Vector3 headPosition;
-    private Vector3 bodyPosition;
-    private Quaternion headRotation;
-    private Quaternion bodyRotation;
+
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
     public bool readyToFire = true;
@@ -40,26 +37,49 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
     #endregion
 
+    #region Reload Powerup Variables
+    public float reloadBoostTimer = 0.0f;
     public float maxReloadBoostTimer = 10.0f;
     public bool reloadBoostTimerRunning = false;
-    public float reloadBoostTimer = 0.0f;
+    
     private float reloadBoost = 1.0f;
-    public bool reloadBoostOn = false;
     private float originalReloadBoost = 1.0f;
-    private bool speedBoostOn = false;
-
-    #region 
-
     #endregion
+
+    #region Movement Speed Powerup Variables
+    public float speedBoostTimer;
+    public float maxSpeedBoostTimer = 10.0f;
+    public bool speedBoostTimerRunning = false;
+
+    private float movementForce;
+    private float rotateSpeed;
+    private float movementMultiplier;
+    private float rotateMultiplier;
+    private float originalMovementMultiplier = 1.0f;
+    private float originalRotateMultiplier = 8.0f;
+    #endregion
+
+    #region Public Reference Variables
     public Animator fireAnimation;
     public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
-
-    
     #endregion
 
-    #region Movement Keys
+    #region Private Reference Variables
+    private Vector3 headPosition;
+    private Vector3 bodyPosition;
+    private Quaternion headRotation;
+    private Quaternion bodyRotation;
+    private Tank tank;
+    private Player player;
+    private CollisionDetection collisionDetection;
+    private FireMechanism fireMechanism;
+    #endregion
+
+    #endregion
+
+    #region Movement Keys and Powerup Keys
     KeyCode forwardMovement;
     KeyCode backwardMovement;
     KeyCode leftMovement;
@@ -69,24 +89,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     KeyCode activateMovementBoost = KeyCode.Alpha2;
     #endregion
 
-    #region Movement Speeds
-    private float movementForce;
-    private float movementMultiplier;
-    private float originalMovementMultiplier = 1.0f;
-    private float originalRotateMultiplier = 8.0f;
-    private float rotateMultiplier;
-    private float rotateSpeed;
-    public float speedBoostTimer;
-    public float maxSpeedBoostTimer = 10.0f;
-    public bool speedBoostTimerRunning = false;
-    #endregion
-
-    #region Reference Variables
-    private Tank tank;
-    private Player player;
-    private CollisionDetection collisionDetection;
-    private FireMechanism fireMechanism;
-    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -96,6 +98,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         backwardMovement = KeyBindings.backwardKey;
         leftMovement     = KeyBindings.leftKey;
         rightMovement    = KeyBindings.rightKey;
+        //Need to add Key Function Initialization for Powerup Keys
         #endregion
 
         //playerState = states.Stationary;
@@ -130,8 +133,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
            && ((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn) || (TutorialMode.currentStep > TutorialMode.step5))
            && (readyToFire))
         {
-                      
-
             if(tank.tankModel == "catapult")
             {
                 StartCoroutine(DelayFire());
@@ -142,15 +143,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 readyToFire = false;
             }
 
-            
-
             if (fireAnimation != null)
             {
                 Debug.Log("Firing the Catapult!!!");
                 fireAnimation.SetTrigger("Fire");
             }
             
-            if(!readyToFire)
+            if(!readyToFire) // 
             {
                 switch(currentBulletType)
                 {
@@ -191,7 +190,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 currentBulletType = 0;
         }
 
-        if(Input.GetKeyDown(activateReloadBoost))
+        #region Reload Powerup Logic
+
+        if (Input.GetKeyDown(activateReloadBoost))
         {
             SendReloadToggleMessage();
         }
@@ -206,6 +207,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
                 
         }
+
+        #endregion
+
+        #region Speed Powerup Logic
 
         if (Input.GetKeyDown(activateMovementBoost))
         {
@@ -222,6 +227,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
 
         }
+
+        #endregion
 
         //if (Input.GetKeyDown(KeyCode.H))
         //{
@@ -360,6 +367,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     #region Powerups
+
+    #region Speed Logic
     public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
     {
         if (photonView.IsMine)
@@ -393,6 +402,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    #endregion
+
     public void SetHealthBoost(float healthBoost)
     {
         if (photonView.IsMine)
@@ -402,6 +413,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
             
     }
+
+    #region Reload Logic
 
     public void SetReloadBoostOn(float newReloadBoost)
     {
@@ -432,6 +445,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             reloadBoostTimerRunning = false;
         }
     }
+
+    #endregion
 
     public void SetShieldBoostOn()
     {
@@ -480,6 +495,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             
     }
     #endregion
+
+    #region Messages
+
+    #region Reload Powerup Messages
     public void SendReloadPowerUpExpiredMessage()
     {
         // Send message to any listeners
@@ -510,6 +529,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    #endregion
+
+    #region Speed Powerup Messages
     public void SendSpeedPowerUpExpiredMessage()
     {
         // Send message to any listeners
@@ -539,6 +561,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
+    #endregion
+
+    #endregion
 
     public void DealDamage(float damage)
     {
@@ -563,7 +588,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         yield return new WaitForSeconds(0.3f);
         fireMechanism.FireBullet();
-
     }
 }
 
