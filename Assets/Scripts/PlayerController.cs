@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public float speedBoostTimer;
     public float maxSpeedBoostTimer = 10.0f;
     public bool speedBoostTimerRunning = false;
+    public bool frozenStatus = false;
 
     private float movementForce;
     private float rotateSpeed;
@@ -369,15 +370,27 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #region Powerups
 
     #region Speed Logic
-    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
+    public void SetFreezeStatus(bool frozen)
+    {
+        frozenStatus = frozen;
+    }
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, bool isSpeedPowerup)
     {
         if (photonView.IsMine)
         {
-            SendSpeedPowerUpExpiredMessage();
-            speedBoostTimer = maxSpeedBoostTimer;
+            if(isSpeedPowerup)
+            {
+                SendSpeedPowerUpExpiredMessage();
+                speedBoostTimer = maxSpeedBoostTimer;
+            }
+
             movementMultiplier = newMovementMultiplier;
             rotateMultiplier = newRotateMultiplier;
-            speedBoostTimerRunning = true;
+
+            if(isSpeedPowerup)
+                speedBoostTimerRunning = true;
+
+            SetFreezeStatus(isSpeedPowerup);
         }
     }
 

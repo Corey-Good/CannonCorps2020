@@ -7,12 +7,13 @@ public class FreezePowerUp : PowerUp
     public float rotateMultiplier = 0f;
     public float speedMultiplier = 0f;
     public float Damage = -5.0f;
+    private bool isSpeedPowerup = false;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
         playerBrain.SetSpeedBoostOff();
-        playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier);
+        playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier, isSpeedPowerup);
         playerBrain.SetHealthBoost(Damage);
         StartCoroutine(FreezeTimer());
     }
@@ -27,6 +28,7 @@ public class FreezePowerUp : PowerUp
     protected override void PowerUpHasExpired()       // Checklist item 2
     {
         playerBrain.SetSpeedBoostOff();
+        playerBrain.SetFreezeStatus(true);
         base.PowerUpHasExpired();
     }
 }
