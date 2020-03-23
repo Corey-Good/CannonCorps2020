@@ -470,6 +470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   readyToFire: 1
+  invulnerable: 0
   numOfFreezeBullets: 0
   numOfDynamiteBullets: 0
   numOfLaserBullets: 0
@@ -481,7 +482,8 @@ MonoBehaviour:
   maxReloadBoostTimer: 10
   reloadBoostTimerRunning: 0
   speedBoostTimer: 0
-  maxSpeedBoostTimer: 10
+  maxSpeedBoostTimer: 6
+  oneSpeedCharge: 2
   speedBoostTimerRunning: 0
   isNotFrozen: 1
   fireAnimation: {fileID: 0}

@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
     public bool readyToFire = true;
+    public bool invulnerable = false;
 
     #region BulletVariables
     public float numOfFreezeBullets;
@@ -48,10 +49,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #region Movement Speed Powerup Variables
     public float speedBoostTimer;
-    public float maxSpeedBoostTimer = 10.0f;
+    public float maxSpeedBoostTimer = 6.0f;
+    public float oneSpeedCharge = 2.0f;
     public bool speedBoostTimerRunning = false;
-    public bool frozenStatus = false;
+    public bool isNotFrozen = true;
 
+    private float timeLeftOnCharge;
     private float movementForce;
     private float rotateSpeed;
     private float movementMultiplier;
@@ -220,7 +223,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (speedBoostTimerRunning)
         {
+            timeLeftOnCharge -= Time.deltaTime;
             speedBoostTimer -= Time.deltaTime;
+
+            if(timeLeftOnCharge <= 0.0f)
+            {
+                SendSpeedToggleMessage();
+            }
+            
             if (speedBoostTimer <= 0.0f)
             {
                 speedBoostTimer = 0.0f;
@@ -372,23 +382,29 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #region Speed Logic
     public void SetFreezeStatus(bool frozen)
     {
-        frozenStatus = frozen;
+        isNotFrozen = frozen;
+    }
+    public void PickupSpeedPowerup()
+    {
+        if (photonView.IsMine)
+        {
+            SendSpeedPowerUpExpiredMessage();
+            speedBoostTimer += oneSpeedCharge;
+            timeLeftOnCharge = oneSpeedCharge;
+            if(speedBoostTimer >= maxSpeedBoostTimer)
+            {
+                speedBoostTimer = maxSpeedBoostTimer;
+            }
+
+        }
     }
     public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, bool isSpeedPowerup)
     {
         if (photonView.IsMine)
         {
-            if(isSpeedPowerup)
-            {
-                SendSpeedPowerUpExpiredMessage();
-                speedBoostTimer = maxSpeedBoostTimer;
-            }
-
             movementMultiplier = newMovementMultiplier;
             rotateMultiplier = newRotateMultiplier;
-
-            if(isSpeedPowerup)
-                speedBoostTimerRunning = true;
+            speedBoostTimerRunning = true;
 
             SetFreezeStatus(isSpeedPowerup);
         }
@@ -411,6 +427,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             movementMultiplier = originalMovementMultiplier;
             rotateMultiplier = originalRotateMultiplier;
+            timeLeftOnCharge = oneSpeedCharge;
             speedBoostTimerRunning = false;
         }
     }
@@ -464,7 +481,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public void SetShieldBoostOn()
     {
         if (photonView.IsMine)
+        {
             collisionDetection.shieldBoostOn = true;
+            invulnerable = true;
+        }
+            
     }
     #endregion
 

@@ -31,6 +31,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public Image laserBulletIcon;
     public Image reloadIcon;
     public Image speedIcon;
+    public Image shieldIcon;
     
     #endregion
 
@@ -104,6 +105,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
+        shieldIcon.enabled = playerController.invulnerable;
         reloadIcon.fillAmount = (playerController.reloadBoostTimer / playerController.maxReloadBoostTimer);
         speedIcon.fillAmount = (playerController.speedBoostTimer / playerController.maxSpeedBoostTimer);
         bulletIcon.fillAmount = tank.reloadProgress;
