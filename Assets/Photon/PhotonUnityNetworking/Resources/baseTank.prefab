@@ -485,7 +485,7 @@ MonoBehaviour:
   maxSpeedBoostTimer: 6
   oneSpeedCharge: 2
   speedBoostTimerRunning: 0
-  isNotFrozen: 1
+  isFrozen: 0
   fireAnimation: {fileID: 0}
   tankCamera: {fileID: 330835968949293933}
   tankBody: {fileID: 5182402257086063641}

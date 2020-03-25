@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     public float maxSpeedBoostTimer = 6.0f;
     public float oneSpeedCharge = 2.0f;
     public bool speedBoostTimerRunning = false;
-    public bool isNotFrozen = true;
+    public bool isFrozen = false;
 
     private float timeLeftOnCharge;
     private float movementForce;
@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (Input.GetKeyDown(activateMovementBoost))
         {
-            SendSpeedToggleMessage();
+            HandleSpeedBoostCharge();
         }
 
         if (speedBoostTimerRunning)
@@ -247,6 +247,25 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         //}
 
         ReloadBullet();
+    }
+    private void HandleSpeedBoostCharge()
+    {
+        if (speedBoostTimerRunning)
+            return;
+        else if (!speedBoostTimerRunning)
+        {
+            if(!isFrozen)
+            {
+                SendSpeedToggleMessage();
+            }
+            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge))
+            {
+                isFrozen = false;
+                SendSpeedToggleMessage();
+                SendSpeedToggleMessage();
+                speedBoostTimer -= oneSpeedCharge;
+            }
+        }
     }
 
     private void MovePlayer()
@@ -380,9 +399,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #region Powerups
 
     #region Speed Logic
-    public void SetFreezeStatus(bool frozen)
+    public void FreezeTank(bool frozen)
     {
-        isNotFrozen = frozen;
+        isFrozen = frozen;
     }
     public void PickupSpeedPowerup()
     {
@@ -398,15 +417,17 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         }
     }
-    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, bool isSpeedPowerup)
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, bool isFreezePowerup)
     {
         if (photonView.IsMine)
         {
             movementMultiplier = newMovementMultiplier;
             rotateMultiplier = newRotateMultiplier;
-            speedBoostTimerRunning = true;
 
-            SetFreezeStatus(isSpeedPowerup);
+            if(!isFreezePowerup)
+                speedBoostTimerRunning = true;
+
+            FreezeTank(isFreezePowerup);
         }
     }
 

@@ -7,7 +7,7 @@ class SpeedPowerUp : PowerUp, IPowerUpEvents
     public float rotateMultiplier = 16f;
     public float speedMultiplier = 3.0f;
     private float speedTimer;
-    public bool isSpeedPowerup = true;
+    public bool isFreezePowerup = false;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {
@@ -45,11 +45,11 @@ class SpeedPowerUp : PowerUp, IPowerUpEvents
 
     void IPowerUpEvents.ToggleSpeedBoost()
     {
-        if (playerBrain.speedBoostTimerRunning && playerBrain.speedBoostTimer > 0.0f && playerBrain.isNotFrozen)
+        if (playerBrain.speedBoostTimerRunning && playerBrain.speedBoostTimer > 0.0f && !playerBrain.isFrozen)
         {
             playerBrain.SetSpeedBoostOff();
         }
-        else if ((!playerBrain.speedBoostTimerRunning) && playerBrain.speedBoostTimer > 0.0f && playerBrain.isNotFrozen)
+        else if ((!playerBrain.speedBoostTimerRunning) && playerBrain.speedBoostTimer > 0.0f && !playerBrain.isFrozen)
         {
             speedTimer = playerBrain.speedBoostTimer;
             playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier, speedTimer);
