@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnPowerUp : MonoBehaviour
+public class PowerUpManager : MonoBehaviour
 {
     public GameObject[] powerupRotations = new GameObject[4];
     public GameObject[] spawnLocations = new GameObject[4];
