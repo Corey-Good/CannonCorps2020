@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ReloadPowerUp : PowerUp, IPowerUpEvents
 {
-    public float reloadBoost = 0.5f;
-    public float reloadTime;
+    private float reloadBoost = 0.5f;
+    private float reloadTime;
 
 
     protected override void PowerUpPayload()          // Checklist item 1

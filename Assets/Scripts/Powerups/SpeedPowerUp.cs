@@ -4,10 +4,9 @@ using UnityEngine;
 
 class SpeedPowerUp : PowerUp, IPowerUpEvents
 {
-    public float rotateMultiplier = 16f;
-    public float speedMultiplier = 3.0f;
+    private float rotateMultiplier = 16f;
+    private float speedMultiplier = 3.0f;
     private float speedTimer;
-    public bool isFreezePowerup = false;
 
     protected override void PowerUpPayload()          // Checklist item 1
     {

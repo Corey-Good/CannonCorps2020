@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good                                       */
 /* Date Created:       1/27/2020                                        */
-/* Last Modified Date: 2/27/2020                                        */
-/* Modified By:        J. Calas                                         */
+/* Last Modified Date: 3/26/2020                                        */
+/* Modified By:        Eddie Habal                                      */
 /************************************************************************/
 using UnityEngine;
 using Photon.Pun;
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 fireAnimation.SetTrigger("Fire");
             }
             
-            if(!readyToFire) // If just fired, check if any bullets are left
+            if(!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
             {
                 switch(currentBulletType)
                 {
@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
 
-        if (Input.GetKeyDown(switchBulletType))
+        if (Input.GetKeyDown(switchBulletType)) // Cycle through bullets
         {
             currentBulletType += 1;
             
@@ -226,7 +226,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             timeLeftOnCharge -= Time.deltaTime;
             speedBoostTimer -= Time.deltaTime;
 
-            if(timeLeftOnCharge <= 0.0f)
+            if(timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
             {
                 SendSpeedToggleMessage();
             }
@@ -236,29 +236,30 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 speedBoostTimer = 0.0f;
                 SendSpeedPowerUpExpiredMessage();
             }
-
         }
 
         #endregion
 
+        #region Suicide Code
         //if (Input.GetKeyDown(KeyCode.H))
         //{
         //    tank.healthCurrent -= 10;
         //}
+        #endregion
 
         ReloadBullet();
     }
     private void HandleSpeedBoostCharge()
     {
-        if (speedBoostTimerRunning)
+        if (speedBoostTimerRunning) // Don't use a charge if one is currently running
             return;
         else if (!speedBoostTimerRunning)
         {
-            if(!isFrozen)
+            if(!isFrozen) // Allow a charge to be used
             {
                 SendSpeedToggleMessage();
             }
-            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge))
+            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
             {
                 isFrozen = false;
                 SendSpeedToggleMessage();
@@ -461,7 +462,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             if(damage > 0.0f)
             {
-                if (invulnerable)
+                if (invulnerable) // Set invulnerable to false don't take damage for that hit
                 {
                     invulnerable = false;
                     return;
@@ -469,7 +470,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 else
                     tank.damageTaken(damage);
             }
-            else if (damage < 0.0f)
+            else if (damage < 0.0f) // Let health boost pass through
             {   
                 tank.damageTaken(damage);
             }
@@ -523,41 +524,29 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Collect Bullets
-    public void CollectFreezeBullets(float freezeBullets)
+    public void CollectFreezeBullets()
     {
         if (photonView.IsMine)
         {
-            numOfFreezeBullets += freezeBullets;
-            if (numOfFreezeBullets >= maxNumOfFreezeBullets)
-            {
                 numOfFreezeBullets = maxNumOfFreezeBullets;
-            }
         }
 
     }
 
-    public void CollectDynamiteBullets(float dynamiteBullets)
+    public void CollectDynamiteBullets()
     {
         if (photonView.IsMine)
         {
-            numOfDynamiteBullets += dynamiteBullets;
-            if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
-            {
                 numOfDynamiteBullets = maxNumOfDynamiteBullets;
-            }
         }
             
     }
 
-    public void CollectLaserBullets(float laserBullets)
+    public void CollectLaserBullets()
     {
         if (photonView.IsMine)
         {
-            numOfLaserBullets += laserBullets;
-            if (numOfLaserBullets >= maxNumOfLaserBullets)
-            {
                 numOfLaserBullets = maxNumOfLaserBullets;
-            }
         }
             
     }
@@ -631,11 +620,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #endregion
-
-    public void DealDamage(float damage)
-    {
-        tank.damageTaken(damage);
-    }
 
     /* Using collision detection script instead */
     //public void DealDamage(float damage)

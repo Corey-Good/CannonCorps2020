@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MinePowerUp : PowerUp
 {
-    public float damage = 20f;
+    private float damage = 20f;
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
