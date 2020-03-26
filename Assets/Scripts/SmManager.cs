@@ -123,6 +123,7 @@ public class SmManager : MonoBehaviour
         }        
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
         tankObject.transform.position = spawnlocations[spawnPoint].transform.position;        
+        tankObject.transform.rotation = spawnlocations[spawnPoint].transform.rotation;        
 
         if(deathCount == 1 && !PhotonNetwork.IsMasterClient)
         {

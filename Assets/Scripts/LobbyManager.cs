@@ -37,7 +37,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     #endregion Lobby Info
 
-    private int minPlayers = 2;
+    private int minPlayers = 1;
 
     private void Awake()
     {

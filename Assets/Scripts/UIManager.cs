@@ -53,6 +53,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     #endregion    
 
     public RectTransform transitionPanel;
+    public GameObject gameOverRect;
+    public TextMeshProUGUI gameOverText;
     public GameObject hitIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
     public List<RectTransform> rectPoints = new List<RectTransform>();
@@ -267,7 +269,9 @@ public class UIManager : MonoBehaviourPunCallbacks
         TutorialMode.tutorialModeOn = false;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
-        yield return new WaitForSeconds(1);
+        SetEndText();
+        gameOverRect.SetActive(true);
+        yield return new WaitForSeconds(3);
 
         // Leave the room, waiting until we are disconnected from the room to proceed
         PhotonNetwork.LeaveRoom();
@@ -305,5 +309,43 @@ public class UIManager : MonoBehaviourPunCallbacks
         textPoints[index].text = "+10";
         yield return new WaitForSeconds(1.2f);
         textPoints[index].text = "";
+    }
+
+    void SetEndText()
+    {
+        switch(player.gameState)
+        {
+            case Player.GameState.FFA:
+                gameOverText.text = "You were eliminated";
+                break;
+            case Player.GameState.SM:
+                if(matchTimer >= 300.0)
+                {
+                    gameOverText.text = "The Minnows evaded the Shark!";
+                }
+                else
+                {
+                    gameOverText.text = "All Minnows were eliminated.";
+                }
+                
+                break;
+            case Player.GameState.TB:
+                if(blueTeamScore.value >= 250)
+                {
+                    gameOverText.text = "The Blue Team won!";
+                }
+                else if(redTeamScore.value >= 250)
+                {
+                    gameOverText.text = "The Red Team won!";
+                }
+                else
+                {
+                    gameOverText.text = "You quit the game . . .";
+                }
+                break;
+            case Player.GameState.TT:
+                gameOverText.text = "";
+                break;
+        }
     }
 }
