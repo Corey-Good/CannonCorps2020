@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 fireAnimation.SetTrigger("Fire");
             }
             
-            if(!readyToFire) // 
+            if(!readyToFire) // If just fired, check if any bullets are left
             {
                 switch(currentBulletType)
                 {
@@ -455,12 +455,25 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    public void SetHealthBoost(float healthBoost)
+    public void SetHealthBoost(float damage)
     {
         if (photonView.IsMine)
         {
-            healthBoost = -healthBoost;
-            tank.damageTaken(healthBoost);
+            if(damage > 0.0f)
+            {
+                if (invulnerable)
+                {
+                    invulnerable = false;
+                    return;
+                }
+                else
+                    tank.damageTaken(damage);
+            }
+            else if (damage < 0.0f)
+            {   
+                tank.damageTaken(damage);
+            }
+          
         }
             
     }
@@ -503,7 +516,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (photonView.IsMine)
         {
-            collisionDetection.shieldBoostOn = true;
             invulnerable = true;
         }
             

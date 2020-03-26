@@ -5,13 +5,14 @@ public class CollisionDetection : MonoBehaviour
 {
     private PhotonView photonView;
     private Tank tank;
+    private PlayerController playerController;
     private UIManager ui;
-    public bool shieldBoostOn;
 
     private void Awake()
     {
         photonView = GetComponentInParent<PhotonView>();
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
     }
 
     private void OnCollisionEnter (Collision collision)
@@ -19,9 +20,9 @@ public class CollisionDetection : MonoBehaviour
         Debug.Log(collision.gameObject.tag);
         if(photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
-            if (shieldBoostOn)
+            if (playerController.invulnerable)
             {
-                shieldBoostOn = false;
+                playerController.invulnerable = false;
                 return;
             }
             else

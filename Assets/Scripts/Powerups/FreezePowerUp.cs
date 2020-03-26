@@ -6,7 +6,7 @@ public class FreezePowerUp : PowerUp
 {
     public float rotateMultiplier = 0f;
     public float speedMultiplier = 0f;
-    public float Damage = -5.0f;
+    public float Damage = 5.0f;
     private bool isFreezePowerup = true;
 
     protected override void PowerUpPayload()          // Checklist item 1
