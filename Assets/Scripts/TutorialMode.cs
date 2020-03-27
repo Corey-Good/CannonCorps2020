@@ -1,7 +1,7 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       02/12/20                                         */
-/* Last Modified Date: 03/08/20                                         */
+/* Last Modified Date: 03/25/20                                         */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
 
@@ -12,24 +12,21 @@ using UnityEngine.SceneManagement;
 
 public class TutorialMode : MonoBehaviour
 {
-    #region Symbolic Constants
-
-    public const int step1 = 00;
-    public const int step2 = 05;
-    public const int step3 = 10;
-    public const int step4 = 15;
-    public const int step5 = 60;
-    public const int step6 = 120;
-    public const int step7 = 140;
-
-    #endregion Symbolic Constants
-
     #region Variables
 
     // Affects CameraMovement, TurretRotation, and PlayerController
-    public static int currentStep;
-
     public static bool tutorialModeOn;
+
+    public static bool CameraIsEnabled   = true;
+    public static bool MovementIsEnabled = true;
+    public static bool FiringIsEnabled   = true;
+
+    public static bool step1;
+    public static bool step2;
+    public static bool step3;
+    public static bool step4;
+    public static bool step5;
+    public static bool step6;
 
     public GameObject PlayerUI;
     public GameObject TutorialUI;
@@ -43,9 +40,9 @@ public class TutorialMode : MonoBehaviour
     public TextMeshProUGUI subtitleText;
 
     private Player player;
-    private int lastStep;
     private bool firstCall;
     private string sceneName;
+    private string mouseClick;
 
     public static int startTime;
     public static int gameTimer;
@@ -67,7 +64,18 @@ public class TutorialMode : MonoBehaviour
 
         #endregion Changes GameUI to TutorialUI
 
-        #region Initialize variables
+        #region Initializes variables
+
+        CameraIsEnabled = false;
+        MovementIsEnabled = false;
+        FiringIsEnabled = false;
+
+        step1 = true;
+        step2 = false;
+        step3 = false;
+        step4 = false;
+        step5 = false;
+        step6 = false;
 
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         wall = GameObject.Find("Checkpoint (1)");
@@ -75,14 +83,20 @@ public class TutorialMode : MonoBehaviour
         panel = GameObject.Find("Panel");
         block = GameObject.Find("Block");
 
-        currentStep = step1;
-        lastStep = step7;
-
-        firstCall = true;
+        firstCall      = true;
         tutorialModeOn = false;
 
         gameTimer = 0;
         startTime = (int)PhotonNetwork.Time;
+
+        if (KeyBindings.clickIndex == 0)
+        {
+            mouseClick = "Left Click";
+        }
+        else if (KeyBindings.clickIndex == 1)
+        {
+            mouseClick = "Right Click";
+        }
 
         #endregion Initialize variables
     }
@@ -91,18 +105,22 @@ public class TutorialMode : MonoBehaviour
     {
         #region Debug
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            startTime += -5;
-        }
+        //Debug.Log(gameTimer);
+
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    CameraIsEnabled = true;
+        //    MovementIsEnabled = true;
+        //    FiringIsEnabled = true;
+
+        //    startTime -= 11;
+        //}
 
         #endregion Debug
 
         #region Handles GameTimer
 
         gameTimer = (int)(PhotonNetwork.Time - startTime);
-
-        currentStep = gameTimer;
 
         #endregion Handles GameTimer
 
@@ -114,82 +132,124 @@ public class TutorialMode : MonoBehaviour
         }
 
         #endregion Moves tutorial to the next slide on GameUI
+
+        #region Moves player to MainMenu after completing tutorial
+
+        if (firstCall && step6)
+        {
+            Invoke("exitTutorial", 3);
+            firstCall = false;
+        }
+
+        #endregion Moves player to MainMenu after completing tutorial
     }
 
     private void TutorialUIText()
     {
-        switch (currentStep)
+        #region Automates Step 1-3
+        switch (gameTimer)
         {
-            #region Step 1
-
-            case step1:
-                headingText.text = "Welcome to the training camp!";
-                subtitleText.text = "Here you will learn the basic skills required in battle.";
+            case 5:
+                step1 = false;
+                step2 = true;
                 break;
 
-            #endregion Step 1
-
-            #region Step 2
-
-            case step2:
-                headingText.text = "Use your mouse to control the camera.";
-                subtitleText.text = "The turret follows the camera as you move it.";
+            case 10:
+                step2 = false;
+                step3 = true;
                 break;
 
-            #endregion Step 2
-
-            #region Step 3
-
-            case step3:
-                headingText.text = string.Format(
-                                     "Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
-                                        KeyBindings.forwardKey, KeyBindings.leftKey,
-                                        KeyBindings.backwardKey, KeyBindings.rightKey);
-                subtitleText.text = "";
+            case 15:
+                step3 = false;
+                step4 = true;
                 break;
 
-            #endregion Step 3
-
-            #region Step 4
-
-            case step4:
-                wall.LeanMoveLocalY(-5, 1.5f);
-                headingText.text = "Move to the designated location.";
-                subtitleText.text = "";
+            default:
                 break;
+        }
+        #endregion
 
-                #endregion Step 4
+        //Welcome Message
+        #region Step 1
+
+        if (step1)
+        {
+            headingText.text = "Welcome to the training camp!";
+            subtitleText.text = "Here you will learn the basic skills required in battle.";
         }
 
+        #endregion Step 1
+
+        //Camera Control
+        #region Step 2
+
+        if (step2)
+        {
+            CameraIsEnabled = true;
+
+            headingText.text = "Use your mouse to control the camera.";
+            subtitleText.text = "The turret follows the camera as you move it.";
+        }
+
+        #endregion Step 2
+
+        //Movement Control
+        #region Step 3
+
+        if (step3)
+        {
+            MovementIsEnabled = true;
+
+            headingText.text = string.Format(
+                                 "Use the {0}, {1}, {2}, and {3} keys to control your vehicle.",
+                                    KeyBindings.forwardKey, KeyBindings.leftKey,
+                                    KeyBindings.backwardKey, KeyBindings.rightKey);
+            subtitleText.text = "";
+        }
+
+        #endregion Step 3
+        
+        //Move to Designated Area
+        #region Step 4
+
+        if (step4)
+        {
+            wall.LeanMoveLocalY(-5, 2f);
+
+            headingText.text = "Move to the designated location.";
+            subtitleText.text = "";
+        }
+
+        #endregion Step 4
+
+        //Firing Control
         #region Step 5
 
-        if (gameTimer >= step5)
+        if (step5)
         {
-            wall2.LeanMoveLocalY(-5, 1.5f);
-            headingText.text = "Aim at the block and click to fire.";
+            FiringIsEnabled = true;
+
+            wall2.LeanMoveLocalY(-5, 2f);
+            headingText.text = string.Format("Aim at the designated target and {0} to fire.", mouseClick);
             subtitleText.text = "";
         }
 
         #endregion Step 5
 
+        //Finish
         #region Step 6
 
-        if (gameTimer >= step6)
+        if (step6)
         {
             headingText.text = "CONGRATULATIONS!";
             subtitleText.text = "You have successfully completed the tutorial.";
         }
 
         #endregion Step 6
+    }
 
-        #region Moves player to MainMenu after completing tutorial
-
-        if (currentStep > lastStep && firstCall)
-        {
-            player.leaveGame = true;
-            firstCall = false;
-        }
-
-        #endregion Moves player to MainMenu after completing tutorial
+    public void exitTutorial()
+    {
+        player.leaveGame = true;
     }
 }
