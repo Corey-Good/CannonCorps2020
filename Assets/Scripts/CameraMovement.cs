@@ -39,14 +39,10 @@ public class CameraMovement : MonoBehaviourPun
     public void FixedUpdate()
     {
         if (!photonView.IsMine)
-        {
             return;
-        }
-        if (((!PauseMenuAnimations.GameIsPaused) && (!TutorialMode.tutorialModeOn)) || (TutorialMode.currentStep > TutorialMode.step1))
-        {
-            ZoomCamera();
-            LookAtCameraTarget();
-        }
+
+        ZoomCamera();
+        LookAtCameraTarget();
     }
 
     // Ensure camera is pointing at right target
@@ -54,6 +50,7 @@ public class CameraMovement : MonoBehaviourPun
     {
         if (!photonView.IsMine)
             return;
+
         SetCameraTarget();
     }
 
@@ -71,7 +68,7 @@ public class CameraMovement : MonoBehaviourPun
         }
 
         // Set the new target position height based on mouse input
-        if (!(PauseMenuAnimations.GameIsPaused))
+        if (!PauseMenuAnimations.GameIsPaused && TutorialMode.CameraIsEnabled)
         {
             target.transform.position =
                 new Vector3(target.transform.position.x,

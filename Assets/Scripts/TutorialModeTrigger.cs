@@ -13,12 +13,12 @@ public class TutorialModeTrigger : MonoBehaviour
     {
         if (other.tag == "PlayerGO" && this.gameObject.name == "Panel")
         {
-            TutorialMode.startTime -= 60;
+            TutorialMode.step5 = true;
             Destroy(this.gameObject);
         }
         else if (other.tag == "Bullet" && this.gameObject.name == "Block")
         {
-            TutorialMode.startTime -= 120;
+            TutorialMode.step6 = true;
         }
     }
 }
