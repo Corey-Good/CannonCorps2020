@@ -483,7 +483,6 @@ MonoBehaviour:
   reloadBoostTimerRunning: 0
   speedBoostTimer: 0
   maxSpeedBoostTimer: 6
-  oneSpeedCharge: 2
   speedBoostTimerRunning: 0
   isFrozen: 0
   fireAnimation: {fileID: 0}

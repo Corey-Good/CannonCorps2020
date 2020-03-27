@@ -116,9 +116,6 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
-  rotateMultiplier: 0
-  speedMultiplier: 0
-  Damage: -10
 --- !u!114 &6054451205431304159
 MonoBehaviour:
   m_ObjectHideFlags: 0
