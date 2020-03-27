@@ -60,45 +60,50 @@ public class TutorialMode : MonoBehaviour
             PlayerUI.SetActive(false);
             TutorialUI.SetActive(true);
             tutorialModeOn = true;
+            #region Initializes variables
+
+            CameraIsEnabled = false;
+            MovementIsEnabled = false;
+            FiringIsEnabled = false;
+
+            step1 = true;
+            step2 = false;
+            step3 = false;
+            step4 = false;
+            step5 = false;
+            step6 = false;
+
+            player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+            wall = GameObject.Find("Checkpoint (1)");
+            wall2 = GameObject.Find("Checkpoint (2)");
+            panel = GameObject.Find("Panel");
+            block = GameObject.Find("Block");
+
+            firstCall = true;
+            tutorialModeOn = false;
+
+            gameTimer = 0;
+            startTime = (int)PhotonNetwork.Time;
+
+            if (KeyBindings.clickIndex == 0)
+            {
+                mouseClick = "Left Click";
+            }
+            else if (KeyBindings.clickIndex == 1)
+            {
+                mouseClick = "Right Click";
+            }
+
+            #endregion Initialize variables
+        }
+        else
+        {
+            Destroy(this);
         }
 
         #endregion Changes GameUI to TutorialUI
 
-        #region Initializes variables
-
-        CameraIsEnabled = false;
-        MovementIsEnabled = false;
-        FiringIsEnabled = false;
-
-        step1 = true;
-        step2 = false;
-        step3 = false;
-        step4 = false;
-        step5 = false;
-        step6 = false;
-
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        wall = GameObject.Find("Checkpoint (1)");
-        wall2 = GameObject.Find("Checkpoint (2)");
-        panel = GameObject.Find("Panel");
-        block = GameObject.Find("Block");
-
-        firstCall      = true;
-        tutorialModeOn = false;
-
-        gameTimer = 0;
-        startTime = (int)PhotonNetwork.Time;
-
-        if (KeyBindings.clickIndex == 0)
-        {
-            mouseClick = "Left Click";
-        }
-        else if (KeyBindings.clickIndex == 1)
-        {
-            mouseClick = "Right Click";
-        }
-
-        #endregion Initialize variables
+       
     }
 
     private void FixedUpdate()
@@ -251,5 +256,10 @@ public class TutorialMode : MonoBehaviour
     public void exitTutorial()
     {
         player.leaveGame = true;
+        TutorialUI.SetActive(false);
+        //PlayerUI.SetActive(true);
+        CameraIsEnabled = true;
+        MovementIsEnabled = true;
+        FiringIsEnabled = true;
     }
 }
