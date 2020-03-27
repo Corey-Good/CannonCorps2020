@@ -124,17 +124,22 @@ public class TmManager : MonoBehaviour
     // Move the player to a random location in the map
     void RespawnPlayer()
     {
+        int spawnPoint;
         tank.healthCurrent = tank.healthMax;
         if (player.teamCode == 0)
         {
-            int spawnPoint = Random.Range(0, redSpawnlocations.Length - 1);
-            tankObject = PhotonNetwork.Instantiate(tank.tankModel, redSpawnlocations[spawnPoint].transform.position, redSpawnlocations[spawnPoint].transform.rotation);
+            spawnPoint = Random.Range(0, redSpawnlocations.Length - 1);
+            tankObject.transform.position = redSpawnlocations[spawnPoint].transform.position;
+            tankObject.transform.rotation = redSpawnlocations[spawnPoint].transform.rotation;
+
         }
         else if (player.teamCode == 1)
         {
-            int spawnPoint = Random.Range(0, blueSpawnlocations.Length - 1);
-            tankObject = PhotonNetwork.Instantiate(tank.tankModel, blueSpawnlocations[spawnPoint].transform.position, blueSpawnlocations[spawnPoint].transform.rotation);
+            spawnPoint = Random.Range(0, blueSpawnlocations.Length - 1);
+            tankObject.transform.position = blueSpawnlocations[spawnPoint].transform.position;
+            tankObject.transform.rotation = blueSpawnlocations[spawnPoint].transform.rotation;
         }
+        
     }
 
     public void UpdateTeamScores(int teamCode, int pointsEarned)

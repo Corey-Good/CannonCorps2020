@@ -5,7 +5,6 @@
 /* Modified By:        M. Agamalian                                     */
 /************************************************************************/
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,27 +18,26 @@ public class CustomizeCharacter : MonoBehaviour
     public Slider G;
     public Slider B;
 
-    float r_value = 1.0f;
-    float g_value = 1.0f;
-    float b_value = 1.0f;
-    Color tankColor;
+    private float r_value = 1.0f;
+    private float g_value = 1.0f;
+    private float b_value = 1.0f;
+    private Color tankColor;
     public Color[] defaultColors;
 
     public List<GameObject> tankModels = new List<GameObject>();
 
     // Set the base tank as the starting tank
-    void Start()
+    private void Start()
     {
         tankInstance = GetTankInstance();
         SetDefaultModel();
         UpdateDefault();
-
     }
 
     // Scroll to the left within the tank menu
-    public void OnClickLeft() 
+    public void OnClickLeft()
     {
-        if(model - 1 > -1)
+        if (model - 1 > -1)
         {
             tankModels[model--].SetActive(false);
             tankModels[model].SetActive(true);
@@ -77,7 +75,7 @@ public class CustomizeCharacter : MonoBehaviour
         tankInstance.CreateTank(tankModels[model].name);
         tankInstance.tankColor = tankColor;
     }
-    
+
     public Tank GetTankInstance()
     {
         return GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
@@ -93,8 +91,8 @@ public class CustomizeCharacter : MonoBehaviour
         ChangeTankColor(tankColor);
     }
 
-    void ChangeTankColor(Color tankColor)
-    {        
+    private void ChangeTankColor(Color tankColor)
+    {
         if (tankModels[model].name == "baseTank")
         {
             Renderer[] rends = tankModels[model].GetComponentsInChildren<Renderer>();
@@ -141,7 +139,7 @@ public class CustomizeCharacter : MonoBehaviour
         }
     }
 
-    void UpdateDefault ()
+    private void UpdateDefault()
     {
         R.value = defaultColors[model].r;
         G.value = defaultColors[model].g;
@@ -151,7 +149,7 @@ public class CustomizeCharacter : MonoBehaviour
         r_value = R.value;
     }
 
-    void SetDefaultModel()
+    private void SetDefaultModel()
     {
         tankModels[0].SetActive(false);
         tankModels[1].SetActive(false);

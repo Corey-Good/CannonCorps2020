@@ -1,4 +1,11 @@
-﻿using Photon.Pun;
+﻿/************************************************************************/
+/* Author:  */
+/* Date Created: */
+/* Last Modified Date: */
+/* Modified By: */
+/************************************************************************/
+
+using Photon.Pun;
 using UnityEngine;
 
 public class CollisionDetection : MonoBehaviour
@@ -15,10 +22,9 @@ public class CollisionDetection : MonoBehaviour
         playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
     }
 
-    private void OnCollisionEnter (Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.tag);
-        if(photonView.IsMine && collision.gameObject.tag == "Bullet")
+        if (photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
             if (playerController.invulnerable)
             {
@@ -30,8 +36,6 @@ public class CollisionDetection : MonoBehaviour
                 tank.damageTaken(10f);
                 tank.tankHit = true;
             }
-            
-
         }
     }
 }

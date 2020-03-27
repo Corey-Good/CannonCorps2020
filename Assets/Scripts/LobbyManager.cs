@@ -6,22 +6,23 @@
 /************************************************************************/
 
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using ExitGames.Client.Photon;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     #region Classes
+
     private Player player;
     private Tank tank;
-    #endregion
+
+    #endregion Classes
 
     #region Lobby Info
+
     public TextMeshProUGUI playerCount;
     public TextMeshProUGUI lobbyStatus;
     public GameObject LobbyView;
@@ -29,12 +30,14 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public GameObject playerListingPrefab;
     public Button readyUpButton;
     public RectTransform transitionPanel;
+    public TMP_ColorGradient greenGradient;
     private List<GameObject> playerListings = new List<GameObject>();
     private float lobbyTimer = 5f;
     private bool beginCountDown = false;
-    #endregion
 
-    public int minPlayers = 2;
+    #endregion Lobby Info
+
+    private int minPlayers = 1;
 
     private void Awake()
     {
@@ -44,14 +47,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     private void FixedUpdate()
     {
-        if(beginCountDown)
+        if (beginCountDown)
         {
-            Debug.Log("Timer should be moving");
             lobbyTimer -= Time.deltaTime;
             lobbyStatus.text = "Starting game in " + lobbyTimer.ToString("00");
         }
 
-        if(lobbyTimer <= 0)
+        if (lobbyTimer <= 0)
         {
             SetUpGame();
             beginCountDown = false;
@@ -59,17 +61,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             lobbyTimer = 5f;
         }
 
-        if(!beginCountDown && PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        if (!beginCountDown && PhotonNetwork.InRoom && (bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
         {
-            Debug.Log("Countdown should start soon");
             beginCountDown = true;
+            lobbyTimer = 5f;
+        }
+        else if (PhotonNetwork.InRoom && !(bool)PhotonNetwork.CurrentRoom.CustomProperties["StartGame"])
+        {
+            beginCountDown = false;
+            lobbyTimer = 5f;
+            lobbyStatus.text = "Waiting for players";
         }
     }
 
     public override void OnJoinedRoom()
     {
         PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", false } });
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
         }
@@ -94,11 +102,9 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         player.gameState = Player.GameState.Lobby;
         readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready Up";
-        readyUpButton.interactable = true;
         PhotonNetwork.LeaveRoom();
         LobbyView.SetActive(false);
         EmptyPlayerList();
-
     }
 
     private void UpdatePlayerList()
@@ -125,11 +131,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             playerListings.Add(tempListing);
 
             // Set the players name
-            Text tempText = tempListing.GetComponentInChildren<Text>();
+            TextMeshProUGUI tempText = tempListing.GetComponentInChildren<TextMeshProUGUI>();
             tempText.text = count.ToString() + " " + photonPlayer.NickName;
             if (string.Equals(photonPlayer.NickName, player.PlayerName))
             {
-                tempText.color = Color.white;
+                tempText.colorGradientPreset = greenGradient;
             }
         }
     }
@@ -206,28 +212,46 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void ReadyUp()
     {
-        Debug.Log("CLicked ready up");
-        PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
-
-        int readyPlayers = 0;
-        Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
-        foreach (Photon.Realtime.Player player in players)
+        if ((bool)PhotonNetwork.LocalPlayer.CustomProperties["Ready"])
         {
-            if ((bool)player.CustomProperties["Ready"])
+            PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", false } });
+            readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready Up";
+
+            int readyPlayers = 0;
+            Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
+            foreach (Photon.Realtime.Player player in players)
             {
-                readyPlayers++;
+                if ((bool)player.CustomProperties["Ready"])
+                {
+                    readyPlayers++;
+                }
+            }
+            if (readyPlayers < minPlayers)
+            {
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", false } });
+                PhotonNetwork.CurrentRoom.IsOpen = true;
             }
         }
-        Debug.Log("Ready players is: " + readyPlayers);
-        if (readyPlayers >= minPlayers)
+        else
         {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
-            PhotonNetwork.CurrentRoom.IsOpen = false;
+            PhotonNetwork.SetPlayerCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "Ready", true } });
+            readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Cancel";
 
+            int readyPlayers = 0;
+            Photon.Realtime.Player[] players = PhotonNetwork.PlayerList;
+            foreach (Photon.Realtime.Player player in players)
+            {
+                if ((bool)player.CustomProperties["Ready"])
+                {
+                    readyPlayers++;
+                }
+            }
 
+            if (readyPlayers >= minPlayers)
+            {
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "StartGame", true } });
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+            }
         }
-
-        readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready";
-        readyUpButton.interactable = false;
     }
 }

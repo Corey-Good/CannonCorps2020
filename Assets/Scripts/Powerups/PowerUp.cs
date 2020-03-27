@@ -1,5 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/************************************************************************/
+/* Author:  */
+/* Date Created: */
+/* Last Modified Date: */
+/* Modified By: */
+/************************************************************************/
+
 using UnityEngine;
 
 public class PowerUp : MonoBehaviour
@@ -7,15 +12,19 @@ public class PowerUp : MonoBehaviour
     public string powerUpName;
     public string powerUpExplanation;
     public string powerUpQuote;
+
     [Tooltip("Tick true for power ups that are instant use, eg a health addition that has no delay before expirint")]
     public bool expiresImmediately;
+
     public GameObject specialEffect;
     public AudioClip soundEffect;
-    Vector3 powerUpOffset = new Vector3(0.0f, -20.0f, 0.0f);
+    private Vector3 powerUpOffset = new Vector3(0.0f, -20.0f, 0.0f);
+
     ///<summary>
     ///Keep a reference to the player that collected
     ///</summary>
     protected PlayerController playerBrain;
+
     //Should PlayerBrain just be mashed in with Player?
 
     public MeshRenderer powerUpMeshRenderer;
@@ -43,12 +52,12 @@ public class PowerUp : MonoBehaviour
     /// 3D Support
     /// </summary>
 
-    protected virtual void OnTriggerEnter (Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         PowerUpCollected(other.gameObject);
     }
 
-    protected virtual void PowerUpCollected (GameObject gameObjectCollectingPowerUp)
+    protected virtual void PowerUpCollected(GameObject gameObjectCollectingPowerUp)
     {
         // We only care if we've been collected by the player
         if (gameObjectCollectingPowerUp.tag != "PlayerGO")
@@ -65,7 +74,6 @@ public class PowerUp : MonoBehaviour
 
         // We must have been collected by a player, store handle to player for later use
         playerBrain = gameObjectCollectingPowerUp.GetComponent<PlayerController>();
-
 
         // We move the power up game object to be under the player that collected it, this isn't essential for functionality
         // but is neater in the gameObject hierarchy
@@ -104,9 +112,9 @@ public class PowerUp : MonoBehaviour
     protected virtual void PowerUpPayload()
     {
         Debug.Log("Power Up collected, issuing payload for: " + gameObject.name);
-        
+
         // If we're instant use we also expire self immediately
-        if(expiresImmediately)
+        if (expiresImmediately)
         {
             PowerUpHasExpired();
         }
@@ -114,7 +122,7 @@ public class PowerUp : MonoBehaviour
 
     protected virtual void PowerUpHasExpired()
     {
-        if(powerUpState == PowerUpState.IsExpiring)
+        if (powerUpState == PowerUpState.IsExpiring)
         {
             return;
         }
@@ -139,5 +147,4 @@ public class PowerUp : MonoBehaviour
     {
         EventSystemListeners.main.AddListener(gameObjectListen);
     }
-
 }
