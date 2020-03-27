@@ -272,7 +272,6 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         player.leaveGame = false;
         player.returning = true;
-        TutorialMode.tutorialModeOn = false;
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         SetEndText();
