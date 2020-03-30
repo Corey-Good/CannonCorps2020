@@ -167,13 +167,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             // Set the Shark to the Master Client
             if (PhotonNetwork.IsMasterClient)
             {
-                tank.tankModel = "futureTank";
                 tank.healthCurrent = 100f;
             }
             // Set everyone else in the room to the base tank with minmal health
             else
             {
-                tank.tankModel = "baseTank";
                 tank.healthCurrent = 10f;
             }
 

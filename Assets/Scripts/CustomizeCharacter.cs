@@ -8,6 +8,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CustomizeCharacter : MonoBehaviour
 {
@@ -17,11 +18,14 @@ public class CustomizeCharacter : MonoBehaviour
     public Slider R;
     public Slider G;
     public Slider B;
+    public Button colorLock;
+    public TextMeshProUGUI colorText;
+    private static bool isColorLocked = false;
 
     private float r_value = 1.0f;
     private float g_value = 1.0f;
     private float b_value = 1.0f;
-    private Color tankColor;
+    private static Color tankColor;
     public Color[] defaultColors;
 
     public List<GameObject> tankModels = new List<GameObject>();
@@ -29,9 +33,19 @@ public class CustomizeCharacter : MonoBehaviour
     // Set the base tank as the starting tank
     private void Start()
     {
-        tankInstance = GetTankInstance();
+        tankInstance = GetTankInstance();        
         SetDefaultModel();
-        UpdateDefault();
+
+        if(isColorLocked)
+        {
+            colorText.text = "Color Locked";
+            ChangeTankColor(tankColor);
+        }
+        else
+        {
+            UpdateDefault();
+            colorText.text = "Lock Color";
+        }
     }
 
     // Scroll to the left within the tank menu
@@ -48,8 +62,16 @@ public class CustomizeCharacter : MonoBehaviour
             model = 3;
             tankModels[model].SetActive(true);
         }
-        UpdateDefault();
-        tankInstance.tankColor = tankColor;
+
+
+        if (isColorLocked)
+        {
+            ChangeTankColor(tankColor);
+        }
+        else
+        {
+            UpdateDefault();
+        }
     }
 
     // Scroll to the right within the tank menu
@@ -66,7 +88,15 @@ public class CustomizeCharacter : MonoBehaviour
             model = 0;
             tankModels[model].SetActive(true);
         }
-        UpdateDefault();
+
+        if (isColorLocked)
+        {
+            ChangeTankColor(tankColor);
+        }
+        else
+        {
+            UpdateDefault();
+        }
     }
 
     // Set the selected tank as the player's tank
@@ -180,6 +210,19 @@ public class CustomizeCharacter : MonoBehaviour
         {
             tankModels[0].SetActive(true);
             model = 0;
+        }
+    }
+
+    public void LockColor()
+    {
+        isColorLocked = !isColorLocked;
+        if(isColorLocked)
+        {
+            colorText.text = "Color Locked";
+        }
+        else
+        {
+            colorText.text = "Lock Color";
         }
     }
 }

@@ -21,6 +21,8 @@ public class SmManager : MonoBehaviour
     public  RectTransform panel;
             int           deathCount = 0;
             bool          firstCall = true;
+
+    string tempTankModel;
     #endregion
 
     void Awake()
@@ -64,7 +66,7 @@ public class SmManager : MonoBehaviour
         }
 
         // If a shark leaves the game for some reason, decrease the shark count
-        if (player.leaveGame && (deathCount >= 1 || tank.tankModel == "futureTank"))
+        if (player.leaveGame && (deathCount >= 1 || tempTankModel == "futureTank"))
         {
             int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
             PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", sharkCount - 1 } });
@@ -74,7 +76,7 @@ public class SmManager : MonoBehaviour
         {
             if(PhotonNetwork.IsMasterClient)
             {
-                tank.tankModel = "futureTank";
+                tempTankModel = "futureTank";
                 RespawnPlayer();
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "SharkCount", 1 } });
                 int sharkCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["SharkCount"];
@@ -86,7 +88,16 @@ public class SmManager : MonoBehaviour
     // Spawn the player at a random spawnpoint in the map
     void SpawnPlayer()
     {
-        if (tank.tankModel == "baseTank")
+        if (PhotonNetwork.IsMasterClient)
+        {
+            tempTankModel = "futureTank";
+        }
+        else
+        {
+            tempTankModel = "baseTank";
+        }
+
+        if (tempTankModel == "baseTank")
         {
             tank.healthCurrent = tank.healthMax * 0.2f;
         }
@@ -100,7 +111,7 @@ public class SmManager : MonoBehaviour
         {
             if(player == PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.LocalPlayer.ActorNumber))
             {
-                tankObject = PhotonNetwork.Instantiate(tank.tankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
+                tankObject = PhotonNetwork.Instantiate(tempTankModel, spawnlocations[count].transform.position, spawnlocations[count].transform.rotation);
             }
 
             count++;
@@ -112,7 +123,7 @@ public class SmManager : MonoBehaviour
     // Move the player to a random location in the map
     void RespawnPlayer()
     {
-        if (tank.tankModel == "baseTank")
+        if (tempTankModel == "baseTank")
         {
             tank.healthCurrent = tank.healthMax * 0.2f;
             tankPhotonView.RPC("ChangeColor_RPC", RpcTarget.AllBuffered);
