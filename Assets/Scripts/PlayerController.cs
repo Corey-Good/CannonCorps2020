@@ -97,11 +97,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             tank.damageTaken(10f);
         }
 
-        if (!PauseMenuAnimations.GameIsPaused && TutorialMode.MovementIsEnabled)
+        if (!PauseMenuManager.GameIsPaused && TutorialMode.MovementIsEnabled)
         {
             MovePlayer();
             if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
-               && (!PauseMenuAnimations.GameIsPaused && TutorialMode.FiringIsEnabled)
+               && (!PauseMenuManager.GameIsPaused && TutorialMode.FiringIsEnabled)
                && (readyToFire))
             {
                 readyToFire = false;

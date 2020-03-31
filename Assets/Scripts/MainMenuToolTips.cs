@@ -1,11 +1,13 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       3/03/2020                                        */
-/* Last Modified Date: 3/03/2020                                        */
+/* Last Modified Date: 3/31/2020                                        */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
+
 using UnityEngine;
 using TMPro;
+
 public class MainMenuToolTips : MonoBehaviour
 {
     public TextMeshProUGUI ToolTipsText;
@@ -17,18 +19,28 @@ public class MainMenuToolTips : MonoBehaviour
     }
     public void PlayMenuSMTips()
     {
-       ToolTipsText.text =     "All players start off as minnows, with 1 player randomly becoming a shark." +
-                           "\n\nThe shark will try to overpower as many minnows as possible, while minnows try to survive " +
-                               "for as long as possible!";
+        ToolTipsText.text = "All players start off as minnows, with one player randomly becoming a shark. " +
+                            "The shark will try to overpower as many minnows as possible, while minnows try to survive " +
+                            "for as long as possible!";
     }
     public void PlayMenuTBTips()
     {
-       ToolTipsText.text =     "Defeat players on the enemy team to earn points for your team. " +
-                           "\n\nThe team that reaches the score limit, or has more points when time expires wins!";
+        ToolTipsText.text = "Defeat players on the enemy team to earn points for your team. " +
+                            "The team that reaches the score limit, or has more points when time expires wins!";
     }
     public void PlayMenuTTTips()
     {
-        ToolTipsText.text = "Click here to learn the basics!";
+        ToolTipsText.text = "Learn the basics!";
+    }
+
+    public void OptionsMenuControls()
+    {
+        ToolTipsText.text = "Set your preferred keybindings!";
+    }
+
+    public void OptionsMenuInfo()
+    {
+        ToolTipsText.text = "See more information about each game mode!";
     }
     #endregion
 
@@ -57,7 +69,7 @@ public class MainMenuToolTips : MonoBehaviour
     }
     public void InfoMenuTTTips()
     {
-        ToolTipsText.text = "Learn the basics of gameplay, such as turret rotation, tank movement, aiming and firing.";
+        ToolTipsText.text = "In Tutorial, learn the basics of gameplay, such as turret rotation, tank movement, aiming and firing.";
     }
     #endregion
 }

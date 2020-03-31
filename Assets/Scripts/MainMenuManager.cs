@@ -1,32 +1,24 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       2/20/2020                                        */
-/* Last Modified Date: 2/26/2020                                        */
-/* Modified By:        M. Agamalian                                     */
+/* Last Modified Date: 3/01/2020                                        */
+/* Modified By:        J. Calas                                     */
 /************************************************************************/
 
 using UnityEngine;
 
-public class MainMenuAnimations : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
     public GameObject currentMenu;
-    public static float transitionTime = 0.5f;
-
-    // Used for debug purposes
-    public void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    CloseMenu();
-        //}
-    }
+    public GameObject nextMenu;
+    private float transitionTime = 0.5f;
 
     // Scale the menu to look like an animation
-    public void OpenMenu()
+    public void OpenNewMenu()
     {
-        currentMenu.SetActive(true);
-        currentMenu.transform.localScale = Vector3.zero;
-        LeanTween.scale(currentMenu, Vector3.one, transitionTime);
+        nextMenu.SetActive(true);
+        nextMenu.transform.localScale = Vector3.zero;
+        LeanTween.scale(nextMenu, Vector3.one, transitionTime);
     }
 
     // Scale the menu to look like an animation
@@ -40,5 +32,11 @@ public class MainMenuAnimations : MonoBehaviour
     public void turnOffMenu()
     {
         currentMenu.SetActive(false);
+    }
+
+    public void CustomizeToPlay()
+    {
+        CloseMenu();
+        Invoke("OpenNewMenu", MenuAnimations.transitionTime);
     }
 }
