@@ -38,13 +38,19 @@ public class CustomizeCharacter : MonoBehaviour
 
         if(isColorLocked)
         {
-            colorText.text = "Color Locked";
+            colorText.text = "Locked";
             ChangeTankColor(tankColor);
+            R.value = tankColor.r;
+            G.value = tankColor.g;
+            B.value = tankColor.b;
+            r_value = tankColor.r;
+            g_value = tankColor.g;
+            b_value = tankColor.b;
         }
         else
         {
             UpdateDefault();
-            colorText.text = "Lock Color";
+            colorText.text = "Unlocked";
         }
     }
 
@@ -218,11 +224,11 @@ public class CustomizeCharacter : MonoBehaviour
         isColorLocked = !isColorLocked;
         if(isColorLocked)
         {
-            colorText.text = "Color Locked";
+            colorText.text = "Locked";
         }
         else
         {
-            colorText.text = "Lock Color";
+            colorText.text = "Unlocked";
         }
     }
 }

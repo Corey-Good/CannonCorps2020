@@ -18,9 +18,12 @@ public class PauseMenuAnimations : MonoBehaviour
     public static RectTransform transitionPanel;
     private Player player;
 
+    public static bool playerQuit = false;
+
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        playerQuit = false;
     }
 
     // Lock the mouse, pause the game, and open the pause menu and vice versa
@@ -105,8 +108,10 @@ public class PauseMenuAnimations : MonoBehaviour
     // Exit for the game and switch to the main menu
     public void Quit()
     {
+        playerQuit = true;
         GameIsPaused = false;
         player.leaveGame = true;
+        
     }
 
     // Scale the menu as an animation
@@ -117,7 +122,7 @@ public class PauseMenuAnimations : MonoBehaviour
         LeanTween.scale(Menu, Vector3.one, 0.5f);
     }
 
-    // Scale the menue as an animation
+    // Scale the menu as an animation
     public void ClosePauseMenu(GameObject Menu)
     {
         LeanTween.scale(Menu, Vector3.zero, 0.5f);

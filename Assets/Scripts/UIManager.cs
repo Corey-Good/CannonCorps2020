@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     #endregion    
 
     public RectTransform transitionPanel;
-    public GameObject gameOverRect;
+    public GameObject gameOverObj;
     public TextMeshProUGUI gameOverText;
     public GameObject hitIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
+        LeanTween.scale(gameOverObj, Vector3.zero, 0);
 
         // Set default values
         playerScoreText.text = "0";
@@ -269,8 +270,9 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         SetEndText();
-        gameOverRect.SetActive(true);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(0.65f);
+        LeanTween.scale(gameOverObj, Vector3.one, 1); ;
+        yield return new WaitForSeconds(2);
 
         // Leave the room, waiting until we are disconnected from the room to proceed
         PhotonNetwork.LeaveRoom();
@@ -314,13 +316,24 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         switch(player.gameState)
         {
-            case Player.GameState.FFA:
-                gameOverText.text = "You were eliminated";
+            case Player.GameState.FFA:                
+                if(PauseMenuAnimations.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . . ";
+                }
+                else
+                {
+                    gameOverText.text = "You were eliminated";
+                }
                 break;
             case Player.GameState.SM:
                 if(matchTimer >= 300.0)
                 {
                     gameOverText.text = "The Minnows evaded the Shark!";
+                }
+                else if (PauseMenuAnimations.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . .";
                 }
                 else
                 {
@@ -337,13 +350,20 @@ public class UIManager : MonoBehaviourPunCallbacks
                 {
                     gameOverText.text = "The Red Team won!";
                 }
-                else
+                else if (PauseMenuAnimations.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . .";
                 }
                 break;
             case Player.GameState.TT:
-                gameOverText.text = "";
+                if (PauseMenuAnimations.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . .";
+                }
+                else
+                {
+                    gameOverText.text = "Tutorial Mode Completed!";
+                }
                 break;
         }
     }
