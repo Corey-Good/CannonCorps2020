@@ -13,6 +13,11 @@ public interface IPlayerEvents : IEventSystemHandler
     void OnPlayerReachedExit(GameObject exit);
 }
 
+public interface IPowerUpManagerEvents : IEventSystemHandler
+{
+    void OnSpawnPowerup();
+}
+
 public interface IPowerUpEvents: IEventSystemHandler
 {
     void OnReloadBoostExpired();

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3634666284489349541}
   - component: {fileID: 3634666284489349538}
   - component: {fileID: 3634666284489349539}
-  - component: {fileID: 4635512932984404421}
   - component: {fileID: 5570332842405487443}
   - component: {fileID: 8457147859971190976}
   - component: {fileID: 1123029686250086293}
@@ -116,28 +115,6 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
---- !u!114 &4635512932984404421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3634666284489349536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!114 &5570332842405487443
 MonoBehaviour:
   m_ObjectHideFlags: 0

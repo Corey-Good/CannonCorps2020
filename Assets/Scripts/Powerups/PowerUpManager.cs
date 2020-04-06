@@ -2,38 +2,58 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PowerUpManager : MonoBehaviour
+public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 {
-    public GameObject[] powerupRotations = new GameObject[4];
-    public GameObject[] spawnLocations = new GameObject[4];
+    public GameObject[] powerupRotations = new GameObject[numberOfPowerups];
+    public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
     private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPowerUp", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
+    private static int numberOfPowerups;
+    private static int numberOfPowerupSpawnLocations = 4;
     private float time = 0.0f;
 
-    public void FixedUpdate()
+    public void Start()
     {
-        time += Time.deltaTime;
-        if (time > 8.0f)
+        numberOfPowerups = powerupNames.Length;
+        
+        EventSystemListeners.main.AddListener(this.gameObject);
+    }
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            SpawnRandomPowerUp();
-            time = 0.0f;
+            SendSpawnPowerUpMessage();
+        }
+    }
+
+    private void SendSpawnPowerUpMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpManagerEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnSpawnPowerup()            // 4
+                    );
+            }
         }
     }
 
     private void SpawnRandomPowerUp()
     {
-        int randomNumber = Random.Range(0, 4);
-        Debug.Log(randomNumber);
-        float yValue = 1.0f;
-        if (randomNumber == 1)
-        {
-            yValue = 0.0f;
-        }
-        else if (randomNumber == 3)
-        {
-            yValue -= 0.55f;
-        }
+        int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
+        int locationRandomNumber = Random.Range(0, numberOfPowerupSpawnLocations);
+        Debug.Log(powerupNames[powerUpRandomNumber]);
+        Debug.Log(locationRandomNumber);
 
-        PhotonNetwork.Instantiate(powerupNames[randomNumber], new Vector3(Random.Range(200.0f, 315.0f), yValue, Random.Range(215.0f, 350.0f)), powerupRotations[randomNumber].transform.rotation);
+        PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), powerupRotations[powerUpRandomNumber].transform.rotation);
+    }
+
+    void IPowerUpManagerEvents.OnSpawnPowerup()
+    {
+        SpawnRandomPowerUp();
     }
 }
