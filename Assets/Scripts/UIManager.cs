@@ -317,7 +317,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         switch(player.gameState)
         {
             case Player.GameState.FFA:                
-                if(PauseMenuAnimations.playerQuit)
+                if(PauseMenuManager.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . . ";
                 }
@@ -331,7 +331,7 @@ public class UIManager : MonoBehaviourPunCallbacks
                 {
                     gameOverText.text = "The Minnows evaded the Shark!";
                 }
-                else if (PauseMenuAnimations.playerQuit)
+                else if (PauseMenuManager.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . .";
                 }
@@ -350,13 +350,13 @@ public class UIManager : MonoBehaviourPunCallbacks
                 {
                     gameOverText.text = "The Red Team won!";
                 }
-                else if (PauseMenuAnimations.playerQuit)
+                else if (PauseMenuManager.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . .";
                 }
                 break;
             case Player.GameState.TT:
-                if (PauseMenuAnimations.playerQuit)
+                if (PauseMenuManager.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . .";
                 }

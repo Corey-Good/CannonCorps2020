@@ -9,17 +9,22 @@ using UnityEngine;
 
 public class PauseMenuManager : MonoBehaviour
 {
-    public static  bool          GameIsPaused = false;
-    public         GameObject    pauseMenu;
+    #region Variables
+    public GameObject    pauseMenu;
     public         GameObject    optionsMenu;
     public         GameObject    controlsMenu;
     public         GameObject    infoMenu;
-    public  static RectTransform transitionPanel;
     private        Player        player;
+
+    public  static bool          gameIsPaused = false;
+    public  static bool          playerQuit = false;
+    public  static RectTransform transitionPanel;
+    #endregion
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        player     = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        playerQuit = false;
     }
 
     // Lock the mouse, pause the game, and open the pause menu and vice versa
@@ -27,17 +32,17 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (gameIsPaused)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
+                Cursor.lockState  = CursorLockMode.Locked;
+                Cursor.visible    = false;
                 pauseMenu.SetActive(false);
                 ResumeGame();
             }
             else
             {
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                Cursor.lockState  = CursorLockMode.None;
+                Cursor.visible    = true;
                 pauseMenu.SetActive(true);
                 PauseGame();
             }
@@ -47,26 +52,27 @@ public class PauseMenuManager : MonoBehaviour
     // Open the pause menu
     public void PauseGame()
     {
-        GameIsPaused   = true;
+        gameIsPaused   = true;
         Cursor.visible = true;
     }
 
     // Close all menus and resume the game
     public void ResumeGame()
     {
-        GameIsPaused   = false;
+        gameIsPaused   = false;
         Cursor.visible = false;
 
-        pauseMenu.SetActive(false);
-        optionsMenu.SetActive(false);
+        pauseMenu.   SetActive(false);
+        optionsMenu. SetActive(false);
         controlsMenu.SetActive(false);
-        infoMenu.SetActive(false);
+        infoMenu.    SetActive(false);
     }
 
     // Exit for the game and switch to the main menu
     public void QuitGame()
     {
-        GameIsPaused     = false;
+        playerQuit       = false;
+        gameIsPaused     = false;
         player.leaveGame = true;
     }
 }
