@@ -7,9 +7,9 @@
 
 using UnityEngine;
 
-public class MainMenuAnimations : MonoBehaviour
+public class MenuAnimations : MonoBehaviour
 {
-    public GameObject currentMenu;
+    public GameObject   currentMenu;
     public static float transitionTime = 0.5f;
 
     // Used for debug purposes
@@ -37,7 +37,7 @@ public class MainMenuAnimations : MonoBehaviour
     }
 
     // Deactivate the main menu
-    public void turnOffMenu()
+    private void turnOffMenu()
     {
         currentMenu.SetActive(false);
     }

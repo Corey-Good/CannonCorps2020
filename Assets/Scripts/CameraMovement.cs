@@ -68,7 +68,7 @@ public class CameraMovement : MonoBehaviourPun
         }
 
         // Set the new target position height based on mouse input
-        if (!PauseMenuAnimations.GameIsPaused && TutorialMode.CameraIsEnabled)
+        if (!PauseMenuManager.GameIsPaused && TutorialMode.CameraIsEnabled)
         {
             target.transform.position =
                 new Vector3(target.transform.position.x,
