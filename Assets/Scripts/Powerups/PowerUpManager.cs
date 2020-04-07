@@ -40,6 +40,16 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
             SendSpawnPowerUpMessage();
         }
 
+        // if PowerUpsOut counter == 0, then unlock all locations
+        if (powerUpsOut == 0)
+        {
+            for (int i = 0; i < numberOfPowerupSpawnLocations; i++)
+            {
+                lockedLocations[i] = false;
+            }
+            allLocationsLocked = false;
+        }
+
         if (!allLocationsLocked)
         {
             time += Time.deltaTime;
@@ -95,21 +105,12 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 
     private int HandleSpawnLocation()
     {   
-        // if PowerUpsOut counter == 0, then unlock all locations
-        if(powerUpsOut == 0)
-        {
-            for(int i = 0; i < numberOfPowerupSpawnLocations; i++)
-            {
-                lockedLocations[i] = false;
-            }
-        }
-
         // random location and then lock location
         int randomLocation = Random.Range(0, numberOfPowerupSpawnLocations - 1);
 
         // if random location is locked, then find next unlocked
-        int loopCount = 1;
-        while (CheckIfLocked(randomLocation) && loopCount <= numberOfPowerupSpawnLocations)
+        int loopCount = 0;
+        while (CheckIfLocked(randomLocation) && loopCount < numberOfPowerupSpawnLocations)
         {
             randomLocation++;
             if (randomLocation >= numberOfPowerupSpawnLocations)
@@ -128,11 +129,11 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         }
 
 
-        loopCount = 1;
+        loopCount = 0;
 
         // if all are locked then return numberOfPowerupSpawnLocations + 1
         if (allLocationsLocked)
-            randomLocation = numberOfPowerupSpawnLocations + 1;
+            randomLocation = numberOfPowerupSpawnLocations;
 
         return randomLocation;
     }
