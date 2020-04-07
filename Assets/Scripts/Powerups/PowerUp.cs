@@ -6,6 +6,7 @@
 /************************************************************************/
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PowerUp : MonoBehaviour
 {
@@ -87,10 +88,7 @@ public class PowerUp : MonoBehaviour
         PowerUpPayload();
 
         // Send message to any listeners
-        //foreach (GameObject go in EventListeners.main.listeners)
-        //{
-        //    ExecuteEvents.Execute<IPowerUpEvents>(go, null, (x, y) => x.OnPowerUpCollected(this, playerBrain));
-        //}
+        SendPowerUpCollectedMessage();
 
         // Now the power up visuals can go away
         //powerUpMeshRenderer.enabled = false;
@@ -146,5 +144,20 @@ public class PowerUp : MonoBehaviour
     protected void StartListening(GameObject gameObjectListen)
     {
         EventSystemListeners.main.AddListener(gameObjectListen);
+    }
+
+    private void SendPowerUpCollectedMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpManagerEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnPowerUpCollected()            // 4
+                    );
+            }
+        }
     }
 }

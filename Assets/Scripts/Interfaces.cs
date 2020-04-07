@@ -16,6 +16,7 @@ public interface IPlayerEvents : IEventSystemHandler
 public interface IPowerUpManagerEvents : IEventSystemHandler
 {
     void OnSpawnPowerup();
+    void OnPowerUpCollected();
 }
 
 public interface IPowerUpEvents: IEventSystemHandler
