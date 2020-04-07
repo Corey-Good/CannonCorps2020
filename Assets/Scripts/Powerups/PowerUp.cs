@@ -93,7 +93,7 @@ public class PowerUp : MonoBehaviour
         //}
 
         // Now the power up visuals can go away
-        powerUpMeshRenderer.enabled = false;
+        //powerUpMeshRenderer.enabled = false;
     }
 
     protected virtual void PowerUpEffects()
