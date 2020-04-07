@@ -640,6 +640,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        throw new System.NotImplementedException();
+
     }
 }

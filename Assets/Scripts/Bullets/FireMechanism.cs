@@ -68,7 +68,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && tankCamera.transform.rotation.x < 0.05)
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
@@ -84,7 +84,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && tankCamera.transform.rotation.x < 0.05)
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
@@ -100,7 +100,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && tankCamera.transform.rotation.x < 0.05)
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);

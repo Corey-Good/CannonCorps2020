@@ -10,7 +10,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
     private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPowerUp", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
     private static int numberOfPowerups;
-    private static int numberOfPowerupSpawnLocations = 4;
+    private static int numberOfPowerupSpawnLocations = 7;
     private float time = 0.0f;
 
     public void Start()
@@ -42,12 +42,19 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         }
     }
 
+    private int count = 0;
     private void SpawnRandomPowerUp()
     {
-        int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
-        int locationRandomNumber = Random.Range(0, numberOfPowerupSpawnLocations);
-        Debug.Log(powerupNames[powerUpRandomNumber]);
-        Debug.Log(locationRandomNumber);
+        //int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
+        //int locationRandomNumber = Random.Range(0, numberOfPowerupSpawnLocations);
+        //Debug.Log(powerupNames[powerUpRandomNumber]);
+        //Debug.Log(locationRandomNumber);
+
+        int powerUpRandomNumber = count;
+        int locationRandomNumber = count;
+        count++;
+        if (count == 7)
+            count = 0;
 
         PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), powerupRotations[powerUpRandomNumber].transform.rotation);
     }
