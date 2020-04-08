@@ -12,7 +12,7 @@ public class FreezePowerUp : PowerUp
     private Player player;
     private PhotonView photonView;
     [Tooltip("Value must not exceed 200!")]
-    public float speed = 150f;
+    public float speed = 140f;
 
     protected override void Start()
     {
@@ -20,6 +20,11 @@ public class FreezePowerUp : PowerUp
         photonView = GetComponentInParent<PhotonView>();
         if (!photonView.IsMine) { return; }
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+    }
+
+    private void Update()
+    {
+        transform.position += transform.forward * speed * Time.deltaTime;
     }
     protected override void PowerUpPayload()          // Checklist item 1
     {

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 3634666284489349539}
   - component: {fileID: 5570332842405487443}
   - component: {fileID: 8457147859971190976}
-  - component: {fileID: 1123029686250086293}
   m_Layer: 0
   m_Name: DynamiteBullet
   m_TagString: Untagged
@@ -153,25 +152,3 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1123029686250086293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3634666284489349536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ade5d1a43c839847b4a4ee5bbd47c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TankMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ExplosionAudio: {fileID: 0}
-  m_MaxDamage: 25
-  m_ExplosionForce: 1000
-  m_MaxLifeTime: 2
-  m_ExplosionRadius: 5
-  bullet: {fileID: 0}
-  speed: 150

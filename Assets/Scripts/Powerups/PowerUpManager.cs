@@ -7,8 +7,8 @@ using UnityEngine.EventSystems;
 public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 {
     private static int numberOfPowerups;
-    private static int numberOfPowerupSpawnLocations = 7;
-    public GameObject[] powerupRotations = new GameObject[numberOfPowerups];
+    private static int numberOfPowerupSpawnLocations = 14;
+    public GameObject[] powerupRotations = new GameObject[numberOfPowerupSpawnLocations];
     public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
     private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPowerUp", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
     public bool[] lockedLocations = new bool[numberOfPowerupSpawnLocations];
@@ -90,13 +90,13 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 
       
         int locationRandomNumber = HandleSpawnLocation();
-        int powerUpRandomNumber = locationRandomNumber;
+        int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
 
         if (locationRandomNumber < numberOfPowerupSpawnLocations)
         {
             PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
                                       new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), 
-                                      powerupRotations[powerUpRandomNumber].transform.rotation);
+                                      powerupRotations[locationRandomNumber].transform.rotation);
             // Increment PowerUpsOut counter
             powerUpsOut++;
         }
@@ -106,7 +106,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     private int HandleSpawnLocation()
     {   
         // random location and then lock location
-        int randomLocation = Random.Range(0, numberOfPowerupSpawnLocations - 1);
+        int randomLocation = Random.Range(0, numberOfPowerupSpawnLocations);
 
         // if random location is locked, then find next unlocked
         int loopCount = 0;

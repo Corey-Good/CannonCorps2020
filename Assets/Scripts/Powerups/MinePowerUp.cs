@@ -9,7 +9,7 @@ public class MinePowerUp : PowerUp
     private Player player;
     private PhotonView photonView;
     [Tooltip("Value must not exceed 200!")]
-    public float speed = 150f;
+    public float speed = 130f;
 
     protected override void Start()
     {
