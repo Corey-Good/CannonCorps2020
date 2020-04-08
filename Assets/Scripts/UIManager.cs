@@ -110,7 +110,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         shieldIcon.enabled = playerController.invulnerable;
         reloadIcon.fillAmount = (playerController.reloadBoostTimer / playerController.maxReloadBoostTimer);
         speedIcon.fillAmount = (playerController.speedBoostTimer / playerController.maxSpeedBoostTimer);
-        bulletIcon.fillAmount = tank.reloadProgress;
+        bulletIcon.fillAmount = 1.0f;
         freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
         laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
@@ -118,40 +118,40 @@ public class UIManager : MonoBehaviourPunCallbacks
         switch (playerController.currentBulletType)
         {
             case PlayerController.BulletType.Normal:
-                bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                bulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.FreezeBullet:
-                freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                freezeBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.DynamiteBullet:
-                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.LaserBullet:
-                laserBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                laserBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
         }
 

@@ -19,6 +19,11 @@ public interface IPowerUpManagerEvents : IEventSystemHandler
     void OnPowerUpCollected();
 }
 
+public interface ICarouselEvents : IEventSystemHandler
+{
+    void OnRotateCarousel();
+}
+
 public interface IPowerUpEvents: IEventSystemHandler
 {
     void OnReloadBoostExpired();

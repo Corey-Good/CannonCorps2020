@@ -170,16 +170,28 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             if (Input.GetKeyDown(switchBulletType)) // Cycle through bullets
             {
                 currentBulletType += 1;
+                SendBulletSwitchMessage();
 
                 if (numOfFreezeBullets == 0.0f)
                     if ((int)currentBulletType == 1)
+                    {
                         currentBulletType += 1;
+                        SendBulletSwitchMessage();
+                    }
+                        
                 if (numOfDynamiteBullets == 0.0f)
                     if ((int)currentBulletType == 2)
+                    {
+                        SendBulletSwitchMessage();
                         currentBulletType += 1;
+                    }
+                        
                 if (numOfLaserBullets == 0.0f)
                     if ((int)currentBulletType == 3)
+                    {
+                        SendBulletSwitchMessage();
                         currentBulletType += 1;
+                    }
 
                 if ((int)currentBulletType >= numberOfBulletTypes)
                     currentBulletType = 0;
@@ -548,6 +560,24 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Messages
+
+    #region Send BulletSwitch Messages
+    private void SendBulletSwitchMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<ICarouselEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnRotateCarousel()            // 4
+                    );
+            }
+        }
+    }
+
+    #endregion
 
     #region Reload Powerup Messages
     public void SendReloadPowerUpExpiredMessage()
