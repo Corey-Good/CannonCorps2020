@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class FreezePowerUp : PowerUp
 {
@@ -8,10 +9,36 @@ public class FreezePowerUp : PowerUp
     private float speedMultiplier = 0f;
     private float Damage = 5.0f;
     private bool isFreezePowerup = true;
+    private Player player;
+    private PhotonView photonView;
+    [Tooltip("Value must not exceed 200!")]
+    public float speed = 150f;
 
+    protected override void Start()
+    {
+        base.Start();
+        photonView = GetComponentInParent<PhotonView>();
+        if (!photonView.IsMine) { return; }
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+    }
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
+        if (photonView.IsMine)
+        {
+            // Update the player's score
+            player.ScoreCurrent += 10;
+            player.gotPoints = true;
+
+            // Show the points to the player
+            //UIManager.ShowPoints();
+
+            // Add points to the player's team score
+            if (player.gameState == Player.GameState.TB)
+            {
+                //TmManager.UpdateTeamScores(player.teamCode, 10);
+            }
+        }
         playerBrain.SetSpeedBoostOff();
         playerBrain.SetSpeedBoostOn(speedMultiplier, rotateMultiplier, isFreezePowerup);
         playerBrain.SetHealthBoost(Damage);

@@ -488,7 +488,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     return;
                 }
                 else
+                {
                     tank.damageTaken(damage);
+                    tank.tankHit = true;
+                }
+                    
             }
             else if (damage < 0.0f) // Let health boost pass through
             {   

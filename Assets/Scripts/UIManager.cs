@@ -107,12 +107,13 @@ public class UIManager : MonoBehaviourPunCallbacks
         reloadDial.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
-        shieldIcon.enabled = playerController.invulnerable;
-        reloadIcon.fillAmount = (playerController.reloadBoostTimer / playerController.maxReloadBoostTimer);
-        speedIcon.fillAmount = (playerController.speedBoostTimer / playerController.maxSpeedBoostTimer);
-        freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
+        #region Powerups UI
+        shieldIcon.enabled            = playerController.invulnerable;
+        reloadIcon.fillAmount         = (playerController.reloadBoostTimer     / playerController.maxReloadBoostTimer);
+        speedIcon.fillAmount          = (playerController.speedBoostTimer      / playerController.maxSpeedBoostTimer);
+        freezeBulletIcon.fillAmount   = (playerController.numOfFreezeBullets   / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
-        laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
+        laserBulletIcon.fillAmount    = (playerController.numOfLaserBullets    / playerController.maxNumOfLaserBullets);
 
         switch (playerController.currentBulletType)
         {
@@ -153,6 +154,8 @@ public class UIManager : MonoBehaviourPunCallbacks
                     bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
         }
+
+        #endregion
 
         if (player.gameState == Player.GameState.SM)
         {
