@@ -149,19 +149,32 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                         case BulletType.FreezeBullet:
                             numOfFreezeBullets -= 1.0f;
                             if (numOfFreezeBullets == 0.0f)
+                            {
+                                SendBulletSwitchMessage();
+                                SendBulletSwitchMessage();
+                                SendBulletSwitchMessage();
                                 currentBulletType = BulletType.Normal;
+                            }
+                                
                             break;
 
                         case BulletType.DynamiteBullet:
                             numOfDynamiteBullets -= 1.0f;
                             if (numOfDynamiteBullets == 0.0f)
+                            {
+                                SendBulletSwitchMessage();
+                                SendBulletSwitchMessage();
                                 currentBulletType = BulletType.Normal;
+                            }
                             break;
 
                         case BulletType.LaserBullet:
                             numOfLaserBullets -= 1.0f;
                             if (numOfLaserBullets == 0.0f)
+                            {
+                                SendBulletSwitchMessage();
                                 currentBulletType = BulletType.Normal;
+                            }
                             break;
                     }
                 }

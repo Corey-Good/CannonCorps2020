@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public GameObject gameOverRect;
     public TextMeshProUGUI gameOverText;
     public GameObject hitIndicator;
+    public GameObject freezeIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
     public List<RectTransform> rectPoints = new List<RectTransform>();
 
@@ -104,13 +105,11 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
         reloadDial.fillAmount = tank.reloadProgress;
-        //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
         shieldIcon.enabled = playerController.invulnerable;
         reloadIcon.fillAmount = (playerController.reloadBoostTimer / playerController.maxReloadBoostTimer);
         speedIcon.fillAmount = (playerController.speedBoostTimer / playerController.maxSpeedBoostTimer);
-        bulletIcon.fillAmount = 1.0f;
         freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
         laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
@@ -187,6 +186,18 @@ public class UIManager : MonoBehaviourPunCallbacks
         {
             ShowPoints();
             player.gotPoints = false;
+        }
+
+        if(playerController.isFrozen && flashFreeze)
+        {
+            FlashFreeze();
+            flashFreeze = false;
+        }
+
+        if(!playerController.isFrozen && !flashFreeze)
+        {
+            BreakFreeze();
+            flashFreeze = true;
         }
     }
 
@@ -302,6 +313,26 @@ public class UIManager : MonoBehaviourPunCallbacks
             LeanTween.alpha(edge, 0, 1f);
         }
     }
+
+    private bool flashFreeze = true;
+    public void FlashFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 1, 0.75f);
+        }
+    }
+
+    public void BreakFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 0, 1f);
+        }
+    }
+
 
     public void ShowPoints()
     {
