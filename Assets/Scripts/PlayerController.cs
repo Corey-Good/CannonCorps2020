@@ -695,9 +695,4 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         fireMechanism.FireBullet();
     }
 
-
-    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-
-    }
 }
