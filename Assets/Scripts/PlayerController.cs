@@ -323,21 +323,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
-            if(tank.tankModel == "Catapult")
-            {
-                stream.SendNext(tankBody.transform.position);
-                stream.SendNext(tankBody.transform.rotation);
-                stream.SendNext(tankBody.transform.position);
-                stream.SendNext(tankBody.transform.rotation);
-            }
-            else
-            {
-                stream.SendNext(tankBody.transform.position);
-                stream.SendNext(tankBody.transform.rotation);
-                stream.SendNext(tankHead.transform.position);
-                stream.SendNext(tankHead.transform.rotation);
-            }
-
+            stream.SendNext(tankBody.transform.position);
+            stream.SendNext(tankBody.transform.rotation);
+            stream.SendNext(tankHead.transform.position);
+            stream.SendNext(tankHead.transform.rotation);
         }
         else
         {
