@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731703, g: 0.13414727, b: 0.12107852, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -881,7 +881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &157215709
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7583,7 +7583,7 @@ MonoBehaviour:
   redTeamScore: {fileID: 428497616}
   blueTeamScore: {fileID: 609633635}
   transitionPanel: {fileID: 1140036589}
-  gameOverRect: {fileID: 157215708}
+  gameOverObj: {fileID: 157215708}
   gameOverText: {fileID: 1110063789}
   hitIndicator: {fileID: 1097663406}
   freezeIndicator: {fileID: 251527762}

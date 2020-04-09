@@ -21,7 +21,7 @@ public class FireMechanism : MonoBehaviour
 
     public void ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
     {
-        if (readyToFire)
+        if (readyToFire && ValidAim())
         {
             switch (currentBulletType)
             {
@@ -46,13 +46,14 @@ public class FireMechanism : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(tankCamera.transform.rotation.eulerAngles.x);
     }
 
     public void FireBullet()
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && tankCamera.transform.rotation.x < 0.05)
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && ValidAim())
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
@@ -110,5 +111,11 @@ public class FireMechanism : MonoBehaviour
         {
             GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, gameObject.transform.rotation);
         }
+    }
+
+    private bool ValidAim()
+    {
+        float angle = tankCamera.transform.rotation.eulerAngles.x;
+        return angle < 6.0f || (angle > 180.0f && angle < 360.0f);
     }
 }
