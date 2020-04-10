@@ -18,13 +18,13 @@ public class CustomizeCharacter : MonoBehaviour
     public Slider R;
     public Slider G;
     public Slider B;
+    private static float r;
+    private static float g;
+    private static float b;
     public Button colorLock;
     public TextMeshProUGUI colorText;
     private static bool isColorLocked = false;
 
-    private float r_value = 1.0f;
-    private float g_value = 1.0f;
-    private float b_value = 1.0f;
     private static Color tankColor;
     public Color[] defaultColors;
 
@@ -33,25 +33,23 @@ public class CustomizeCharacter : MonoBehaviour
     // Set the base tank as the starting tank
     private void Start()
     {
-        tankInstance = GetTankInstance();        
+        tankInstance = GetTankInstance();
         SetDefaultModel();
 
-        if(isColorLocked)
+        if (isColorLocked)
         {
             colorText.text = "Locked";
             ChangeTankColor(tankColor);
-            R.value = tankColor.r;
-            G.value = tankColor.g;
-            B.value = tankColor.b;
-            r_value = tankColor.r;
-            g_value = tankColor.g;
-            b_value = tankColor.b;
+            R.value = r;
+            G.value = g;
+            B.value = b;
         }
         else
-        {
-            UpdateDefault();
+        {            
             colorText.text = "Unlocked";
+            UpdateDefault();
         }
+        
     }
 
     // Scroll to the left within the tank menu
@@ -110,6 +108,9 @@ public class CustomizeCharacter : MonoBehaviour
     {
         tankInstance.CreateTank(tankModels[model].name);
         tankInstance.tankColor = tankColor;
+        r = tankColor.r;
+        g = tankColor.g;
+        b = tankColor.b;
     }
 
     public Tank GetTankInstance()
@@ -119,11 +120,7 @@ public class CustomizeCharacter : MonoBehaviour
 
     public void OnValueChanged()
     {
-        r_value = R.value;
-        g_value = G.value;
-        b_value = B.value;
-
-        tankColor = new Color(r_value, g_value, b_value);
+        tankColor = new Color(R.value, G.value, B.value);
         ChangeTankColor(tankColor);
     }
 
@@ -180,9 +177,6 @@ public class CustomizeCharacter : MonoBehaviour
         R.value = defaultColors[model].r;
         G.value = defaultColors[model].g;
         B.value = defaultColors[model].b;
-        g_value = G.value;
-        b_value = B.value;
-        r_value = R.value;
     }
 
     private void SetDefaultModel()

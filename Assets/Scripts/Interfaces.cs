@@ -13,6 +13,24 @@ public interface IPlayerEvents : IEventSystemHandler
     void OnPlayerReachedExit(GameObject exit);
 }
 
+public interface IPowerUpManagerEvents : IEventSystemHandler
+{
+    void OnSpawnPowerup();
+    void OnPowerUpCollected();
+}
+
+public interface ICarouselEvents : IEventSystemHandler
+{
+    void OnRotateCarousel();
+}
+
+public interface IPowerUpEvents: IEventSystemHandler
+{
+    void OnReloadBoostExpired();
+    void ToggleReloadBoost();
+    void OnSpeedBoostExpired();
+    void ToggleSpeedBoost();
+}
 interface ITakeDamage
 {
     void damageTaken(float damage);

@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviourPunCallbacks
     public Image freezeBulletIcon;
     public Image dynamiteBulletIcon;
     public Image laserBulletIcon;
+    public Image reloadIcon;
+    public Image speedIcon;
+    public Image shieldIcon;
     
     #endregion
 
@@ -56,6 +59,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     public GameObject gameOverObj;
     public TextMeshProUGUI gameOverText;
     public GameObject hitIndicator;
+    public GameObject freezeIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
     public List<RectTransform> rectPoints = new List<RectTransform>();
 
@@ -102,53 +106,57 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
         reloadDial.fillAmount = tank.reloadProgress;
-        //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
-        bulletIcon.fillAmount = tank.reloadProgress;
-        freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
+        #region Powerups UI
+        shieldIcon.enabled            = playerController.invulnerable;
+        reloadIcon.fillAmount         = (playerController.reloadBoostTimer     / playerController.maxReloadBoostTimer);
+        speedIcon.fillAmount          = (playerController.speedBoostTimer      / playerController.maxSpeedBoostTimer);
+        freezeBulletIcon.fillAmount   = (playerController.numOfFreezeBullets   / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
-        laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
+        laserBulletIcon.fillAmount    = (playerController.numOfLaserBullets    / playerController.maxNumOfLaserBullets);
 
         switch (playerController.currentBulletType)
         {
             case PlayerController.BulletType.Normal:
-                bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                bulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.FreezeBullet:
-                freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                freezeBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.DynamiteBullet:
-                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.LaserBullet:
-                laserBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                laserBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
         }
+
+        #endregion
 
         if (player.gameState == Player.GameState.SM)
         {
@@ -182,6 +190,18 @@ public class UIManager : MonoBehaviourPunCallbacks
         {
             ShowPoints();
             player.gotPoints = false;
+        }
+
+        if(playerController.isFrozen && flashFreeze)
+        {
+            FlashFreeze();
+            flashFreeze = false;
+        }
+
+        if(!playerController.isFrozen && !flashFreeze)
+        {
+            BreakFreeze();
+            flashFreeze = true;
         }
     }
 
@@ -283,6 +303,8 @@ public class UIManager : MonoBehaviourPunCallbacks
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         Cursor.lockState = CursorLockMode.None;
 
+        Debug.Log("UI right before switching scenes: Tank Model" + tank.tankModel);
+
         // Move back to main menu, unload the UI scene (this must be done last)
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(0);
@@ -298,6 +320,26 @@ public class UIManager : MonoBehaviourPunCallbacks
             LeanTween.alpha(edge, 0, 1f);
         }
     }
+
+    private bool flashFreeze = true;
+    public void FlashFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 1, 0.75f);
+        }
+    }
+
+    public void BreakFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 0, 1f);
+        }
+    }
+
 
     public void ShowPoints()
     {

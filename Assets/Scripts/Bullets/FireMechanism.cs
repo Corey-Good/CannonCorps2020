@@ -21,7 +21,7 @@ public class FireMechanism : MonoBehaviour
 
     public void ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
     {
-        if (readyToFire && ValidAim())
+        if (readyToFire)
         {
             switch (currentBulletType)
             {
@@ -42,12 +42,7 @@ public class FireMechanism : MonoBehaviour
                     break;
             }
         }
-    }
-
-    private void Update()
-    {
-        Debug.Log(tankCamera.transform.rotation.eulerAngles.x);
-    }
+    } 
 
     public void FireBullet()
     {
@@ -69,7 +64,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && ValidAim())
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
@@ -85,7 +80,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && ValidAim())
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
@@ -101,7 +96,7 @@ public class FireMechanism : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && ValidAim())
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);

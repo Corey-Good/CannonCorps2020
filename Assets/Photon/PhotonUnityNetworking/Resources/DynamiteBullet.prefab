@@ -13,10 +13,8 @@ GameObject:
   - component: {fileID: 3634666284489349541}
   - component: {fileID: 3634666284489349538}
   - component: {fileID: 3634666284489349539}
-  - component: {fileID: 4635512932984404421}
   - component: {fileID: 5570332842405487443}
   - component: {fileID: 8457147859971190976}
-  - component: {fileID: 1123029686250086293}
   m_Layer: 0
   m_Name: DynamiteBullet
   m_TagString: Untagged
@@ -32,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3634666284489349536}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 580.8197, y: 7.93, z: 511.27762}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 580.8197, y: 7.9301, z: 511.27762}
+  m_LocalScale: {x: 0.5876422, y: 0.5876422, z: 0.5876422}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3634666284489349536}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4711208715938537054, guid: a422d0e612c8303448996c5d115de703, type: 3}
 --- !u!23 &3634666284489349541
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 8481279119928274143, guid: 856e4623e4214d74d806ed3aa354e810, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,29 +114,7 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
-  damage: -25
---- !u!114 &4635512932984404421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3634666284489349536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 0
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
+  speed: 150
 --- !u!114 &5570332842405487443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,24 +152,3 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1123029686250086293
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3634666284489349536}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ade5d1a43c839847b4a4ee5bbd47c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TankMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ExplosionAudio: {fileID: 0}
-  m_MaxDamage: 25
-  m_ExplosionForce: 1000
-  m_MaxLifeTime: 2
-  m_ExplosionRadius: 5
-  bullet: {fileID: 0}

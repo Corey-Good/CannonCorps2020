@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: -5492988223941295065}
   - component: {fileID: 6054451205431304159}
   - component: {fileID: -1323504931331907507}
-  - component: {fileID: 1864121122429999230}
   m_Layer: 0
   m_Name: FreezeBullet
   m_TagString: Bullet
@@ -32,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3910180448835655434}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 531.0621, y: 7.701833, z: 475.40894}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 0.41086677, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -116,9 +115,7 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
-  rotateMultiplier: 0
-  speedMultiplier: 0
-  Damage: -10
+  speed: 150
 --- !u!114 &6054451205431304159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,24 +153,3 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!114 &1864121122429999230
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3910180448835655434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ade5d1a43c839847b4a4ee5bbd47c7e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TankMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ExplosionAudio: {fileID: 0}
-  m_MaxDamage: 25
-  m_ExplosionForce: 1000
-  m_MaxLifeTime: 2
-  m_ExplosionRadius: 5
-  bullet: {fileID: 3910180448835655434}
