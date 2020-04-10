@@ -18,13 +18,13 @@ public class CustomizeCharacter : MonoBehaviour
     public Slider R;
     public Slider G;
     public Slider B;
+    private static float r;
+    private static float g;
+    private static float b;
     public Button colorLock;
     public TextMeshProUGUI colorText;
     private static bool isColorLocked = false;
 
-    private float r_value = 1.0f;
-    private float g_value = 1.0f;
-    private float b_value = 1.0f;
     private static Color tankColor;
     public Color[] defaultColors;
 
@@ -36,16 +36,20 @@ public class CustomizeCharacter : MonoBehaviour
         tankInstance = GetTankInstance();
         SetDefaultModel();
 
-        if(isColorLocked)
+        if (isColorLocked)
         {
             colorText.text = "Locked";
             ChangeTankColor(tankColor);
+            R.value = r;
+            G.value = g;
+            B.value = b;
         }
         else
-        {
-            UpdateDefault();
+        {            
             colorText.text = "Unlocked";
+            UpdateDefault();
         }
+        
     }
 
     // Scroll to the left within the tank menu
@@ -104,8 +108,9 @@ public class CustomizeCharacter : MonoBehaviour
     {
         tankInstance.CreateTank(tankModels[model].name);
         tankInstance.tankColor = tankColor;
-        Debug.Log("The color that is set is: " + tankColor);
-        Debug.Log("The model that is set is: " + tankInstance.tankModel);
+        r = tankColor.r;
+        g = tankColor.g;
+        b = tankColor.b;
     }
 
     public Tank GetTankInstance()

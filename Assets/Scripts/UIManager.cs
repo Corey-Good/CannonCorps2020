@@ -303,6 +303,8 @@ public class UIManager : MonoBehaviourPunCallbacks
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         Cursor.lockState = CursorLockMode.None;
 
+        Debug.Log("UI right before switching scenes: Tank Model" + tank.tankModel);
+
         // Move back to main menu, unload the UI scene (this must be done last)
         PhotonNetwork.Disconnect();
         SceneManager.LoadScene(0);

@@ -53,7 +53,8 @@ public class FfaManager : MonoBehaviour
         {
             // Triggers the leave function in UIManager
             player.leaveGame = true;
-            firstCall = false;            
+            firstCall = false;
+            Debug.Log("FFA health = 0: Tank Model" + tank.tankModel);
         }
     }
 
