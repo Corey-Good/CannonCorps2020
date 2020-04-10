@@ -37,8 +37,8 @@ public class KeyBindings : MonoBehaviour
     public TextMeshProUGUI speedButton;
     private bool lookingForKey = false;
     private string objectName;
-    private List<KeyCode> currentKeys = new List<KeyCode>() { KeyCode.W, KeyCode.S, KeyCode.A, KeyCode.D,
-                                                                          KeyCode.Space, KeyCode.Alpha1, KeyCode.Alpha2 };
+    private List<KeyCode> currentKeys = new List<KeyCode>() { forwardKey, backwardKey, leftKey, rightKey, 
+                                                              switchBulletType, activateReloadBoost, activateMovementBoost};
 
     #endregion Variables
 

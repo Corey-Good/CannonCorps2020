@@ -66,6 +66,8 @@ public class PowerUp : MonoBehaviour
             return;
         }
 
+        PowerupPrompts.powerupsOn = true;
+
         // We only care if we've not been collected before
         if (powerUpState == PowerUpState.IsCollected || powerUpState == PowerUpState.IsExpiring)
         {
