@@ -115,6 +115,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             LagAdjust();
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.H))
         {
             tank.damageTaken(10f);
