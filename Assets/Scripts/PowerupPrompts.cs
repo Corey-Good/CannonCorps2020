@@ -14,6 +14,7 @@ public class PowerupPrompts : MonoBehaviour
     #region Variables
 
     public static bool powerupsOn;
+    public static string powerupName;
 
     public GameObject PlayerUI;
     public GameObject TutorialUI;
@@ -51,17 +52,40 @@ public class PowerupPrompts : MonoBehaviour
     {
         if (powerupsOn)
         {
-            PowerupText();
+            DisplayPowerupText();
         }
     }
 
-    private void PowerupText()
+    private void DisplayPowerupText()
     {
         panel.gameObject.SetActive(true);
         headingText.gameObject.SetActive(true);
         subtitleText.gameObject.SetActive(true);
 
-        headingText.text = "Acquired powerup!";
+        //if (powerupName.Contains("(Clone)"))
+        //{
+        //    powerupName = gameObject.name.Replace("(Clone)", "");
+        //}
+
+        //if (powerupName.Contains("(Clone) (UnityEngine.GameObject)"))
+        //{
+        //    powerupName = gameObject.name.Replace("(Clone) (UnityEngine.GameObject)", "");
+        //}
+
+        //headingText.text = string.Format("Acquired powerup: {0}", powerupName);
+
+        //switch (powerupName)
+        //{
+        //    case one:
+        //        {
+
+        //        }
+        //        break;
+
+        //    default:
+        //        break;
+        //}
+
         subtitleText.text = string.Format(
                                 "Use the {0} key to switch bullet types, {1} to activate Reload Boost and {2} to activate Movement Boost!",
                                 KeyBindings.switchBulletType, KeyBindings.activateReloadBoost, KeyBindings.activateMovementBoost);

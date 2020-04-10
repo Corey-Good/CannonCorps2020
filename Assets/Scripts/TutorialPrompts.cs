@@ -101,9 +101,7 @@ public class TutorialPrompts : MonoBehaviour
             Destroy(this);
         }
 
-        #endregion Changes GameUI to TutorialUI
-
-       
+        #endregion Changes GameUI to TutorialUI   
     }
 
     private void FixedUpdate()
