@@ -83,12 +83,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    #region Movement Keys and Powerup Keys
-    KeyCode switchBulletType = KeyCode.Space;
-    KeyCode activateReloadBoost = KeyCode.Alpha1;
-    KeyCode activateMovementBoost = KeyCode.Alpha2;
-    #endregion
-
     #endregion
 
     // Start is called before the first frame update
@@ -121,11 +115,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             tank.damageTaken(10f);
         }
 
-        if (!PauseMenuManager.gameIsPaused && TutorialMode.MovementIsEnabled)
+        if (!PauseMenuManager.gameIsPaused && TutorialPrompts.MovementIsEnabled)
         {
             MovePlayer();
             if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
-               && (!PauseMenuManager.gameIsPaused && TutorialMode.FiringIsEnabled)
+               && (!PauseMenuManager.gameIsPaused && TutorialPrompts.FiringIsEnabled)
                && (readyToFire))
             {
                 if (tank.tankModel == "catapult")
@@ -181,7 +175,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 }
             }
 
-            if (Input.GetKeyDown(switchBulletType)) // Cycle through bullets
+            if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
             {
                 currentBulletType += 1;
                 SendBulletSwitchMessage();
@@ -213,7 +207,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             #region Reload Powerup Logic
 
-            if (Input.GetKeyDown(activateReloadBoost))
+            if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
             {
                 SendReloadToggleMessage();
             }
@@ -233,7 +227,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             #region Speed Powerup Logic
 
-            if (Input.GetKeyDown(activateMovementBoost))
+            if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
             {
                 HandleSpeedBoostCharge();
             }

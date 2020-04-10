@@ -18,7 +18,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     private float randomFloor = 5.0f;
     private float randomCeiling = 10.0f;
     private bool allLocationsLocked = false;
-    private int locationCount = 0;
     public int powerUpsOut = 0;
 
     public static PowerUpManager main;

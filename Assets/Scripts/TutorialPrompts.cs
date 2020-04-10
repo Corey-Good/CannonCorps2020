@@ -10,7 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TutorialMode : MonoBehaviour
+public class TutorialPrompts : MonoBehaviour
 {
     #region Variables
 
