@@ -105,19 +105,20 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         //Debug.Log(powerupNames[powerUpRandomNumber]);
         //Debug.Log(locationRandomNumber);
 
-      
-        int locationRandomNumber = HandleSpawnLocation();
-        int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
-
-        if (locationRandomNumber < numberOfPowerupSpawnLocations)
+        if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
-                                      new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), 
-                                      powerupRotations[locationRandomNumber].transform.rotation);
-            // Increment PowerUpsOut counter
-            powerUpsOut++;
-        }
+            int locationRandomNumber = HandleSpawnLocation();
+            int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
 
+            if (locationRandomNumber < numberOfPowerupSpawnLocations)
+            {
+                PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
+                                          new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), 
+                                          powerupRotations[locationRandomNumber].transform.rotation);
+                // Increment PowerUpsOut counter
+                powerUpsOut++;
+            }
+        }
     }
 
     private int HandleSpawnLocation()
