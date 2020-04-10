@@ -22,6 +22,23 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     private int locationCount = 0;
     public int powerUpsOut = 0;
 
+    public static PowerUpManager main;
+
+    /// <summary>
+    /// Check we are singleton
+    /// </summary>
+    private void Awake()
+    {
+        if (main == null)
+        {
+            main = this;
+        }
+        else
+        {
+            Debug.LogWarning("EventSystemListeners re-creation attempted, destroying the new one");
+            Destroy(gameObject);
+        }
+    }
     public void Start()
     {
         numberOfPowerups = powerupNames.Length;
