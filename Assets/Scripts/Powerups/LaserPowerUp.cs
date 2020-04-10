@@ -43,19 +43,9 @@ public class LaserPowerUp : PowerUp
                 //TmManager.UpdateTeamScores(player.teamCode, 10);
             }
         }
-    }
-
-    private void OnEnable()
-    {
-        StartCoroutine(LaserTimer());
-    }
-
-    IEnumerator LaserTimer()
-    {
-        //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(1);
         PowerUpHasExpired();
     }
+
 
     protected override void PowerUpHasExpired()       // Checklist item 2
     {

@@ -8,7 +8,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 {
     private static int numberOfPowerups;
     private static int numberOfPowerupSpawnLocations = 14;
-    public GameObject[] powerupRotations = new GameObject[numberOfPowerupSpawnLocations];
     public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
     private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPowerUp", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
     public bool[] lockedLocations = new bool[numberOfPowerupSpawnLocations];
@@ -54,7 +53,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            SendSpawnPowerUpMessage();
+            SpawnRandomPowerUp();
         }
 
         // if PowerUpsOut counter == 0, then unlock all locations
@@ -64,6 +63,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
             {
                 lockedLocations[i] = false;
             }
+
             allLocationsLocked = false;
         }
 
@@ -71,31 +71,16 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         {
             time += Time.deltaTime;
 
-            if(time >= waitRandomTimeAmount)
+            if (time >= waitRandomTimeAmount)
             {
-                SendSpawnPowerUpMessage();
+                SpawnRandomPowerUp();
                 time = 0.0f;
                 waitRandomTimeAmount = Random.Range(randomFloor, randomCeiling);
             }
         }
-
-
     }
 
-    private void SendSpawnPowerUpMessage()
-    {
-        // Send message to any listeners
-        if (EventSystemListeners.main.listeners != null)
-        {
-            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
-            {
-                ExecuteEvents.Execute<IPowerUpManagerEvents>                   // 2
-                    (go, null,                                               // 3
-                     (x, y) => x.OnSpawnPowerup()            // 4
-                    );
-            }
-        }
-    }
+ 
 
 
     private void SpawnRandomPowerUp()
@@ -113,8 +98,8 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
             if (locationRandomNumber < numberOfPowerupSpawnLocations)
             {
                 PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
-                                          new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z), 
-                                          powerupRotations[locationRandomNumber].transform.rotation);
+                                          new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z),
+                                          spawnLocations[locationRandomNumber].transform.rotation);
                 // Increment PowerUpsOut counter
                 powerUpsOut++;
             }
