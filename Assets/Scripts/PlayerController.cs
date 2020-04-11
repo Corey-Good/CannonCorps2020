@@ -116,6 +116,74 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             FireBullet();            
 
             ManageReloadProcess();
+
+            if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
+            {
+                currentBulletType += 1;
+                SendBulletSwitchMessage();
+
+                if (numOfFreezeBullets == 0.0f)
+                    if ((int)currentBulletType == 1)
+                    {
+                        currentBulletType += 1;
+                        SendBulletSwitchMessage();
+                    }
+
+                if (numOfDynamiteBullets == 0.0f)
+                    if ((int)currentBulletType == 2)
+                    {
+                        SendBulletSwitchMessage();
+                        currentBulletType += 1;
+                    }
+
+                if (numOfLaserBullets == 0.0f)
+                    if ((int)currentBulletType == 3)
+                    {
+                        SendBulletSwitchMessage();
+                        currentBulletType += 1;
+                    }
+
+                if ((int)currentBulletType >= numberOfBulletTypes)
+                    currentBulletType = 0;
+            }
+
+            if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
+            {
+                SendReloadToggleMessage();
+            }
+
+            if (reloadBoostTimerRunning)
+            {
+                reloadBoostTimer -= Time.deltaTime;
+                if (reloadBoostTimer <= 0.0f)
+                {
+                    reloadBoostTimer = 0.0f;
+                    SendReloadPowerUpExpiredMessage();
+                }
+
+            }
+
+            if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
+            {
+                HandleSpeedBoostCharge();
+            }
+
+            if (speedBoostTimerRunning)
+            {
+                timeLeftOnCharge -= Time.deltaTime;
+                speedBoostTimer -= Time.deltaTime;
+
+                if (timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
+                {
+                    SendSpeedToggleMessage();
+                }
+
+                if (speedBoostTimer <= 0.0f)
+                {
+                    speedBoostTimer = 0.0f;
+                    SendSpeedPowerUpExpiredMessage();
+                }
+            }
         }
     }
 
@@ -197,75 +265,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     }
                     break;
             }
-        }        
-
-        if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
-        {
-            currentBulletType += 1;
-            SendBulletSwitchMessage();
-
-            if (numOfFreezeBullets == 0.0f)
-                if ((int)currentBulletType == 1)
-                {
-                    currentBulletType += 1;
-                    SendBulletSwitchMessage();
-                }
-
-            if (numOfDynamiteBullets == 0.0f)
-                if ((int)currentBulletType == 2)
-                {
-                    SendBulletSwitchMessage();
-                    currentBulletType += 1;
-                }
-
-            if (numOfLaserBullets == 0.0f)
-                if ((int)currentBulletType == 3)
-                {
-                    SendBulletSwitchMessage();
-                    currentBulletType += 1;
-                }
-
-            if ((int)currentBulletType >= numberOfBulletTypes)
-                currentBulletType = 0;
-        }        
-
-        if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
-        {
-            SendReloadToggleMessage();
-        }
-
-        if (reloadBoostTimerRunning)
-        {
-            reloadBoostTimer -= Time.deltaTime;
-            if (reloadBoostTimer <= 0.0f)
-            {
-                reloadBoostTimer = 0.0f;
-                SendReloadPowerUpExpiredMessage();
-            }
-
-        }      
-
-        if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
-        {
-            HandleSpeedBoostCharge();
-        }
-
-        if (speedBoostTimerRunning)
-        {
-            timeLeftOnCharge -= Time.deltaTime;
-            speedBoostTimer -= Time.deltaTime;
-
-            if (timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
-            {
-                SendSpeedToggleMessage();
-            }
-
-            if (speedBoostTimer <= 0.0f)
-            {
-                speedBoostTimer = 0.0f;
-                SendSpeedPowerUpExpiredMessage();
-            }
-        }
+        }       
     }
 
     private void ManageReloadProcess()
