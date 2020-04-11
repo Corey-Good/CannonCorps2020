@@ -113,9 +113,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             MovePlayer();
 
-            FireBullet();
-
-            HandleBullets();
+            FireBullet();            
 
             ManageReloadProcess();
         }
@@ -157,6 +155,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 fireMechanism.FireBullet(currentBulletType);
                 readyToFire = false;
             }
+
+            HandleBullets();
         }
     }
 
