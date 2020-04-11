@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good                                       */
 /* Date Created:       1/27/2020                                        */
-/* Last Modified Date: 3/26/2020                                        */
-/* Modified By:        Eddie Habal                                      */
+/* Last Modified Date: 4/11/2020                                        */
+/* Modified By:        Corey Good                                       */
 /************************************************************************/
 
 using Photon.Pun;
@@ -83,8 +83,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
         //playerState = states.Stationary;
 
@@ -97,8 +96,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         rotateSpeed = tank.speedRotation;
     }
 
-    // Update is called once per frame
-    private void Update()
+    void Update()
     {
         if (!photonView.IsMine)
         {
@@ -115,158 +113,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             MovePlayer();
 
-            if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
-               && (!PauseMenuManager.gameIsPaused && TutorialPrompts.FiringIsEnabled)
-               && (readyToFire))
-            {
-                if (tank.tankModel == "catapult")
-                {
-                    StartCoroutine(DelayFire());
-                    fireAnimation.SetTrigger("Fire");
-                }
-                else
-                {
-                    fireMechanism.ReceivePlayerControllerClick(currentBulletType);
-                    readyToFire = false;
-                }
+            FireBullet();
 
+            HandleBullets();
 
-                if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
-                {
-                    switch (currentBulletType)
-                    {
-                        case BulletType.FreezeBullet:
-                            numOfFreezeBullets -= 1.0f;
-                            if (numOfFreezeBullets == 0.0f)
-                            {
-                                SendBulletSwitchMessage();
-                                SendBulletSwitchMessage();
-                                SendBulletSwitchMessage();
-                                currentBulletType = BulletType.Normal;
-                            }
-                                
-                            break;
-
-                        case BulletType.DynamiteBullet:
-                            numOfDynamiteBullets -= 1.0f;
-                            if (numOfDynamiteBullets == 0.0f)
-                            {
-                                SendBulletSwitchMessage();
-                                SendBulletSwitchMessage();
-                                currentBulletType = BulletType.Normal;
-                            }
-                            break;
-
-                        case BulletType.LaserBullet:
-                            numOfLaserBullets -= 1.0f;
-                            if (numOfLaserBullets == 0.0f)
-                            {
-                                SendBulletSwitchMessage();
-                                currentBulletType = BulletType.Normal;
-                            }
-                            break;
-                    }
-                }
-            }
-
-            if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
-            {
-                currentBulletType += 1;
-                SendBulletSwitchMessage();
-
-                if (numOfFreezeBullets == 0.0f)
-                    if ((int)currentBulletType == 1)
-                    {
-                        currentBulletType += 1;
-                        SendBulletSwitchMessage();
-                    }
-                        
-                if (numOfDynamiteBullets == 0.0f)
-                    if ((int)currentBulletType == 2)
-                    {
-                        SendBulletSwitchMessage();
-                        currentBulletType += 1;
-                    }
-                        
-                if (numOfLaserBullets == 0.0f)
-                    if ((int)currentBulletType == 3)
-                    {
-                        SendBulletSwitchMessage();
-                        currentBulletType += 1;
-                    }
-
-                if ((int)currentBulletType >= numberOfBulletTypes)
-                    currentBulletType = 0;
-            }
-
-            #region Reload Powerup Logic
-
-            if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
-            {
-                SendReloadToggleMessage();
-            }
-
-            if (reloadBoostTimerRunning)
-            {
-                reloadBoostTimer -= Time.deltaTime;
-                if (reloadBoostTimer <= 0.0f)
-                {
-                    reloadBoostTimer = 0.0f;
-                    SendReloadPowerUpExpiredMessage();
-                }
-
-            }
-
-            #endregion
-
-            #region Speed Powerup Logic
-
-            if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
-            {
-                HandleSpeedBoostCharge();
-            }
-
-            if (speedBoostTimerRunning)
-            {
-                timeLeftOnCharge -= Time.deltaTime;
-                speedBoostTimer -= Time.deltaTime;
-
-                if (timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
-                {
-                    SendSpeedToggleMessage();
-                }
-
-                if (speedBoostTimer <= 0.0f)
-                {
-                    speedBoostTimer = 0.0f;
-                    SendSpeedPowerUpExpiredMessage();
-                }
-            }
-
-            #endregion
-
-
-            ReloadBullet();
-        }
-    }
-
-    private void HandleSpeedBoostCharge()
-    {
-        if (speedBoostTimerRunning) // Don't use a charge if one is currently running
-            return;
-        else if (!speedBoostTimerRunning)
-        {
-            if(!isFrozen) // Allow a charge to be used
-            {
-                SendSpeedToggleMessage();
-            }
-            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
-            {
-                isFrozen = false;
-                SendSpeedToggleMessage();
-                SendSpeedToggleMessage();
-                speedBoostTimer -= oneSpeedCharge;
-            }
+            ManageReloadProcess();
         }
     }
 
@@ -292,7 +143,132 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void ReloadBullet()
+    private void FireBullet()
+    {
+        if (Input.GetMouseButtonDown(KeyBindings.clickIndex) && TutorialPrompts.FiringIsEnabled && readyToFire)
+        {
+            if (tank.tankModel == "catapult")
+            {
+                StartCoroutine(DelayFire());
+                fireAnimation.SetTrigger("Fire");
+            }
+            else
+            {
+                fireMechanism.FireBullet(currentBulletType);
+                readyToFire = false;
+            }
+        }
+    }
+
+    private void HandleBullets()
+    {
+        if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
+        {
+            switch (currentBulletType)
+            {
+                case BulletType.FreezeBullet:
+                    numOfFreezeBullets -= 1.0f;
+                    if (numOfFreezeBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+
+                    break;
+
+                case BulletType.DynamiteBullet:
+                    numOfDynamiteBullets -= 1.0f;
+                    if (numOfDynamiteBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+                    break;
+
+                case BulletType.LaserBullet:
+                    numOfLaserBullets -= 1.0f;
+                    if (numOfLaserBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+                    break;
+            }
+        }        
+
+        if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
+        {
+            currentBulletType += 1;
+            SendBulletSwitchMessage();
+
+            if (numOfFreezeBullets == 0.0f)
+                if ((int)currentBulletType == 1)
+                {
+                    currentBulletType += 1;
+                    SendBulletSwitchMessage();
+                }
+
+            if (numOfDynamiteBullets == 0.0f)
+                if ((int)currentBulletType == 2)
+                {
+                    SendBulletSwitchMessage();
+                    currentBulletType += 1;
+                }
+
+            if (numOfLaserBullets == 0.0f)
+                if ((int)currentBulletType == 3)
+                {
+                    SendBulletSwitchMessage();
+                    currentBulletType += 1;
+                }
+
+            if ((int)currentBulletType >= numberOfBulletTypes)
+                currentBulletType = 0;
+        }        
+
+        if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
+        {
+            SendReloadToggleMessage();
+        }
+
+        if (reloadBoostTimerRunning)
+        {
+            reloadBoostTimer -= Time.deltaTime;
+            if (reloadBoostTimer <= 0.0f)
+            {
+                reloadBoostTimer = 0.0f;
+                SendReloadPowerUpExpiredMessage();
+            }
+
+        }      
+
+        if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
+        {
+            HandleSpeedBoostCharge();
+        }
+
+        if (speedBoostTimerRunning)
+        {
+            timeLeftOnCharge -= Time.deltaTime;
+            speedBoostTimer -= Time.deltaTime;
+
+            if (timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
+            {
+                SendSpeedToggleMessage();
+            }
+
+            if (speedBoostTimer <= 0.0f)
+            {
+                speedBoostTimer = 0.0f;
+                SendSpeedPowerUpExpiredMessage();
+            }
+        }
+    }
+
+    private void ManageReloadProcess()
     {
         if (!readyToFire)
         {
@@ -305,6 +281,26 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 timeElapsed = 0f;
                 readyToFire = true;
+            }
+        }
+    }
+
+    private void HandleSpeedBoostCharge()
+    {
+        if (speedBoostTimerRunning) // Don't use a charge if one is currently running
+            return;
+        else if (!speedBoostTimerRunning)
+        {
+            if(!isFrozen) // Allow a charge to be used
+            {
+                SendSpeedToggleMessage();
+            }
+            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
+            {
+                isFrozen = false;
+                SendSpeedToggleMessage();
+                SendSpeedToggleMessage();
+                speedBoostTimer -= oneSpeedCharge;
             }
         }
     }
@@ -656,7 +652,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private IEnumerator DelayFire()
     {
         yield return new WaitForSeconds(0.3f);
-        fireMechanism.ReceivePlayerControllerClick(currentBulletType);
+        fireMechanism.FireBullet(currentBulletType);
     }
-
 }

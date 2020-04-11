@@ -19,7 +19,7 @@ public class FireMechanism : MonoBehaviour
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
     }
 
-    public void ReceivePlayerControllerClick(PlayerController.BulletType currentBulletType)
+    public void FireBullet(PlayerController.BulletType currentBulletType)
     {
         RaycastHit hit;
         string bulletType = GetBullet(currentBulletType);
