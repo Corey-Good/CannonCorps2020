@@ -599,7 +599,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    private void SendReloadToggleMessage()
+    public void SendReloadToggleMessage()
     {
         // Send message to any listeners
         if (EventSystemListeners.main.listeners != null)
