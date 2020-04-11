@@ -231,11 +231,11 @@ public class UIManager : MonoBehaviourPunCallbacks
             tempText.text = photonPlayer.NickName;
             if(string.Equals(photonPlayer.NickName, player.PlayerName))
             {
-                tempText.color = Color.white;
+                tempText.color = Color.black;
             }
             else
             {
-                tempText.color = Color.black;
+                tempText.color = Color.white;
             }
         }
     }
