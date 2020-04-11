@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731703, g: 0.13414727, b: 0.12107852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7228,15 +7228,11 @@ MonoBehaviour:
   hitIndicator: {fileID: 1239242109}
   freezeIndicator: {fileID: 36431115}
   textPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  rectPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1626223039}
+  - {fileID: 1949636153}
+  - {fileID: 192284403}
+  - {fileID: 2052679233}
+  - {fileID: 545384746}
 --- !u!4 &1024350415
 Transform:
   m_ObjectHideFlags: 0

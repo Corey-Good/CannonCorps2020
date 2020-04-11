@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4bf1d4a639eb543aa57114f3c9e309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expiresImmediately: 1
   powerUpName: 
   powerUpExplanation: 
   powerUpQuote: 
-  expiresImmediately: 1
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}

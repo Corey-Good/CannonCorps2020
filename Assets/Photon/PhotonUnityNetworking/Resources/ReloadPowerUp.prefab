@@ -123,10 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387931c5b564c4a46aaee439ca713420, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expiresImmediately: 0
   powerUpName: 
   powerUpExplanation: 
   powerUpQuote: 
-  expiresImmediately: 0
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}

@@ -61,7 +61,6 @@ public class UIManager : MonoBehaviourPunCallbacks
     public GameObject hitIndicator;
     public GameObject freezeIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
-    public List<RectTransform> rectPoints = new List<RectTransform>();
 
     void Awake()
     {

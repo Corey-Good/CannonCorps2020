@@ -194,10 +194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33dacdf1c68356a46b39c67a7e5fde19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expiresImmediately: 1
   powerUpName: 
   powerUpExplanation: 
   powerUpQuote: 
-  expiresImmediately: 1
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
