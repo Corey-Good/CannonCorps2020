@@ -59,7 +59,7 @@ public class PowerupPrompts : MonoBehaviourPun
 
     private void FixedUpdate()
     {
-        if (powerupAcquired)
+        if (powerupAcquired && photonView.IsMine)
             DisplayPowerupText();
     }
 
