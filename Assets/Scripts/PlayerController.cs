@@ -77,6 +77,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion headRotation;
     private Quaternion bodyRotation;
     private Tank tank;
+    private Player player;
     private FireMechanism fireMechanism;
 
     #endregion
@@ -88,12 +89,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         //playerState = states.Stationary;
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
         movementMultiplier = originalMovementMultiplier;
         rotateMultiplier = originalRotateMultiplier;
         rotateSpeed = tank.speedRotation;
+        player.photonView = this.gameObject.GetComponent<PhotonView>();
     }
 
     void Update()
