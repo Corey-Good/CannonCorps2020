@@ -112,36 +112,6 @@ public class PowerUp : MonoBehaviour
     {
         Debug.Log("Power Up collected, issuing payload for: " + gameObject.name);
 
-        #region Powerup Prompts
-        //string text = string.Empty;
-
-        //PowerupPrompts.powerupsOn = true;
-
-        //if (gameObject.name.Contains("(Clone)"))
-        //{
-        //    text = gameObject.name.Replace("(Clone)", "");
-        //}
-
-        //if(gameObject.name.Contains("(Clone) (UnityEngine.GameObject)"))
-        //{
-        //    text = gameObject.name.Replace("(Clone) (UnityEngine.GameObject)", "");
-        //}
-        
-        //PowerupPrompts.powerupName = string.Format("Acquired powerup: {0}", text);
-
-        //switch (text)
-        //{
-        //    case one:
-        //        {
-
-        //        }
-        //        break;
-
-        //    default:
-        //        break;
-        //}
-        #endregion
-
         // If we're instant use we also expire self immediately
         if (expiresImmediately)
         {
