@@ -9,7 +9,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     private static int numberOfPowerups;
     private static int numberOfPowerupSpawnLocations = 14;
     public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
-    private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPowerUp", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
+    private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPU", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
     public bool[] lockedLocations = new bool[numberOfPowerupSpawnLocations];
     
 
@@ -93,7 +93,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         {
             int locationRandomNumber = HandleSpawnLocation();
             int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
-
             if (locationRandomNumber < numberOfPowerupSpawnLocations)
             {
                 PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
