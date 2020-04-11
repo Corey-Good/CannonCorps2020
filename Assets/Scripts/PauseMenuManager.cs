@@ -79,7 +79,7 @@ public class PauseMenuManager : MonoBehaviour
     // Exit for the game and switch to the main menu
     public void QuitGame()
     {
-        playerQuit       = false;
+        playerQuit       = true;
         gameIsPaused     = false;
         player.leaveGame = true;
     }
