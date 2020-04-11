@@ -217,6 +217,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 StartCoroutine(DelayFire());
                 fireAnimation.SetTrigger("Fire");
+                readyToFire = false;
             }
             else
             {

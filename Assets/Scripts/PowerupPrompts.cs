@@ -10,10 +10,11 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 #endregion
 
-public class PowerupPrompts : MonoBehaviour
+public class PowerupPrompts : MonoBehaviourPun
 {
     #region Variables
 
@@ -58,7 +59,7 @@ public class PowerupPrompts : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (powerupAcquired)
+        if (powerupAcquired && photonView.IsMine)
             DisplayPowerupText();
     }
 

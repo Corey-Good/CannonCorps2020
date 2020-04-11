@@ -12,6 +12,7 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
     {
         base.PowerUpPayload();
         playerBrain.SetReloadBoostOn(reloadBoost);
+        playerBrain.SetReloadBoostOff();
         StartListening(this.gameObject);
     }
 
