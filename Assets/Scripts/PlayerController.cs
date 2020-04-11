@@ -77,8 +77,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private Quaternion headRotation;
     private Quaternion bodyRotation;
     private Tank tank;
-    private Player player;
-    private CollisionDetection collisionDetection;
     private FireMechanism fireMechanism;
 
     #endregion
@@ -91,8 +89,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         //playerState = states.Stationary;
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        collisionDetection = GetComponent<CollisionDetection>();
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
@@ -118,6 +114,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (!PauseMenuManager.gameIsPaused && TutorialPrompts.MovementIsEnabled)
         {
             MovePlayer();
+
             if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
                && (!PauseMenuManager.gameIsPaused && TutorialPrompts.FiringIsEnabled)
                && (readyToFire))
@@ -125,17 +122,14 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 if (tank.tankModel == "catapult")
                 {
                     StartCoroutine(DelayFire());
+                    fireAnimation.SetTrigger("Fire");
                 }
                 else
                 {
-                    fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
+                    fireMechanism.ReceivePlayerControllerClick(currentBulletType);
                     readyToFire = false;
                 }
 
-                if (fireAnimation != null)
-                {
-                    fireAnimation.SetTrigger("Fire");
-                }
 
                 if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
                 {
@@ -255,6 +249,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             ReloadBullet();
         }
     }
+
     private void HandleSpeedBoostCharge()
     {
         if (speedBoostTimerRunning) // Don't use a charge if one is currently running
@@ -658,25 +653,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    /* Using collision detection script instead */
-    //public void DealDamage(float damage)
-    //{
-    //    if(shieldBoostOn)
-    //    {
-    //        shieldBoostOn = false;
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        tank.damageTaken(damage);
-    //    }
-
-    //}
-
     private IEnumerator DelayFire()
     {
         yield return new WaitForSeconds(0.3f);
-        fireMechanism.FireBullet();
+        fireMechanism.ReceivePlayerControllerClick(currentBulletType);
     }
 
 }
