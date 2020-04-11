@@ -11,10 +11,11 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
     protected override void PowerUpPayload()          // Checklist item 1
     {
         base.PowerUpPayload();
+
         playerBrain.SetReloadBoostOn(reloadBoost);
 
         StartListening(this.gameObject);
-        playerBrain.SendReloadToggleMessage();
+        ToggleReload();
     }
 
     void IPowerUpEvents.OnReloadBoostExpired()
@@ -37,17 +38,21 @@ public class ReloadPowerUp : PowerUp, IPowerUpEvents
 
     void IPowerUpEvents.ToggleReloadBoost()
     {
-        if(playerBrain.reloadBoostTimerRunning && playerBrain.reloadBoostTimer > 0.0f)
+        ToggleReload();
+    }
+
+    void ToggleReload()
+    {
+        if (playerBrain.reloadBoostTimerRunning && playerBrain.reloadBoostTimer > 0.0f)
         {
             reloadTime = playerBrain.reloadBoostTimer;
             playerBrain.SetReloadBoostOff();
         }
-        else if((!playerBrain.reloadBoostTimerRunning) && playerBrain.reloadBoostTimer > 0.0f)
+        else if ((!playerBrain.reloadBoostTimerRunning) && playerBrain.reloadBoostTimer > 0.0f)
         {
             playerBrain.SetReloadBoostOn(reloadBoost, reloadTime);
             reloadTime = 0.0f;
         }
-
     }
 
     void IPowerUpEvents.OnSpeedBoostExpired()
