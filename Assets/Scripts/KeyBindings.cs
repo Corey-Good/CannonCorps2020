@@ -1,81 +1,93 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good                                       */
 /* Date Created:       2/12/2020                                        */
-/* Last Modified Date: 4/06/2020                                        */
-/* Modified By:        Jaben Calas                                      */
+/* Last Modified Date: 4/11/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
+
+#region Libraries
 
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+#endregion
+
 public class KeyBindings : MonoBehaviour
 {
     #region Variables
 
-    public static bool CustomKeys = false;
-    public static bool XisInverted = false;
-    public static bool YisInverted = false;
-    public static int clickIndex = 0;
-    public static KeyCode forwardKey = KeyCode.W;
-    public static KeyCode backwardKey = KeyCode.S;
-    public static KeyCode leftKey = KeyCode.A;
-    public static KeyCode rightKey = KeyCode.D;
-    public static KeyCode switchBulletType = KeyCode.Space;  // Powerup Keys
-    public static KeyCode activateReloadBoost = KeyCode.Alpha1; // Powerup Keys
-    public static KeyCode activateMovementBoost = KeyCode.Alpha2; // Powerup Keys
-    public GameObject closeButton;
-    public TextMeshProUGUI forwardButton;
-    public TextMeshProUGUI backwardButton;
-    public TextMeshProUGUI leftButton;
-    public TextMeshProUGUI rightButton;
-    public TextMeshProUGUI invertXButton;
-    public TextMeshProUGUI invertYButton;
-    public TextMeshProUGUI switchButton;
-    public TextMeshProUGUI reloadButton;
-    public TextMeshProUGUI speedButton;
-    private bool lookingForKey = false;
-    private string objectName;
-    private List<KeyCode> currentKeys = new List<KeyCode>() { forwardKey, backwardKey, leftKey, rightKey, 
-                                                              switchBulletType, activateReloadBoost, activateMovementBoost};
+    public  static bool     customKeys            = false;
+    public  static bool     XisInverted           = false;
+    public  static bool     YisInverted           = false;
+
+    public  static int      clickIndex            = 0;
+
+    public  static KeyCode  forwardKey            = KeyCode.W;
+    public  static KeyCode  backwardKey           = KeyCode.S;
+    public  static KeyCode  leftKey               = KeyCode.A;
+    public  static KeyCode  rightKey              = KeyCode.D;
+
+    public  static KeyCode  switchBulletType      = KeyCode.Space;  // Powerup Keys
+    public  static KeyCode  activateReloadBoost   = KeyCode.Alpha1; // Powerup Keys
+    public  static KeyCode  activateMovementBoost = KeyCode.Alpha2; // Powerup Keys
+
+    public  GameObject      closeButton;
+
+    public  TextMeshProUGUI forwardButton;
+    public  TextMeshProUGUI backwardButton;
+    public  TextMeshProUGUI leftButton;
+    public  TextMeshProUGUI rightButton;
+    public  TextMeshProUGUI switchButton;
+    public  TextMeshProUGUI reloadButton;
+    public  TextMeshProUGUI speedButton;
+    public  TextMeshProUGUI invertXButton;
+    public  TextMeshProUGUI invertYButton;
+
+    private bool            lookingForKey         = false;
+
+    private string          objectName;
+
+    private List<KeyCode>   currentKeys           = new List<KeyCode>() { forwardKey, backwardKey, leftKey, rightKey, 
+                                                                          switchBulletType, activateReloadBoost, activateMovementBoost};
 
     #endregion Variables
 
     private void Start()
     {
-        #region Key Text Initialization
+        #region Initializes key text
 
-        forwardButton.text = forwardKey.ToString();
-        backwardButton.text = backwardKey.ToString();
-        leftButton.text = leftKey.ToString();
-        rightButton.text = rightKey.ToString();
-        invertXButton.text = XisInverted ? "INVERTED" : "NORMAL";
-        invertYButton.text = YisInverted ? "INVERTED" : "NORMAL";
-        switchButton.text = switchBulletType.ToString();
-        reloadButton.text = activateReloadBoost.ToString();
-        speedButton.text = activateMovementBoost.ToString();
+        forwardButton. text = alphaFilter(forwardKey);
+        backwardButton.text = alphaFilter(backwardKey);
+        leftButton.    text = alphaFilter(leftKey);
+        rightButton.   text = alphaFilter(rightKey);
+        switchButton.  text = alphaFilter(switchBulletType);
+        reloadButton.  text = alphaFilter(activateReloadBoost);
+        speedButton.   text = alphaFilter(activateMovementBoost);
+        invertXButton. text = XisInverted ? "INVERTED" : "NORMAL";
+        invertYButton. text = YisInverted ? "INVERTED" : "NORMAL";
 
-        #endregion Key Text Initialization
+        #endregion
     }
 
     private void Update()
     {
+        #region Prevents same key assignment
+
         if (CannotLeave())
-        {
             closeButton.SetActive(false);
-        }
         else
-        {
             closeButton.SetActive(true);
-        }
+
+        #endregion
     }
 
     public void OnClick(TextMeshProUGUI text)
     {
-        text.text = "Hit Key";
+        text.text     = "Hit Key";
         lookingForKey = true;
-        objectName = text.name;
+        objectName    = text.name;
     }
 
     public void InvertX()
@@ -130,95 +142,96 @@ public class KeyBindings : MonoBehaviour
                 switch (currentKeys.IndexOf(e.keyCode))
                 {
                     case 0:
-                        forwardButton.text = "NONE";
-                        forwardKey = KeyCode.None;
-                        currentKeys[0] = forwardKey;
-                        break;
+                        forwardButton.text    = "None";
+                        forwardKey            = KeyCode.None;
+                        currentKeys[0]        = forwardKey;
+                        break;                
 
-                    case 1:
-                        backwardButton.text = "NONE";
-                        backwardKey = KeyCode.None;
-                        currentKeys[1] = backwardKey;
-                        break;
+                    case 1:                   
+                        backwardButton.text   = "None";
+                        backwardKey           = KeyCode.None;
+                        currentKeys[1]        = backwardKey;
+                        break;                
 
-                    case 2:
-                        leftButton.text = "NONE";
-                        leftKey = KeyCode.None;
-                        currentKeys[2] = leftKey;
-                        break;
+                    case 2:                   
+                        leftButton.text       = "None";
+                        leftKey               = KeyCode.None;
+                        currentKeys[2]        = leftKey;
+                        break;                
 
-                    case 3:
-                        rightButton.text = "NONE";
-                        rightKey = KeyCode.None;
-                        currentKeys[3] = rightKey;
-                        break;
+                    case 3:                   
+                        rightButton.text      = "None";
+                        rightKey              = KeyCode.None;
+                        currentKeys[3]        = rightKey;
+                        break;                
 
-                    case 4:
-                        switchButton.text = "NONE";
-                        switchBulletType = KeyCode.None;
-                        currentKeys[4] = switchBulletType;
-                        break;
+                    case 4:                   
+                        switchButton.text     = "None";
+                        switchBulletType      = KeyCode.None;
+                        currentKeys[4]        = switchBulletType;
+                        break;                
 
-                    case 5:
-                        reloadButton.text = "NONE";
-                        activateReloadBoost = KeyCode.None;
-                        currentKeys[5] = activateReloadBoost;
+                    case 5:                   
+                        reloadButton.text     = "None";
+                        activateReloadBoost   = KeyCode.None;
+                        currentKeys[5]        = activateReloadBoost;
                         break;
 
                     case 6:
-                        speedButton.text = "NONE";
+                        speedButton.text      = "None";
                         activateMovementBoost = KeyCode.None;
-                        currentKeys[6] = activateMovementBoost;
+                        currentKeys[6]        = activateMovementBoost;
                         break;
                 }
             }
 
             switch (objectName)
             {
+
                 case "ForwardText":
-                    forwardButton.text = e.keyCode.ToString();
-                    forwardKey = e.keyCode;
-                    currentKeys[0] = forwardKey;
+                    forwardButton.text    = alphaFilter(e.keyCode);
+                    forwardKey            = e.keyCode;
+                    currentKeys[0]        = forwardKey;
                     break;
 
                 case "BackwardText":
-                    backwardButton.text = e.keyCode.ToString();
-                    backwardKey = e.keyCode;
-                    currentKeys[1] = backwardKey;
+                    backwardButton.text   = alphaFilter(e.keyCode);
+                    backwardKey           = e.keyCode;
+                    currentKeys[1]        = backwardKey;
                     break;
 
                 case "LeftText":
-                    leftButton.text = e.keyCode.ToString();
-                    leftKey = e.keyCode;
-                    currentKeys[2] = leftKey;
+                    leftButton.text       = alphaFilter(e.keyCode);
+                    leftKey               = e.keyCode;
+                    currentKeys[2]        = leftKey;
                     break;
 
                 case "RightText":
-                    rightButton.text = e.keyCode.ToString();
-                    rightKey = e.keyCode;
-                    currentKeys[3] = rightKey;
+                    rightButton.text      = alphaFilter(e.keyCode);
+                    rightKey              = e.keyCode;
+                    currentKeys[3]        = rightKey;
                     break;
 
                 case "SwitchText":
-                    switchButton.text = e.keyCode.ToString();
-                    switchBulletType = e.keyCode;
-                    currentKeys[4] = switchBulletType;
+                    switchButton.text     = alphaFilter(e.keyCode);
+                    switchBulletType      = e.keyCode;
+                    currentKeys[4]        = switchBulletType;
                     break;
 
                 case "ReloadText":
-                    reloadButton.text = e.keyCode.ToString();
-                    activateReloadBoost = e.keyCode;
-                    currentKeys[5] = activateReloadBoost;
+                    reloadButton.text     = alphaFilter(e.keyCode);
+                    activateReloadBoost   = e.keyCode;
+                    currentKeys[5]        = activateReloadBoost;
                     break;
 
                 case "SpeedText":
-                    speedButton.text = e.keyCode.ToString();
+                    speedButton.text      = alphaFilter(e.keyCode);
                     activateMovementBoost = e.keyCode;
-                    currentKeys[6] = activateMovementBoost;
+                    currentKeys[6]        = activateMovementBoost;
                     break;
             }
             lookingForKey = false;
-            CustomKeys = true;
+            customKeys    = true;
         }
     }
 
@@ -235,5 +248,15 @@ public class KeyBindings : MonoBehaviour
         }
 
         return keyHit;
+    }
+
+    private string alphaFilter(KeyCode oldKeyPress)
+    {
+        string newKeyPress = oldKeyPress.ToString();
+
+        if (newKeyPress.Contains("Alpha"))
+            newKeyPress = newKeyPress.Replace("Alpha", "");
+
+        return newKeyPress;
     }
 }

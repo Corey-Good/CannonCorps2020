@@ -1,51 +1,56 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
-/* Date Created:       02/12/20                                         */
-/* Last Modified Date: 03/27/20                                         */
-/* Modified By:        C. Good                                          */
+/* Date Created:       2/12/2020                                         */
+/* Last Modified Date: 4/11/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
+
+#region Libraries
 
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#endregion
+
 public class TutorialPrompts : MonoBehaviour
 {
     #region Variables
 
     // Affects CameraMovement, TurretRotation, and PlayerController
-    public static bool tutorialModeOn;
+    public static bool     tutorialModeOn;
+    public static bool     CameraIsEnabled   = true;
+    public static bool     MovementIsEnabled = true;
+    public static bool     FiringIsEnabled   = true;
 
-    public static bool CameraIsEnabled   = true;
-    public static bool MovementIsEnabled = true;
-    public static bool FiringIsEnabled   = true;
+    public static bool     step1;
+    public static bool     step2;
+    public static bool     step3;
+    public static bool     step4;
+    public static bool     step5;
+    public static bool     step6;
 
-    public static bool step1;
-    public static bool step2;
-    public static bool step3;
-    public static bool step4;
-    public static bool step5;
-    public static bool step6;
+    public static int      startTime;
+    public static int      gameTimer;
 
-    public GameObject PlayerUI;
-    public GameObject TutorialUI;
-
-    private GameObject wall;
-    private GameObject wall2;
-    private GameObject panel;
-    private GameObject block;
+    public GameObject      PlayerUI;
+    public GameObject      TutorialUI;
 
     public TextMeshProUGUI headingText;
     public TextMeshProUGUI subtitleText;
 
-    private Player player;
-    private bool firstCall;
-    private string sceneName;
-    private string mouseClick;
+    private GameObject     wall;
+    private GameObject     wall2;
+    private GameObject     panel;
+    private GameObject     block;
 
-    public static int startTime;
-    public static int gameTimer;
+    private Player         player;
+
+    private bool           firstCall;
+
+    private string         sceneName;
+    private string         mouseClick;
 
     #endregion Variables
 
@@ -140,7 +145,7 @@ public class TutorialPrompts : MonoBehaviour
 
         if (firstCall && step6)
         {
-            Invoke("exitTutorial", 3);
+            Invoke("EndTutorialPrompts", 3);
             firstCall = false;
         }
 
@@ -251,13 +256,12 @@ public class TutorialPrompts : MonoBehaviour
         #endregion Step 6
     }
 
-    public void exitTutorial()
+    public void EndTutorialPrompts()
     {
-        player.leaveGame = true;
         TutorialUI.SetActive(false);
-        //PlayerUI.SetActive(true);
-        CameraIsEnabled = true;
+
+        CameraIsEnabled   = true;
         MovementIsEnabled = true;
-        FiringIsEnabled = true;
+        FiringIsEnabled   = true;
     }
 }

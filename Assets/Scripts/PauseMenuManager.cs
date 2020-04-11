@@ -1,24 +1,32 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       3/03/2020                                        */
-/* Last Modified Date: 3/31/2020                                        */
+/* Last Modified Date: 4/11/2020                                        */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
 
+#region Libraries
+
 using UnityEngine;
+
+#endregion
 
 public class PauseMenuManager : MonoBehaviour
 {
     #region Variables
-    public GameObject    pauseMenu;
-    public         GameObject    optionsMenu;
-    public         GameObject    controlsMenu;
-    public         GameObject    infoMenu;
-    private        Player        player;
 
-    public  static bool          gameIsPaused = false;
-    public  static bool          playerQuit = false;
+    public  GameObject           pauseMenu;
+    public  GameObject           optionsMenu;
+    public  GameObject           controlsMenu;
+    public  GameObject           infoMenu;
+
+    private Player               player;
+
+    public  static bool          gameIsPaused     = false;
+    public  static bool          playerQuit       = false;
+
     public  static RectTransform transitionPanel;
+
     #endregion
 
     private void Awake()
@@ -59,8 +67,8 @@ public class PauseMenuManager : MonoBehaviour
     // Close all menus and resume the game
     public void ResumeGame()
     {
-        gameIsPaused   = false;
-        Cursor.visible = false;
+        gameIsPaused         = false;
+        Cursor.visible       = false;
 
         pauseMenu.   SetActive(false);
         optionsMenu. SetActive(false);

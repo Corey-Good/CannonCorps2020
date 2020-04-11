@@ -183,9 +183,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5189952609698347560}
   - component: {fileID: 906138832494311526}
+  - component: {fileID: 8518932899616965186}
   - component: {fileID: 8013414125481156662}
   - component: {fileID: -1124564446019582235}
-  - component: {fileID: 8518932899616965186}
   m_Layer: 0
   m_Name: SpeedPowerUp
   m_TagString: Listener
@@ -228,6 +228,19 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
+--- !u!65 &8518932899616965186
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189952609698347575}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.45, y: 1.85, z: 2.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8013414125481156662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,19 +278,6 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!65 &8518932899616965186
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5189952609698347575}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.45, y: 1.85, z: 2.1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7417371673553411311
 GameObject:
   m_ObjectHideFlags: 0

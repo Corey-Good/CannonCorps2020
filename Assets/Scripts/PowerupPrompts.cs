@@ -1,26 +1,35 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       4/06/2020                                        */
-/* Last Modified Date: 4/06/2020                                        */
+/* Last Modified Date: 4/11/2020                                        */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
+
+#region Libraries
 
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+#endregion
+
 public class PowerupPrompts : MonoBehaviour
 {
     #region Variables
 
-    public  static bool     powerupsOn;
+    public  static bool     powerupAcquired;
+
     public  static string   powerupName;
+
     public  GameObject      PlayerUI;
     public  GameObject      TutorialUI;
     public  GameObject      panel;
+
     public  TextMeshProUGUI headingText;
     public  TextMeshProUGUI subtitleText;
+
     private Player          player;
+
     private string          sceneName;
 
     #endregion Variables
@@ -49,7 +58,7 @@ public class PowerupPrompts : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (powerupsOn)
+        if (powerupAcquired)
             DisplayPowerupText();
     }
 
@@ -59,78 +68,48 @@ public class PowerupPrompts : MonoBehaviour
         headingText. gameObject.SetActive(true);
         subtitleText.gameObject.SetActive(true);
 
-        if (powerupName.Contains("(Clone)"))
-            powerupName = gameObject.name.Replace("(Clone)", "");
-
-        if (powerupName.Contains("(Clone) (UnityEngine.GameObject)"))
-            powerupName = gameObject.name.Replace("(Clone) (UnityEngine.GameObject)", "");
-
-        if (powerupName.Contains("Bullet"))
-            powerupName = gameObject.name.Replace("Bullet", "");
-
-        if (powerupName.Contains("Bullets"))
-            powerupName = gameObject.name.Replace("Bullets", "");
-
-        headingText.text = string.Format("Acquired powerup: {0}", powerupName);
+        headingText.text = string.Format("Acquired {0} powerup!", powerupName);
 
         switch (powerupName)
         {
-            case "ReloadPowerUp":
-            {
-                subtitleText = string.Format("Use the {1} to activate Reload Boost.", KeyBindings.switchBulletType);
-            } 
+            #region Active Powerups
+            case "Reload":
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", alphaFilter(KeyBindings.activateReloadBoost),   powerupName);
             break;
 
-            case "ShieldPowerUp":
-                subtitleText = "Shield is used automatically when you get hit!";
+            case "Speed":
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", alphaFilter(KeyBindings.activateMovementBoost), powerupName);
             break;
+            #endregion
 
-            case "SpeedPowerUp":
-                subtitleText = string.Format("Use the {2} to activate Movement Boost", KeyBindings.switchBulletType);
-            break;
+            #region Passive Powerups
+            case "Health":
+                subtitleText.text = string.Format("{0} restored!",  powerupName);
+                break;
 
-            case "DynamiteBullet":
-                subtitleText = string.Format("Use the {0} key to switch to Dynamite Bullet.", KeyBindings.switchBulletType);
-            break;
+            case "Shield":
+                subtitleText.text = string.Format("{0} activated!", powerupName);
+                break;
+            #endregion
 
-            case "DynamiteBullets":
-                subtitleText = string.Format("Use the {0} key to switch to Dynamite Bullets.", KeyBindings.switchBulletType);
+            #region Bullet Powerups
+            case "Dynamite":
+            case "Freeze"  :
+            case "Laser"   :
+                subtitleText.text = string.Format("Press {0} to switch to {1} bullets!", KeyBindings.switchBulletType, powerupName);
             break;
-
-            case "healthpowerup":
-                subtitleText = "Gained some health back!";
-            break;
-
-            case "HealthPowerUp":
-                subtitleText = "Gained some health back!";
-            break;
-
-            case "FreezeBullet":
-                subtitleText = string.Format("Use the {0} key to switch to Freeze Bullet.", KeyBindings.switchBulletType);
-            break;
-
-            case "FreezeBullets":
-                subtitleText = string.Format("Use the {0} key to switch to Freeze Bullets.", KeyBindings.switchBulletType);
-            break;
-
-            case "LaserBullet":
-                subtitleText = string.Format("Use the {0} key to switch to Laser Bullet.", KeyBindings.switchBulletType);
-            break;
-
-            case "LaserBullets":
-                subtitleText = string.Format("Use the {0} key to switch to Laser Bullets.", KeyBindings.switchBulletType);
-            break;
+            #endregion
 
             default:
                 break;
         }
 
-        Invoke("RemoveText", 5);
+        Invoke("EndPowerupPrompts", 5);
     }
 
-    private void RemoveText()
+    public void EndPowerupPrompts()
     {
-        powerupsOn        = false;
+        powerupAcquired   = false;
         headingText. text = "";
         subtitleText.text = "";
 
@@ -139,12 +118,13 @@ public class PowerupPrompts : MonoBehaviour
         subtitleText.gameObject.SetActive(false);
     }
 
-    public void exitGameUI()
+    private string alphaFilter(KeyCode oldKeyPress)
     {
-        player.leaveGame = true;
+        string newKeyPress = oldKeyPress.ToString();
 
-        panel.       gameObject.SetActive(false);
-        headingText. gameObject.SetActive(false);
-        subtitleText.gameObject.SetActive(false);
+        if (newKeyPress.Contains("Alpha"))
+            newKeyPress = newKeyPress.Replace("Alpha", "");
+
+        return newKeyPress;
     }
 }

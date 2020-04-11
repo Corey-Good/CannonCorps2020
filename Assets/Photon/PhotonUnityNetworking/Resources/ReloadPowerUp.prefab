@@ -83,9 +83,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3384407729845394663}
   - component: {fileID: -8205717029832864003}
+  - component: {fileID: 9096922301117365402}
   - component: {fileID: -1458484468218081851}
   - component: {fileID: -299967579160548018}
-  - component: {fileID: 9096922301117365402}
   - component: {fileID: 4978341375266933328}
   - component: {fileID: 425298496461245972}
   m_Layer: 0
@@ -130,6 +130,19 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
+--- !u!65 &9096922301117365402
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777951253806165748}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.45, y: 1.85, z: 2.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-1458484468218081851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -167,19 +180,6 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
---- !u!65 &9096922301117365402
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1777951253806165748}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.45, y: 1.85, z: 2.1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &4978341375266933328
 MeshFilter:
   m_ObjectHideFlags: 0
