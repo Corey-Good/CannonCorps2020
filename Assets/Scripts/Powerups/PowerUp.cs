@@ -73,6 +73,9 @@ public class PowerUp : MonoBehaviour
         // We must have been collected by a player, store handle to player for later use
         playerBrain = gameObjectCollectingPowerUp.GetComponent<PlayerController>();
 
+        // Send message to any listeners
+        SendPowerUpCollectedMessage();
+
         // We move the power up game object to be under the player that collected it, this isn't essential for functionality
         // but is neater in the gameObject hierarchy
         gameObject.transform.parent   = playerBrain.gameObject.transform;
@@ -84,8 +87,7 @@ public class PowerUp : MonoBehaviour
         // Deliver the payload
         PowerUpPayload();
 
-        // Send message to any listeners
-        SendPowerUpCollectedMessage();
+ 
 
         // Now the power up visuals can go away
         //powerUpMeshRenderer.enabled = false;
@@ -165,7 +167,7 @@ public class PowerUp : MonoBehaviour
             {
                 ExecuteEvents.Execute<IPowerUpManagerEvents>               // 2
                     (go, null,                                             // 3
-                     (x, y) => x.OnPowerUpCollected()                      // 4
+                     (x, y) => x.OnPowerUpCollected(transform.position.x, transform.position.z)                      // 4
                     );
             }
         }

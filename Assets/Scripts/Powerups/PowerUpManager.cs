@@ -7,10 +7,9 @@ using UnityEngine.EventSystems;
 public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 {
     private static int numberOfPowerups;
-    private static int numberOfPowerupSpawnLocations = 14;
-    public GameObject[] spawnLocations = new GameObject[numberOfPowerupSpawnLocations];
+    private static int numberOfPowerupSpawnLocations;
     private string[] powerupNames = new string[] { "FreezeBullets", "DynamiteBullets", "LaserBullets", "HealthPU", "ShieldPowerUp", "ReloadPowerUp", "SpeedPowerUp"};
-    public bool[] lockedLocations = new bool[numberOfPowerupSpawnLocations];
+    public Location[] spawnLocations;
     
 
     private float time = 0.0f;
@@ -18,7 +17,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     private float randomFloor = 5.0f;
     private float randomCeiling = 10.0f;
     private bool allLocationsLocked = false;
-    public int powerUpsOut = 0;
 
     public static PowerUpManager main;
 
@@ -40,10 +38,15 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
     public void Start()
     {
         numberOfPowerups = powerupNames.Length;
+        numberOfPowerupSpawnLocations = this.transform.childCount;
 
-        for(int i = 0; i < numberOfPowerupSpawnLocations; i++)
+        spawnLocations = new Location[numberOfPowerupSpawnLocations];
+
+        for (int i = 0; i < numberOfPowerupSpawnLocations; i++)
         {
-            lockedLocations[i] = false;
+            spawnLocations[i] = new Location();
+            spawnLocations[i].spawnPad = this.transform.GetChild(i);
+            spawnLocations[i].locked = false;
         }
         
         EventSystemListeners.main.AddListener(this.gameObject);
@@ -53,17 +56,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         if (Input.GetKeyDown(KeyCode.P))
         {
             SpawnRandomPowerUp();
-        }
-
-        // if PowerUpsOut counter == 0, then unlock all locations
-        if (powerUpsOut == 0)
-        {
-            for (int i = 0; i < numberOfPowerupSpawnLocations; i++)
-            {
-                lockedLocations[i] = false;
-            }
-
-            allLocationsLocked = false;
         }
 
         if (!allLocationsLocked)
@@ -79,8 +71,6 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         }
     }
 
- 
-
 
     private void SpawnRandomPowerUp()
     {
@@ -93,13 +83,12 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         {
             int locationRandomNumber = HandleSpawnLocation();
             int powerUpRandomNumber = Random.Range(0, numberOfPowerups);
-            if (locationRandomNumber < numberOfPowerupSpawnLocations)
+            if (!allLocationsLocked)
             {
                 PhotonNetwork.Instantiate(powerupNames[powerUpRandomNumber], 
-                                          new Vector3(spawnLocations[locationRandomNumber].transform.position.x, spawnLocations[locationRandomNumber].transform.position.y + 1, spawnLocations[locationRandomNumber].transform.position.z),
-                                          spawnLocations[locationRandomNumber].transform.rotation);
-                // Increment PowerUpsOut counter
-                powerUpsOut++;
+                                          new Vector3(spawnLocations[locationRandomNumber].spawnPad.position.x, spawnLocations[locationRandomNumber].spawnPad.position.y + 1, spawnLocations[locationRandomNumber].spawnPad.position.z),
+                                          spawnLocations[locationRandomNumber].spawnPad.rotation);
+                spawnLocations[locationRandomNumber].locked = true;
             }
         }
     }
@@ -111,7 +100,7 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
 
         // if random location is locked, then find next unlocked
         int loopCount = 0;
-        while (CheckIfLocked(randomLocation) && loopCount < numberOfPowerupSpawnLocations)
+        while (spawnLocations[randomLocation].locked && loopCount < numberOfPowerupSpawnLocations)
         {
             randomLocation++;
             if (randomLocation >= numberOfPowerupSpawnLocations)
@@ -126,22 +115,10 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         }
         else
         {
-            lockedLocations[randomLocation] = true;
+            spawnLocations[randomLocation].locked = true;
         }
 
-
-        loopCount = 0;
-
-        // if all are locked then return numberOfPowerupSpawnLocations + 1
-        if (allLocationsLocked)
-            randomLocation = numberOfPowerupSpawnLocations;
-
         return randomLocation;
-    }
-
-    private bool CheckIfLocked(int locationToCheck)
-    {
-        return lockedLocations[locationToCheck];
     }
 
     void IPowerUpManagerEvents.OnSpawnPowerup()
@@ -149,11 +126,23 @@ public class PowerUpManager : MonoBehaviour, IPowerUpManagerEvents
         SpawnRandomPowerUp();
     }
 
-    void IPowerUpManagerEvents.OnPowerUpCollected()
+    void IPowerUpManagerEvents.OnPowerUpCollected(float xPosition, float zPosition)
     {
-        // Decrement PowerUpsOut counter
-        powerUpsOut--;
+        int i = 0;
+        while(xPosition != spawnLocations[i].spawnPad.position.x && zPosition != spawnLocations[i].spawnPad.position.z)
+        {
+            i++;
+        }
+
+        spawnLocations[i].locked = false;
+
+        if(allLocationsLocked)
+            allLocationsLocked = false;
     }
 
-
+    public class Location
+    {
+        public Transform spawnPad;
+        public bool locked;
+    }
 }
