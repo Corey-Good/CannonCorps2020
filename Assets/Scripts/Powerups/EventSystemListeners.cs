@@ -1,5 +1,16 @@
-﻿using System.Collections.Generic;
+﻿/************************************************************************/
+/* Author:             Eddie Habal                                      */
+/* Date Created:       2/26/2020                                        */
+/* Last Modified Date: 4/12/2020                                        */
+/* Modified By:        J. Calas                                         */
+/************************************************************************/
+
+#region Libraries
+
+using System.Collections.Generic;
 using UnityEngine;
+
+#endregion
 
 /// <summary>
 /// Singleton containing a list of all the listeners that might want to hear about any message

@@ -1,59 +1,58 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good                                       */
 /* Date Created:       1/27/2020                                        */
-/* Last Modified Date: 4/11/2020                                        */
-/* Modified By:        Corey Good                                       */
+/* Last Modified Date: 4/13/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
+#region Libraries
 
 using Photon.Pun;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine;
 
+#endregion
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-
-    private float lagAdjustSpeed = 20f;
-    private float timeElapsed = 0f;
-    public bool readyToFire = true;
-    public bool invulnerable = false;
+    private float lagAdjustSpeed  = 20f;
+    private float timeElapsed     = 0f;
+    public  bool  readyToFire     = true;
+    public  bool  invulnerable    = false;
+    public  bool  powerupAcquired = false;
 
     #region BulletVariables
-    public float numOfFreezeBullets;
-    public float numOfDynamiteBullets;
-    public float numOfLaserBullets;
-    public float maxNumOfFreezeBullets = 10;
-    public float maxNumOfDynamiteBullets = 5;
-    public float maxNumOfLaserBullets = 15;
-
-    public enum BulletType
+    public  float  numOfFreezeBullets;
+    public  float  numOfDynamiteBullets;
+    public  float  numOfLaserBullets;
+    public  float  maxNumOfFreezeBullets   = 10;
+    public  float  maxNumOfDynamiteBullets = 5;
+    public  float  maxNumOfLaserBullets    = 15;
+    public  enum   BulletType
     {
         Normal,
         FreezeBullet,
         DynamiteBullet,
         LaserBullet
     }
-
-    public BulletType currentBulletType;
-    private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
+    public  BulletType currentBulletType;
+    private int        numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
     #endregion
 
     #region Reload Powerup Variables
-    public float reloadBoostTimer = 0.0f;
-    public float maxReloadBoostTimer = 10.0f;
-    public bool reloadBoostTimerRunning = false;
-    
-    private float reloadBoost = 1.0f;
-    private float originalReloadBoost = 1.0f;
+    public float  reloadBoostTimer        = 0.0f;
+    public float  maxReloadBoostTimer     = 10.0f;
+    private float reloadBoost             = 1.0f;
+    public bool   reloadBoostTimerRunning = false;
+    private float originalReloadBoost     = 1.0f;
     #endregion
 
     #region Movement Speed Powerup Variables
-    public float speedBoostTimer;
-    public float maxSpeedBoostTimer = 6.0f;
-    private float oneSpeedCharge = 2.0f;
-    public bool speedBoostTimerRunning = false;
-    public bool isFrozen = false;
+    public  float speedBoostTimer;
+    public  float maxSpeedBoostTimer     = 6.0f;
+    private float oneSpeedCharge         = 2.0f;
+    public  bool  speedBoostTimerRunning = false;
+    public  bool  isFrozen               = false;
 
     private float timeLeftOnCharge;
     private float movementForce;
@@ -65,41 +64,35 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     #endregion
 
     #region Public Reference Variables
-    public Animator fireAnimation;
-    public Camera tankCamera;
+    public Animator   fireAnimation;
+    public Camera     tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
     #endregion
 
     #region Private Reference Variables
-    private Vector3 headPosition;
-    private Vector3 bodyPosition;
-    private Quaternion headRotation;
-    private Quaternion bodyRotation;
-    private Tank tank;
-    private Player player;
+    private Vector3       headPosition;
+    private Vector3       bodyPosition;
+    private Quaternion    headRotation;
+    private Quaternion    bodyRotation;
+    private Tank          tank;
+    private Player        player;
     private FireMechanism fireMechanism;
-
     #endregion
-
     #endregion
-
-    void Start()
+    void         Start                 ()
     {
         //playerState = states.Stationary;
-
-        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        fireMechanism = GetComponentInChildren<FireMechanism>();
-
-        movementForce = tank.speedMovement;
+        tank               = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        player             = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        fireMechanism      = GetComponentInChildren<FireMechanism>();
+        movementForce      = tank.speedMovement;
         movementMultiplier = originalMovementMultiplier;
-        rotateMultiplier = originalRotateMultiplier;
-        rotateSpeed = tank.speedRotation;
-        player.photonView = this.gameObject.GetComponent<PhotonView>();
+        rotateMultiplier   = originalRotateMultiplier;
+        rotateSpeed        = tank.speedRotation;
+        player.photonView  = this.gameObject.GetComponent<PhotonView>();
     }
-
-    void Update()
+    void         Update                ()
     {
         if (!photonView.IsMine)
         {
@@ -112,7 +105,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             tank.damageTaken(10f);
         }
 
-        if (!PauseMenuManager.gameIsPaused && TutorialPrompts.MovementIsEnabled)
+        if (!PauseMenuManager.gameIsPaused && UIManager.movementIsEnabled)
         {
             MovePlayer();
 
@@ -123,8 +116,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             ManagePowerups();
         }
     }
-
-    private void ManagePowerups()
+    private void ManagePowerups        ()
     {
         if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
         {
@@ -194,8 +186,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
-    private void MovePlayer()
+    private void MovePlayer            ()
     {
         // Move play forwards and backwards,
         if (Input.GetKey(KeyBindings.forwardKey))
@@ -216,10 +207,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
     }
-
-    private void FireBullet()
+    private void FireBullet            ()
     {
-        if (Input.GetMouseButtonDown(KeyBindings.clickIndex) && TutorialPrompts.FiringIsEnabled && readyToFire)
+        if (Input.GetMouseButtonDown(KeyBindings.clickIndex) && UIManager.firingIsEnabled && readyToFire)
         {
             if (tank.tankModel == "catapult")
             {
@@ -236,8 +226,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             HandleBullets();
         }
     }
-
-    private void HandleBullets()
+    private void HandleBullets         ()
     {
         if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
         {
@@ -276,8 +265,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }       
     }
-
-    private void ManageReloadProcess()
+    private void ManageReloadProcess   ()
     {
         if (!readyToFire)
         {
@@ -293,7 +281,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
     private void HandleSpeedBoostCharge()
     {
         if (speedBoostTimerRunning) // Don't use a charge if one is currently running
@@ -313,8 +300,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    public void  OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
@@ -331,8 +317,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             headRotation = (Quaternion)stream.ReceiveNext();
         }
     }
-
-    public void LagAdjust()
+    public void  LagAdjust             ()
     {
         #region CalculateLag
 
@@ -658,7 +643,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     #endregion
 
-    private IEnumerator DelayFire()
+    private IEnumerator DelayFire     ()
     {
         yield return new WaitForSeconds(0.3f);
         fireMechanism.FireBullet(currentBulletType);
