@@ -25,7 +25,7 @@ public class PowerUp : MonoBehaviour
 
     private   Vector3              powerUpOffset             = new Vector3(0.0f, -20.0f, 0.0f);
 
-    private   List<string>         nameFilter                = new List<string>() { "Bullets", "(Clone)", "(Clone)(UnityEngine.GameObject)", "PowerUp" };
+    private   List<string>         nameFilter                = new List<string>() { "Bullets", "Bullet", "(Clone)(UnityEngine.GameObject)", "(Clone)", "PowerUp", "PU" };
                                                             // Keeps a list of words to remove from the object name
 
     protected PlayerController     playerBrain;             // Keeps a reference to the player that collected
@@ -100,8 +100,6 @@ public class PowerUp : MonoBehaviour
     }
     protected virtual void PowerUpPayload             ()
     {
-        Debug.Log("Power Up collected, issuing payload for: " + gameObject.name);
-
         #region Sends powerup name to on-screen prompt
         playerBrain.powerupAcquired = true;
         foreach(string unfilteredName in nameFilter)
@@ -111,6 +109,8 @@ public class PowerUp : MonoBehaviour
             UIManager.powerupName = gameObject.name;
         }
         #endregion
+
+        Debug.Log("Power Up collected, issuing payload for: " + gameObject.name);
 
         // If we're instant use we also expire self immediately
         if (expiresImmediately)

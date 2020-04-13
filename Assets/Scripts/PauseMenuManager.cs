@@ -82,5 +82,6 @@ public class PauseMenuManager : MonoBehaviour
         playerQuit       = true;
         gameIsPaused     = false;
         player.leaveGame = true;
+        UIManager.cameraIsEnabled = UIManager.movementIsEnabled = UIManager.firingIsEnabled = true;
     }
 }

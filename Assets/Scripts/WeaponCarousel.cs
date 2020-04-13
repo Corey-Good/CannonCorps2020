@@ -30,7 +30,7 @@ public class WeaponCarousel : MonoBehaviour, ICarouselEvents
     void Start()
     {
         EventSystemListeners.main.AddListener(this.gameObject);
-        Debug.Log(carouselObjects[0].name);//just display the name of the first chosen element in the console
+        // Debug.Log(carouselObjects[0].name); just display the name of the first chosen element in the console
         GameObject raycastHolder = new GameObject();//create an empty gameobject
         raycastHolder.name = "RaycastPicker"; //rename it to RaycastPicker
         theRayCaster = raycastHolder.transform; // assign the transform of the newlycreated gameobject to the raycast transform variable
@@ -161,7 +161,7 @@ public class WeaponCarousel : MonoBehaviour, ICarouselEvents
             {
                 ChosenObject++;
             }
-            Debug.Log(carouselObjects[ChosenObject].name); //show in the console the name of the selected element
+            // Debug.Log(carouselObjects[ChosenObject].name); //show in the console the name of the selected element
         }
     }
 

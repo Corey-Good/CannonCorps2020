@@ -74,8 +74,6 @@ public class UIManager : MonoBehaviourPunCallbacks
     public  static bool     movementIsEnabled    = true;
     public  static bool     firingIsEnabled      = true;
 
-    private bool            tutorialStarted      = false;
-
     public  static bool     tutorialStep1        = false;
     public  static bool     tutorialStep2        = false;
     public  static bool     tutorialStep3        = false;
@@ -137,16 +135,14 @@ public class UIManager : MonoBehaviourPunCallbacks
         #region Initialize variables for Tutorial
         if (player.gameState == Player.GameState.TT)
         {
-            tutorialStarted    = tutorialStep1                       = true;
+            PanelOn();
+            tutorialStep1      = true;
             cameraIsEnabled    = movementIsEnabled = firingIsEnabled = false;
-
             checkpoint1        = GameObject.Find("Checkpoint (1)");
             checkpoint2        = GameObject.Find("Checkpoint (2)");
             trigger1           = GameObject.Find("Trigger (1)");
             trigger2           = GameObject.Find("Trigger (2)");
-
-            startTime          = (double)PhotonNetwork.Time;
-
+            startTime          = (int)PhotonNetwork.Time;
             playerScoreText.   gameObject.SetActive(false);
             healthBar.         gameObject.SetActive(false);
             bulletIcon.        gameObject.SetActive(false);
@@ -181,11 +177,6 @@ public class UIManager : MonoBehaviourPunCallbacks
         {
             DisplayTutorialPrompts();
             tutorialTimer = (int)(PhotonNetwork.Time - startTime);
-        }
-        if (tutorialStarted && tutorialStep6)
-        {
-            Invoke("RemoveTutorialPrompts", 3);
-            tutorialStarted = false;
         }
         if (player.leaveGame)
         {
@@ -353,7 +344,6 @@ public class UIManager : MonoBehaviourPunCallbacks
     private IEnumerator  SwitchScene           ()
     {
         //Debug.Log("UI right before switching scenes: Tank Model" + tank.tankModel);
-
         player.leaveGame = false;
         player.returning = true;
 
@@ -475,53 +465,46 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         PanelOn();
 
-        headingText.text = string.Format("Acquired {0} powerup!", powerupName);
+        headingText.text = string.Format("Acquired {0} powerup!", powerupName.ToLower());
 
         switch (powerupName)
         {
             #region Active Powerups
             case "Reload":
-                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateReloadBoost), powerupName);
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateReloadBoost),   powerupName.ToLower());
                 break;
-
             case "Speed":
-                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateMovementBoost), powerupName);
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateMovementBoost).ToLower(), powerupName.ToLower());
                 break;
             #endregion
-
             #region Passive Powerups
             case "Health":
-                subtitleText.text = string.Format("{0} restored!", powerupName);
+                subtitleText.text = string.Format("{0} restored!",  powerupName);
                 break;
-
             case "Shield":
                 subtitleText.text = string.Format("{0} activated!", powerupName);
                 break;
             #endregion
-
             #region Bullet Powerups
             case "Dynamite":
             case "Freeze":
             case "Laser":
-                subtitleText.text = string.Format("Press {0} to switch to {1} bullets!", KeyBindings.switchBulletType, powerupName);
+                subtitleText.text = string.Format("Press {0} to switch to {1} bullets!", AlphaFilter(KeyBindings.switchBulletType).ToLower(), powerupName.ToLower());
                 break;
             #endregion
-
             default:
                 break;
         }
 
-        Invoke("RemovePowerupPrompts", 5);
+        Invoke("RemovePowerupPrompts", 3);
     }
     private void         RemovePowerupPrompts  ()
     {
-        playerController.powerupAcquired  = false;
-        headingText.text = subtitleText.text = "";
         PanelOff();
+        playerController.powerupAcquired = false;
     }
     private void         DisplayTutorialPrompts()
     {
-        PanelOn();
         #region Autoplay Step 1-3
         switch (tutorialTimer)
         {
@@ -544,7 +527,6 @@ public class UIManager : MonoBehaviourPunCallbacks
                 break;
         }
         #endregion
-
         #region Step 1: Welcome Message
         if (tutorialStep1)
         {
@@ -552,7 +534,6 @@ public class UIManager : MonoBehaviourPunCallbacks
             subtitleText.text = "Here you will learn the basic skills required in battle.";
         }
         #endregion Step 1
-
         #region Step 2: Camera Control
         if (tutorialStep2)
         {
@@ -561,7 +542,6 @@ public class UIManager : MonoBehaviourPunCallbacks
             subtitleText.text = "The turret follows the camera as you move it.";
         }
         #endregion Step 2
-
         #region Step 3: Movement Control
         if (tutorialStep3)
         {
@@ -571,7 +551,6 @@ public class UIManager : MonoBehaviourPunCallbacks
             subtitleText.text = "";
         }
         #endregion Step 3
-
         #region Step 4: Move to Designated Area
         if (tutorialStep4)
         {
@@ -580,7 +559,6 @@ public class UIManager : MonoBehaviourPunCallbacks
             subtitleText.text = "";
         }
         #endregion Step 4
-
         #region Step 5: Firing Control
         if (tutorialStep5)
         {
@@ -591,32 +569,21 @@ public class UIManager : MonoBehaviourPunCallbacks
             subtitleText.text = "";
         }
         #endregion Step 5
-
         #region Step 6: Complete Tutorial
         if (tutorialStep6)
         {
             headingText.text  = "CONGRATULATIONS!";
             subtitleText.text = "You have successfully completed the tutorial!";
+
+            Invoke("RemoveTutorialPrompts", 2);
         }
         #endregion Step 6
     }
     private void         RemoveTutorialPrompts ()
     {
-        cameraIsEnabled  = movementIsEnabled = firingIsEnabled = true;
-        playerScoreText.   gameObject.SetActive(true);
-        healthBar.         gameObject.SetActive(true);
-        bulletIcon.        gameObject.SetActive(true);
-        freezeBulletIcon.  gameObject.SetActive(true);
-        dynamiteBulletIcon.gameObject.SetActive(true);
-        laserBulletIcon.   gameObject.SetActive(true);
-        reloadIcon.        gameObject.SetActive(true);
-        speedIcon.         gameObject.SetActive(true);
-        shieldIcon.        gameObject.SetActive(true);
-        gameOverObj.       gameObject.SetActive(true);
-        gameOverText.      gameObject.SetActive(true);
-        hitIndicator.      gameObject.SetActive(true);
-        freezeIndicator.   gameObject.SetActive(true);
         PanelOff();
+        player.leaveGame = cameraIsEnabled = movementIsEnabled = firingIsEnabled = true;
+        tutorialStep6    = false;
     }
     private void         PanelOn               ()
     {
@@ -633,10 +600,8 @@ public class UIManager : MonoBehaviourPunCallbacks
     private string       AlphaFilter           (KeyCode oldKeyPress)
     {
         string newKeyPress = oldKeyPress.ToString();
-
         if (newKeyPress.Contains("Alpha"))
             newKeyPress = newKeyPress.Replace("Alpha", "");
-
         return newKeyPress;
     }
 }

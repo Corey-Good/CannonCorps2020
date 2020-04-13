@@ -105,7 +105,7 @@ public class dreamloLeaderBoard : MonoBehaviour {
 	
 	public void GetScores()
 	{
-        Debug.Log("Getting the scores in GetScore");
+        // Debug.Log("Getting the scores in GetScore");
 		highScores = "";
 		StartCoroutine(GetRequest(dreamloWebserviceURL +  publicCode  + "/pipe"));
 	}
