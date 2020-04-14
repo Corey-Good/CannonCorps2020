@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 426741102}
   - component: {fileID: 426741106}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: BlueSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1220,7 +1220,7 @@ GameObject:
   - component: {fileID: 1855366218}
   - component: {fileID: 1855366217}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: RedSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
