@@ -1,16 +1,14 @@
 ﻿/************************************************************************/
-/* Author:  */
-/* Date Created: */
-/* Last Modified Date: */
-/* Modified By: */
+/* Author:             Corey Good                                       */
+/* Date Created:       3/22/2020                                        */
+/* Last Modified Date: 4/05/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class RoomManager : MonoBehaviourPunCallbacks
@@ -26,10 +24,12 @@ public class RoomManager : MonoBehaviourPunCallbacks
     private int roomCountTT = 0;
     #endregion
 
-    public GameObject LobbyView;
-    public RectTransform transitionPanel;
-    public TextMeshProUGUI ffaButtonText;
-    public TextMeshProUGUI ttButtonText;
+    #region Variables
+    public  GameObject      LobbyView;
+    public  RectTransform   transitionPanel;
+    public  TextMeshProUGUI ffaButtonText;
+    public  TextMeshProUGUI ttButtonText;
+    #endregion
 
     private void Awake()
     {
@@ -79,10 +79,14 @@ public class RoomManager : MonoBehaviourPunCallbacks
         else if (player.gameState == Player.GameState.SM)
         {
             LobbyView.SetActive(true);
+            LobbyView.transform.localScale = Vector3.zero;
+            LeanTween.scale(LobbyView, Vector3.one, MenuAnimations.transitionTime);
         }
         else if (player.gameState == Player.GameState.TB)
         {
             LobbyView.SetActive(true);
+            LobbyView.transform.localScale = Vector3.zero;
+            LeanTween.scale(LobbyView, Vector3.one, MenuAnimations.transitionTime);
         }
         else if(player.gameState == Player.GameState.TT)
         {

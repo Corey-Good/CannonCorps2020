@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class DynamiteBullets : PowerUp
 {
-    public float dynamiteBullets = 5.0f;
     protected override void PowerUpPayload()
     {
         base.PowerUpPayload();
-        playerBrain.CollectDynamiteBullets(dynamiteBullets);
+        playerBrain.CollectDynamiteBullets();
     }
 }

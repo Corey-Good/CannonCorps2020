@@ -37,7 +37,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     #endregion Lobby Info
 
-    private int minPlayers = 1;
+    private int minPlayers =2;
 
     private void Awake()
     {
@@ -103,7 +103,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         player.gameState = Player.GameState.Lobby;
         readyUpButton.GetComponentInChildren<TextMeshProUGUI>().text = "Ready Up";
         PhotonNetwork.LeaveRoom();
-        LobbyView.SetActive(false);
+        LeanTween.scale(LobbyView, Vector3.zero, MenuAnimations.transitionTime);
+        Invoke("turnOffMenu", MenuAnimations.transitionTime);
         EmptyPlayerList();
     }
 
@@ -251,5 +252,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.CurrentRoom.IsOpen = false;
             }
         }
+    }
+
+    private void turnOffMenu()
+    {
+        LobbyView.SetActive(false);
     }
 }

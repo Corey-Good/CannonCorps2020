@@ -1,8 +1,8 @@
 ﻿/************************************************************************/
-/* Author:  */
-/* Date Created: */
-/* Last Modified Date: */
-/* Modified By: */
+/* Author:             Jaben Calas                                      */
+/* Date Created:       3/03/2020                                        */
+/* Last Modified Date: 3/30/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 
 using UnityEngine;
@@ -13,12 +13,12 @@ public class TutorialModeTrigger : MonoBehaviour
     {
         if (other.tag == "PlayerGO" && this.gameObject.name == "Panel")
         {
-            TutorialMode.step5 = true;
+            TutorialPrompts.step5 = true;
             Destroy(this.gameObject);
         }
         else if (other.tag == "Bullet" && this.gameObject.name == "Block")
         {
-            TutorialMode.step6 = true;
+            TutorialPrompts.step6 = true;
         }
     }
 }

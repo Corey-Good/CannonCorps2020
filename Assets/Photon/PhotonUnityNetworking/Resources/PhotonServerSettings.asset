@@ -26,17 +26,14 @@ MonoBehaviour:
     NetworkLogging: 1
   PunLogging: 0
   EnableSupportLogger: 0
-  RunInBackground: 1
+  RunInBackground: 0
   StartInOfflineMode: 0
   RpcList:
+  - ChangeColor_RPC
   - ClickRpc
   - DestroyRpc
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
-  - UpdateTable
-  - ChangeColor
-  - ChangeColor_RPC
-  - ChangeAllColors
   DisableAutoOpenWizard: 1
   ShowSettings: 1

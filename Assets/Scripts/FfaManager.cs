@@ -54,13 +54,8 @@ public class FfaManager : MonoBehaviour
             // Triggers the leave function in UIManager
             player.leaveGame = true;
             firstCall = false;
-            GameObject.FindGameObjectWithTag("PlayerGO").SetActive(false);
+            Debug.Log("FFA health = 0: Tank Model" + tank.tankModel);
         }
-
-        //if(Input.GetKeyDown(KeyCode.T))
-        //{
-        //    player.ScoreCurrent += 10;
-        //}
     }
 
     // Spawn the player at a random spawnpoint in the map

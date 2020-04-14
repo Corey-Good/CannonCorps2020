@@ -29,6 +29,9 @@ public class UIManager : MonoBehaviourPunCallbacks
     public Image freezeBulletIcon;
     public Image dynamiteBulletIcon;
     public Image laserBulletIcon;
+    public Image reloadIcon;
+    public Image speedIcon;
+    public Image shieldIcon;
     
     #endregion
 
@@ -53,11 +56,11 @@ public class UIManager : MonoBehaviourPunCallbacks
     #endregion    
 
     public RectTransform transitionPanel;
-    public GameObject gameOverRect;
+    public GameObject gameOverObj;
     public TextMeshProUGUI gameOverText;
     public GameObject hitIndicator;
+    public GameObject freezeIndicator;
     public List<TextMeshProUGUI> textPoints = new List<TextMeshProUGUI>();
-    public List<RectTransform> rectPoints = new List<RectTransform>();
 
     void Awake()
     {
@@ -67,6 +70,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
         playerController = GameObject.FindGameObjectWithTag("PlayerGO").GetComponent<PlayerController>();
+        LeanTween.scale(gameOverObj, Vector3.zero, 0);
 
         // Set default values
         playerScoreText.text = "0";
@@ -101,53 +105,57 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Constantly update the various UI rendered
         healthBar.value = tank.healthCurrent / tank.healthMax;
         reloadDial.fillAmount = tank.reloadProgress;
-        //bulletIcon.fillAmount = tank.reloadProgress;
         playerScoreText.text = player.ScoreCurrent.ToString();
 
-        bulletIcon.fillAmount = tank.reloadProgress;
-        freezeBulletIcon.fillAmount = (playerController.numOfFreezeBullets / playerController.maxNumOfFreezeBullets);
+        #region Powerups UI
+        shieldIcon.enabled            = playerController.invulnerable;
+        reloadIcon.fillAmount         = (playerController.reloadBoostTimer     / playerController.maxReloadBoostTimer);
+        speedIcon.fillAmount          = (playerController.speedBoostTimer      / playerController.maxSpeedBoostTimer);
+        freezeBulletIcon.fillAmount   = (playerController.numOfFreezeBullets   / playerController.maxNumOfFreezeBullets);
         dynamiteBulletIcon.fillAmount = (playerController.numOfDynamiteBullets / playerController.maxNumOfDynamiteBullets);
-        laserBulletIcon.fillAmount = (playerController.numOfLaserBullets / playerController.maxNumOfLaserBullets);
+        laserBulletIcon.fillAmount    = (playerController.numOfLaserBullets    / playerController.maxNumOfLaserBullets);
 
         switch (playerController.currentBulletType)
         {
             case PlayerController.BulletType.Normal:
-                bulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                bulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.FreezeBullet:
-                freezeBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                freezeBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.DynamiteBullet:
-                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                dynamiteBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (laserBulletIcon.fillAmount != 0.0f)
-                    laserBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    laserBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
             case PlayerController.BulletType.LaserBullet:
-                laserBulletIcon.CrossFadeAlpha(1.0f, .5f, true);
+                laserBulletIcon.CrossFadeAlpha(1.0f, .2f, true);
                 if (freezeBulletIcon.fillAmount != 0.0f)
-                    freezeBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    freezeBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (dynamiteBulletIcon.fillAmount != 0.0f)
-                    dynamiteBulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    dynamiteBulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 if (bulletIcon.fillAmount != 0.0f)
-                    bulletIcon.CrossFadeAlpha(.3f, .5f, false);
+                    bulletIcon.CrossFadeAlpha(.0f, .2f, false);
                 break;
         }
+
+        #endregion
 
         if (player.gameState == Player.GameState.SM)
         {
@@ -182,6 +190,18 @@ public class UIManager : MonoBehaviourPunCallbacks
             ShowPoints();
             player.gotPoints = false;
         }
+
+        if(playerController.isFrozen && flashFreeze)
+        {
+            FlashFreeze();
+            flashFreeze = false;
+        }
+
+        if(!playerController.isFrozen && !flashFreeze)
+        {
+            BreakFreeze();
+            flashFreeze = true;
+        }
     }
 
     private void UpdateTable()
@@ -210,11 +230,11 @@ public class UIManager : MonoBehaviourPunCallbacks
             tempText.text = photonPlayer.NickName;
             if(string.Equals(photonPlayer.NickName, player.PlayerName))
             {
-                tempText.color = Color.white;
+                tempText.color = Color.black;
             }
             else
             {
-                tempText.color = Color.black;
+                tempText.color = Color.white;
             }
         }
     }
@@ -269,8 +289,9 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Start the scene transition, wait 1 second before proceeding to the next line
         LeanTween.alpha(transitionPanel, 1, 1);
         SetEndText();
-        gameOverRect.SetActive(true);
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(0.65f);
+        LeanTween.scale(gameOverObj, Vector3.one, 1); ;
+        yield return new WaitForSeconds(2);
 
         // Leave the room, waiting until we are disconnected from the room to proceed
         PhotonNetwork.LeaveRoom();
@@ -280,6 +301,8 @@ public class UIManager : MonoBehaviourPunCallbacks
         // Make the cursor visible and free to move on the screen
         Cursor.SetCursor(null, new Vector2(0, 0), CursorMode.Auto);
         Cursor.lockState = CursorLockMode.None;
+
+        Debug.Log("UI right before switching scenes: Tank Model" + tank.tankModel);
 
         // Move back to main menu, unload the UI scene (this must be done last)
         PhotonNetwork.Disconnect();
@@ -296,6 +319,26 @@ public class UIManager : MonoBehaviourPunCallbacks
             LeanTween.alpha(edge, 0, 1f);
         }
     }
+
+    private bool flashFreeze = true;
+    public void FlashFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 1, 0.75f);
+        }
+    }
+
+    public void BreakFreeze()
+    {
+        RectTransform[] edges = freezeIndicator.GetComponentsInChildren<RectTransform>();
+        foreach (RectTransform edge in edges)
+        {
+            LeanTween.alpha(edge, 0, 1f);
+        }
+    }
+
 
     public void ShowPoints()
     {
@@ -314,13 +357,24 @@ public class UIManager : MonoBehaviourPunCallbacks
     {
         switch(player.gameState)
         {
-            case Player.GameState.FFA:
-                gameOverText.text = "You were eliminated";
+            case Player.GameState.FFA:                
+                if(PauseMenuManager.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . . ";
+                }
+                else
+                {
+                    gameOverText.text = "You were eliminated";
+                }
                 break;
             case Player.GameState.SM:
                 if(matchTimer >= 300.0)
                 {
                     gameOverText.text = "The Minnows evaded the Shark!";
+                }
+                else if (PauseMenuManager.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . .";
                 }
                 else
                 {
@@ -337,13 +391,20 @@ public class UIManager : MonoBehaviourPunCallbacks
                 {
                     gameOverText.text = "The Red Team won!";
                 }
-                else
+                else if (PauseMenuManager.playerQuit)
                 {
                     gameOverText.text = "You quit the game . . .";
                 }
                 break;
             case Player.GameState.TT:
-                gameOverText.text = "";
+                if (PauseMenuManager.playerQuit)
+                {
+                    gameOverText.text = "You quit the game . . .";
+                }
+                else
+                {
+                    gameOverText.text = "Tutorial Mode Completed!";
+                }
                 break;
         }
     }

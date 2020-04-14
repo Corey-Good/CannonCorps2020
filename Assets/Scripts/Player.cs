@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
 
     private static Player playerInstance;
 
+    public PhotonView photonView;
+
     public enum GameState
     {
         FFA, 

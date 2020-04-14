@@ -39,12 +39,12 @@ public class Tank : MonoBehaviour, ITakeDamage
         {
             Destroy(gameObject);
         }
-        CreateTank();
+        //CreateTank();
 
-        tankColor = Color.white;
+        //tankColor = Color.white;
     }
 
-    public void CreateTank(string tankModelChosen = "baseTank")
+    public void CreateTank(string tankModelChosen)
     {
         #region Max and Min and Position values
 
@@ -151,11 +151,6 @@ public class Tank : MonoBehaviour, ITakeDamage
         if (healthCurrent >= healthMax)
         {
             healthCurrent = healthMax;
-        }
-
-        if (healthCurrent <= 0.0f)
-        {
-            Destroy(gameObject);
         }
     }
 

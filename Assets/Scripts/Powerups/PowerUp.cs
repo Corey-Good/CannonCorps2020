@@ -1,42 +1,44 @@
 ﻿/************************************************************************/
-/* Author:  */
-/* Date Created: */
-/* Last Modified Date: */
-/* Modified By: */
+/* Author:             Eddie Habal                                      */
+/* Date Created:       2/24/2020                                        */
+/* Last Modified Date: 4/11/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 
+#region Libraries
+
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
+#endregion
 
 public class PowerUp : MonoBehaviour
 {
-    public string powerUpName;
-    public string powerUpExplanation;
-    public string powerUpQuote;
+    #region Variables
+    public    bool                 expiresImmediately;      // Tick true for power ups that are instant use, eg a health addition that has no delay before expirint
 
-    [Tooltip("Tick true for power ups that are instant use, eg a health addition that has no delay before expirint")]
-    public bool expiresImmediately;
+    public    string               powerUpName;
+    public    string               powerUpExplanation;
+    public    string               powerUpQuote;
 
-    public GameObject specialEffect;
-    public AudioClip soundEffect;
-    private Vector3 powerUpOffset = new Vector3(0.0f, -20.0f, 0.0f);
+    public    GameObject           specialEffect;
+    public    AudioClip            soundEffect;
 
-    ///<summary>
-    ///Keep a reference to the player that collected
-    ///</summary>
-    protected PlayerController playerBrain;
+    private   Vector3              powerUpOffset             = new Vector3(0.0f, -20.0f, 0.0f);
 
-    //Should PlayerBrain just be mashed in with Player?
+    private   List<string>         nameFilter                = new List<string>() { "Bullets", "(Clone)", "(Clone)(UnityEngine.GameObject)", "PowerUp" };
 
-    public MeshRenderer powerUpMeshRenderer;
-
+    protected PlayerController     playerBrain;             // Keeps a reference to the player that collected
+    public    MeshRenderer         powerUpMeshRenderer;     // Note: Should PlayerBrain just be mashed in with Player?
     protected enum PowerUpState
     {
         InAttractMode,
         IsCollected,
         IsExpiring
     }
-
-    protected PowerUpState powerUpState;
+    protected      PowerUpState    powerUpState;
+    #endregion
 
     protected virtual void Awake()
     {
@@ -47,10 +49,6 @@ public class PowerUp : MonoBehaviour
     {
         powerUpState = PowerUpState.InAttractMode;
     }
-
-    ///<summary>
-    /// 3D Support
-    /// </summary>
 
     protected virtual void OnTriggerEnter(Collider other)
     {
@@ -75,9 +73,12 @@ public class PowerUp : MonoBehaviour
         // We must have been collected by a player, store handle to player for later use
         playerBrain = gameObjectCollectingPowerUp.GetComponent<PlayerController>();
 
+        // Send message to any listeners
+        SendPowerUpCollectedMessage();
+
         // We move the power up game object to be under the player that collected it, this isn't essential for functionality
         // but is neater in the gameObject hierarchy
-        gameObject.transform.parent = playerBrain.gameObject.transform;
+        gameObject.transform.parent   = playerBrain.gameObject.transform;
         gameObject.transform.position = playerBrain.gameObject.transform.position + powerUpOffset;
 
         // Collection effects
@@ -86,14 +87,10 @@ public class PowerUp : MonoBehaviour
         // Deliver the payload
         PowerUpPayload();
 
-        // Send message to any listeners
-        //foreach (GameObject go in EventListeners.main.listeners)
-        //{
-        //    ExecuteEvents.Execute<IPowerUpEvents>(go, null, (x, y) => x.OnPowerUpCollected(this, playerBrain));
-        //}
+ 
 
         // Now the power up visuals can go away
-        powerUpMeshRenderer.enabled = false;
+        //powerUpMeshRenderer.enabled = false;
     }
 
     protected virtual void PowerUpEffects()
@@ -112,6 +109,19 @@ public class PowerUp : MonoBehaviour
     protected virtual void PowerUpPayload()
     {
         Debug.Log("Power Up collected, issuing payload for: " + gameObject.name);
+
+        #region Code needed for PowerupPrompts script
+
+        PowerupPrompts.powerupAcquired = true;
+
+        foreach(string unfilteredName in nameFilter)
+        {
+            if (gameObject.name.Contains(unfilteredName))
+                gameObject.name = gameObject.name.Replace(unfilteredName, "");
+            PowerupPrompts.powerupName = gameObject.name;
+        }
+
+        #endregion
 
         // If we're instant use we also expire self immediately
         if (expiresImmediately)
@@ -140,11 +150,26 @@ public class PowerUp : MonoBehaviour
     protected virtual void DestroySelfAfterDelay()
     {
         // Arbitrary delay of some seconds to allow particle, audio is all done
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 0.01f);
     }
 
     protected void StartListening(GameObject gameObjectListen)
     {
         EventSystemListeners.main.AddListener(gameObjectListen);
+    }
+
+    private void SendPowerUpCollectedMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners) // 1
+            {
+                ExecuteEvents.Execute<IPowerUpManagerEvents>               // 2
+                    (go, null,                                             // 3
+                     (x, y) => x.OnPowerUpCollected(transform.position.x, transform.position.z)                      // 4
+                    );
+            }
+        }
     }
 }

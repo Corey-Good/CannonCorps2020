@@ -1,36 +1,31 @@
 ﻿/************************************************************************/
 /* Author:             Corey Good                                       */
 /* Date Created:       1/27/2020                                        */
-/* Last Modified Date: 2/27/2020                                        */
-/* Modified By:        J. Calas                                         */
+/* Last Modified Date: 4/11/2020                                        */
+/* Modified By:        Corey Good                                       */
 /************************************************************************/
 
 using Photon.Pun;
 using System.Collections;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
 
-    private Vector3 headPosition;
-    private Vector3 bodyPosition;
-    private Quaternion headRotation;
-    private Quaternion bodyRotation;
     private float lagAdjustSpeed = 20f;
     private float timeElapsed = 0f;
     public bool readyToFire = true;
+    public bool invulnerable = false;
 
+    #region BulletVariables
     public float numOfFreezeBullets;
     public float numOfDynamiteBullets;
     public float numOfLaserBullets;
     public float maxNumOfFreezeBullets = 10;
     public float maxNumOfDynamiteBullets = 5;
     public float maxNumOfLaserBullets = 15;
-
-    private float reloadBoost = 1.0f;
-    private float originalReloadBoost = 1.0f;
-    private bool speedBoostOn = false;
 
     public enum BulletType
     {
@@ -42,129 +37,162 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public BulletType currentBulletType;
     private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
+    #endregion
 
+    #region Reload Powerup Variables
+    public float reloadBoostTimer = 0.0f;
+    public float maxReloadBoostTimer = 10.0f;
+    public bool reloadBoostTimerRunning = false;
+    
+    private float reloadBoost = 1.0f;
+    private float originalReloadBoost = 1.0f;
+    #endregion
+
+    #region Movement Speed Powerup Variables
+    public float speedBoostTimer;
+    public float maxSpeedBoostTimer = 6.0f;
+    private float oneSpeedCharge = 2.0f;
+    public bool speedBoostTimerRunning = false;
+    public bool isFrozen = false;
+
+    private float timeLeftOnCharge;
+    private float movementForce;
+    private float rotateSpeed;
+    private float movementMultiplier;
+    private float rotateMultiplier;
+    private float originalMovementMultiplier = 1.0f;
+    private float originalRotateMultiplier = 8.0f;
+    #endregion
+
+    #region Public Reference Variables
     public Animator fireAnimation;
     public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
+    #endregion
 
-    private FireMechanism fireMechanism;
-
-    #endregion Variables
-
-    #region Movement Speeds
-
-    private float movementForce;
-    private float movementMultiplier;
-    private float originalMovementMultiplier;
-    private float originalRotateMultiplier;
-    private float rotateMultiplier;
-    private float rotateSpeed;
-    #endregion Movement Speeds
-
+    #region Private Reference Variables
+    private Vector3 headPosition;
+    private Vector3 bodyPosition;
+    private Quaternion headRotation;
+    private Quaternion bodyRotation;
     private Tank tank;
     private Player player;
-    private CollisionDetection collisionDetection;
+    private FireMechanism fireMechanism;
 
-    // Start is called before the first frame update
-    private void Start()
+    #endregion
+
+    #endregion
+
+    void Start()
     {
         //playerState = states.Stationary;
 
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        collisionDetection = GetComponent<CollisionDetection>();
         fireMechanism = GetComponentInChildren<FireMechanism>();
 
         movementForce = tank.speedMovement;
-        movementMultiplier = 1f;
-        originalMovementMultiplier = movementMultiplier;
-        rotateMultiplier = 8f;
-        originalRotateMultiplier = rotateMultiplier;
+        movementMultiplier = originalMovementMultiplier;
+        rotateMultiplier = originalRotateMultiplier;
         rotateSpeed = tank.speedRotation;
+        player.photonView = this.gameObject.GetComponent<PhotonView>();
     }
 
-    // Update is called once per frame
-    private void Update()
+    void Update()
     {
         if (!photonView.IsMine)
         {
             LagAdjust();
             return;
         }
-        if(Input.GetKeyDown(KeyCode.H))
+
+        if (Input.GetKeyDown(KeyCode.H))
         {
             tank.damageTaken(10f);
         }
 
-        if (!PauseMenuAnimations.GameIsPaused && TutorialMode.MovementIsEnabled)
+        if (!PauseMenuManager.gameIsPaused && TutorialPrompts.MovementIsEnabled)
         {
             MovePlayer();
-            if (Input.GetMouseButtonDown(KeyBindings.clickIndex)
-               && (!PauseMenuAnimations.GameIsPaused && TutorialMode.FiringIsEnabled)
-               && (readyToFire))
-            {
-                readyToFire = false;
 
-                if (tank.tankModel == "catapult")
+            FireBullet();
+
+            ManageReloadProcess();
+
+            ManagePowerups();
+        }
+    }
+
+    private void ManagePowerups()
+    {
+        if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
+        {
+            currentBulletType += 1;
+            SendBulletSwitchMessage();
+
+            if (numOfFreezeBullets == 0.0f)
+                if ((int)currentBulletType == 1)
                 {
-                    StartCoroutine(DelayFire());
+                    currentBulletType += 1;
+                    SendBulletSwitchMessage();
                 }
-                else
+
+            if (numOfDynamiteBullets == 0.0f)
+                if ((int)currentBulletType == 2)
                 {
-                    fireMechanism.FireBullet();
+                    SendBulletSwitchMessage();
+                    currentBulletType += 1;
                 }
 
-                if (fireAnimation != null)
+            if (numOfLaserBullets == 0.0f)
+                if ((int)currentBulletType == 3)
                 {
-                    fireAnimation.SetTrigger("Fire");
+                    SendBulletSwitchMessage();
+                    currentBulletType += 1;
                 }
-                fireMechanism.ReceivePlayerControllerClick(readyToFire, currentBulletType);
-                if (!readyToFire)
-                {
-                    switch (currentBulletType)
-                    {
-                        case BulletType.FreezeBullet:
-                            numOfFreezeBullets -= 1.0f;
-                            if (numOfFreezeBullets == 0.0f)
-                                currentBulletType = BulletType.Normal;
-                            break;
 
-                        case BulletType.DynamiteBullet:
-                            numOfDynamiteBullets -= 1.0f;
-                            if (numOfDynamiteBullets == 0.0f)
-                                currentBulletType = BulletType.Normal;
-                            break;
-
-                        case BulletType.LaserBullet:
-                            numOfLaserBullets -= 1.0f;
-                            if (numOfLaserBullets == 0.0f)
-                                currentBulletType = BulletType.Normal;
-                            break;
-                    }
-                }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                currentBulletType += 1;
-
-                if (numOfFreezeBullets == 0.0f)
-                    if ((int)currentBulletType == 1)
-                        currentBulletType += 1;
-                if (numOfDynamiteBullets == 0.0f)
-                    if ((int)currentBulletType == 2)
-                        currentBulletType += 1;
-                if (numOfLaserBullets == 0.0f)
-                    if ((int)currentBulletType == 3)
-                        currentBulletType += 1;
-
-                if ((int)currentBulletType >= numberOfBulletTypes)
-                    currentBulletType = 0;
-            }
+            if ((int)currentBulletType >= numberOfBulletTypes)
+                currentBulletType = 0;
         }
 
-        ReloadBullet();
+        if (Input.GetKeyDown(KeyBindings.activateReloadBoost))
+        {
+            SendReloadToggleMessage();
+        }
+
+        if (reloadBoostTimerRunning)
+        {
+            reloadBoostTimer -= Time.deltaTime;
+            if (reloadBoostTimer <= 0.0f)
+            {
+                reloadBoostTimer = 0.0f;
+                SendReloadPowerUpExpiredMessage();
+            }
+
+        }
+
+        if (Input.GetKeyDown(KeyBindings.activateMovementBoost))
+        {
+            HandleSpeedBoostCharge();
+        }
+
+        if (speedBoostTimerRunning)
+        {
+            timeLeftOnCharge -= Time.deltaTime;
+            speedBoostTimer -= Time.deltaTime;
+
+            if (timeLeftOnCharge <= 0.0f) // Only let one charge run at a time
+            {
+                SendSpeedToggleMessage();
+            }
+
+            if (speedBoostTimer <= 0.0f)
+            {
+                speedBoostTimer = 0.0f;
+                SendSpeedPowerUpExpiredMessage();
+            }
+        }
     }
 
     private void MovePlayer()
@@ -189,7 +217,67 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
-    public void ReloadBullet()
+    private void FireBullet()
+    {
+        if (Input.GetMouseButtonDown(KeyBindings.clickIndex) && TutorialPrompts.FiringIsEnabled && readyToFire)
+        {
+            if (tank.tankModel == "catapult")
+            {
+                StartCoroutine(DelayFire());
+                fireAnimation.SetTrigger("Fire");
+                readyToFire = false;
+            }
+            else
+            {
+                fireMechanism.FireBullet(currentBulletType);
+                readyToFire = false;
+            }
+
+            HandleBullets();
+        }
+    }
+
+    private void HandleBullets()
+    {
+        if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
+        {
+            switch (currentBulletType)
+            {
+                case BulletType.FreezeBullet:
+                    numOfFreezeBullets -= 1.0f;
+                    if (numOfFreezeBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+
+                    break;
+
+                case BulletType.DynamiteBullet:
+                    numOfDynamiteBullets -= 1.0f;
+                    if (numOfDynamiteBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+                    break;
+
+                case BulletType.LaserBullet:
+                    numOfLaserBullets -= 1.0f;
+                    if (numOfLaserBullets == 0.0f)
+                    {
+                        SendBulletSwitchMessage();
+                        currentBulletType = BulletType.Normal;
+                    }
+                    break;
+            }
+        }       
+    }
+
+    private void ManageReloadProcess()
     {
         if (!readyToFire)
         {
@@ -202,6 +290,26 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 timeElapsed = 0f;
                 readyToFire = true;
+            }
+        }
+    }
+
+    private void HandleSpeedBoostCharge()
+    {
+        if (speedBoostTimerRunning) // Don't use a charge if one is currently running
+            return;
+        else if (!speedBoostTimerRunning)
+        {
+            if(!isFrozen) // Allow a charge to be used
+            {
+                SendSpeedToggleMessage();
+            }
+            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
+            {
+                isFrozen = false;
+                SendSpeedToggleMessage();
+                SendSpeedToggleMessage();
+                speedBoostTimer -= oneSpeedCharge;
             }
         }
     }
@@ -304,97 +412,255 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         #endregion AdjustHeadRotation
     }
 
-    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier)
-    {
-        if (speedBoostOn)
-        {
-            return;
-        }
+    #region Powerups
 
-        movementMultiplier = newMovementMultiplier;
-        rotateMultiplier = newRotateMultiplier;
-        speedBoostOn = true;
+    #region Speed Logic
+    public void FreezeTank(bool frozen)
+    {
+        isFrozen = frozen;
+    }
+    public void PickupSpeedPowerup()
+    {
+        if (photonView.IsMine)
+        {
+            SendSpeedPowerUpExpiredMessage();
+            speedBoostTimer += oneSpeedCharge;
+            timeLeftOnCharge = oneSpeedCharge;
+            if(speedBoostTimer >= maxSpeedBoostTimer)
+            {
+                speedBoostTimer = maxSpeedBoostTimer;
+            }
+
+        }
+    }
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, bool isFreezePowerup)
+    {
+        if (photonView.IsMine)
+        {
+            movementMultiplier = newMovementMultiplier;
+            rotateMultiplier = newRotateMultiplier;
+
+            if(!isFreezePowerup)
+                speedBoostTimerRunning = true;
+
+            FreezeTank(isFreezePowerup);
+        }
+    }
+
+    public void SetSpeedBoostOn(float newMovementMultiplier, float newRotateMultiplier, float newSpeedTime)
+    {
+        if (photonView.IsMine)
+        {
+            speedBoostTimer = newSpeedTime;
+            movementMultiplier = newMovementMultiplier;
+            rotateMultiplier = newRotateMultiplier;
+            speedBoostTimerRunning = true;
+        }
     }
 
     public void SetSpeedBoostOff()
     {
-        movementMultiplier = originalMovementMultiplier;
-        rotateMultiplier = originalRotateMultiplier;
-        speedBoostOn = false;
+        if(photonView.IsMine)
+        {
+            movementMultiplier = originalMovementMultiplier;
+            rotateMultiplier = originalRotateMultiplier;
+            timeLeftOnCharge = oneSpeedCharge;
+            speedBoostTimerRunning = false;
+        }
     }
 
-    public void SetHealthBoost(float healthBoost)
+    #endregion
+
+    public void SetHealthBoost(float damage)
     {
-        healthBoost = -healthBoost;
-        tank.damageTaken(healthBoost);
+        if (photonView.IsMine)
+        {
+            if(damage > 0.0f)
+            {
+                if (invulnerable) // Set invulnerable to false don't take damage for that hit
+                {
+                    invulnerable = false;
+                    return;
+                }
+                else
+                {
+                    tank.damageTaken(damage);
+                    tank.tankHit = true;
+                }
+                    
+            }
+            else if (damage < 0.0f) // Let health boost pass through
+            {   
+                tank.damageTaken(damage);
+            }
+          
+        }
+            
     }
+
+    #region Reload Logic
 
     public void SetReloadBoostOn(float newReloadBoost)
     {
-        originalReloadBoost = reloadBoost;
-        reloadBoost = newReloadBoost;
+        if (photonView.IsMine)
+        {
+            SendReloadPowerUpExpiredMessage();
+            reloadBoostTimer = maxReloadBoostTimer;
+            reloadBoost = newReloadBoost;
+            reloadBoostTimerRunning = true;
+        }
+    }
+
+    public void SetReloadBoostOn(float newReloadBoost, float newReloadTime)
+    {
+        if (photonView.IsMine)
+        {
+            reloadBoostTimer = newReloadTime;
+            reloadBoost = newReloadBoost;
+            reloadBoostTimerRunning = true;
+        }
     }
 
     public void SetReloadBoostOff()
     {
-        reloadBoost = originalReloadBoost;
+        if (photonView.IsMine)
+        {
+            reloadBoost = originalReloadBoost;
+            reloadBoostTimerRunning = false;
+        }
     }
+
+    #endregion
 
     public void SetShieldBoostOn()
     {
-        collisionDetection.shieldBoostOn = true;
+        if (photonView.IsMine)
+        {
+            invulnerable = true;
+        }
+            
+    }
+    #endregion
+
+    #region Collect Bullets
+    public void CollectFreezeBullets()
+    {
+        if (photonView.IsMine)
+        {
+                numOfFreezeBullets = maxNumOfFreezeBullets;
+        }
+
     }
 
-    public void CollectFreezeBullets(float freezeBullets)
+    public void CollectDynamiteBullets()
     {
-        numOfFreezeBullets += freezeBullets;
-        if (numOfFreezeBullets >= maxNumOfFreezeBullets)
+        if (photonView.IsMine)
         {
-            numOfFreezeBullets = maxNumOfFreezeBullets;
+                numOfDynamiteBullets = maxNumOfDynamiteBullets;
+        }
+            
+    }
+
+    public void CollectLaserBullets()
+    {
+        if (photonView.IsMine)
+        {
+                numOfLaserBullets = maxNumOfLaserBullets;
+        }
+            
+    }
+    #endregion
+
+    #region Messages
+
+    #region Send BulletSwitch Messages
+    private void SendBulletSwitchMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<ICarouselEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnRotateCarousel()            // 4
+                    );
+            }
         }
     }
 
-    public void CollectDynamiteBullets(float dynamiteBullets)
+    #endregion
+
+    #region Reload Powerup Messages
+    public void SendReloadPowerUpExpiredMessage()
     {
-        numOfDynamiteBullets += dynamiteBullets;
-        if (numOfDynamiteBullets >= maxNumOfDynamiteBullets)
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
         {
-            numOfDynamiteBullets = maxNumOfDynamiteBullets;
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnReloadBoostExpired()            // 4
+                    );
+            }
         }
     }
 
-    public void CollectLaserBullets(float laserBullets)
+    public void SendReloadToggleMessage()
     {
-        numOfLaserBullets += laserBullets;
-        if (numOfLaserBullets >= maxNumOfLaserBullets)
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
         {
-            numOfLaserBullets = maxNumOfLaserBullets;
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.ToggleReloadBoost()            // 4
+                    );
+            }
         }
     }
 
-    public void DealDamage(float damage)
+    #endregion
+
+    #region Speed Powerup Messages
+    public void SendSpeedPowerUpExpiredMessage()
     {
-        tank.damageTaken(damage);
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.OnSpeedBoostExpired()            // 4
+                    );
+            }
+        }
     }
 
-    /* Using collision detection script instead */
-    //public void DealDamage(float damage)
-    //{
-    //    if(shieldBoostOn)
-    //    {
-    //        shieldBoostOn = false;
-    //        return;
-    //    }
-    //    else
-    //    {
-    //        tank.damageTaken(damage);
-    //    }
+    private void SendSpeedToggleMessage()
+    {
+        // Send message to any listeners
+        if (EventSystemListeners.main.listeners != null)
+        {
+            foreach (GameObject go in EventSystemListeners.main.listeners)  // 1
+            {
+                ExecuteEvents.Execute<IPowerUpEvents>                   // 2
+                    (go, null,                                               // 3
+                     (x, y) => x.ToggleSpeedBoost()            // 4
+                    );
+            }
+        }
+    }
+    #endregion
 
-    //}
+    #endregion
 
     private IEnumerator DelayFire()
     {
         yield return new WaitForSeconds(0.3f);
-        fireMechanism.FireBullet();
+        fireMechanism.FireBullet(currentBulletType);
     }
 }

@@ -19,96 +19,54 @@ public class FireMechanism : MonoBehaviour
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
     }
 
-    public void ReceivePlayerControllerClick(bool readyToFire, PlayerController.BulletType currentBulletType)
-    {
-        if (readyToFire)
-        {
-            switch (currentBulletType)
-            {
-                case PlayerController.BulletType.Normal:
-                    FireBullet();
-                    break;
-
-                case PlayerController.BulletType.FreezeBullet:
-                    FireFreezeBullet();
-                    break;
-
-                case PlayerController.BulletType.DynamiteBullet:
-                    FireDynamiteBullet();
-                    break;
-
-                case PlayerController.BulletType.LaserBullet:
-                    FireLaserBullet();
-                    break;
-            }
-        }
-    }
-
-    private void Update()
-    {
-    }
-
-    public void FireBullet()
+    public void FireBullet(PlayerController.BulletType currentBulletType)
     {
         RaycastHit hit;
+        string bulletType = GetBullet(currentBulletType);
 
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && tankCamera.transform.rotation.x < 0.05)
+        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit) && ValidAim())
         {
             Vector3 direction = hit.point - gameObject.transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate(tank.tankProjectile, gameObject.transform.position, rotation);
+            PhotonNetwork.Instantiate(bulletType, gameObject.transform.position, rotation);
         }
         else
         {
-            GameObject bullet = PhotonNetwork.Instantiate(tank.tankProjectile, gameObject.transform.position, gameObject.transform.rotation);
+            PhotonNetwork.Instantiate(bulletType, gameObject.transform.position, gameObject.transform.rotation);
         }
+    } 
+
+    private string GetBullet(PlayerController.BulletType currentBulletType)
+    {
+        string bullet;
+        switch (currentBulletType)
+        {
+            case PlayerController.BulletType.Normal:
+                bullet = tank.tankProjectile;
+                break;
+
+            case PlayerController.BulletType.FreezeBullet:
+                bullet = "FreezeBullet";
+                break;
+
+            case PlayerController.BulletType.DynamiteBullet:
+                bullet = "DynamiteBullet";
+                break;
+
+            case PlayerController.BulletType.LaserBullet:
+                bullet = "LaserBullet";
+                break;
+            default:
+                bullet = tank.tankProjectile;
+                break;
+        }
+
+        return bullet;
     }
 
-    public void FireDynamiteBullet()
+    private bool ValidAim()
     {
-        RaycastHit hit;
-
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
-        {
-            Vector3 direction = hit.point - gameObject.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("DynamiteBullet", gameObject.transform.position, rotation);
-        }
-        else
-        {
-            GameObject bullet = PhotonNetwork.Instantiate("DynamiteBullet", gameObject.transform.position, gameObject.transform.rotation);
-        }
-    }
-
-    public void FireLaserBullet()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
-        {
-            Vector3 direction = hit.point - gameObject.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("LaserBullet", gameObject.transform.position, rotation);
-        }
-        else
-        {
-            GameObject bullet = PhotonNetwork.Instantiate("LaserBullet", gameObject.transform.position, gameObject.transform.rotation);
-        }
-    }
-
-    public void FireFreezeBullet()
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(tankCamera.transform.position, tankCamera.transform.forward, out hit))
-        {
-            Vector3 direction = hit.point - gameObject.transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, rotation);
-        }
-        else
-        {
-            GameObject bullet = PhotonNetwork.Instantiate("FreezeBullet", gameObject.transform.position, gameObject.transform.rotation);
-        }
+        float angle = tankCamera.transform.rotation.eulerAngles.x;
+        return angle < 6.0f || (angle > 180.0f && angle < 360.0f);
     }
 }
