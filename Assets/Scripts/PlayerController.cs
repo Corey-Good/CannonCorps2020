@@ -5,54 +5,50 @@
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
 #region Libraries
-
 using Photon.Pun;
 using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine;
-
 #endregion
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     #region Variables
-    private float lagAdjustSpeed  = 20f;
-    private float timeElapsed     = 0f;
-    public  bool  readyToFire     = true;
-    public  bool  invulnerable    = false;
-    public  bool  powerupAcquired = false;
+    public bool readyToFire = true;
+    public bool invulnerable = false;
+    public bool powerupAcquired = false;
+    private float lagAdjustSpeed = 20f;
+    private float timeElapsed = 0f;
 
     #region BulletVariables
-    public  float  numOfFreezeBullets;
-    public  float  numOfDynamiteBullets;
-    public  float  numOfLaserBullets;
-    public  float  maxNumOfFreezeBullets   = 10;
-    public  float  maxNumOfDynamiteBullets = 5;
-    public  float  maxNumOfLaserBullets    = 15;
-    public  enum   BulletType
+    public float numOfFreezeBullets;
+    public float numOfDynamiteBullets;
+    public float numOfLaserBullets;
+    public float maxNumOfFreezeBullets = 10;
+    public float maxNumOfDynamiteBullets = 5;
+    public float maxNumOfLaserBullets = 15;
+    public enum BulletType
     {
         Normal,
         FreezeBullet,
         DynamiteBullet,
         LaserBullet
     }
-    public  BulletType currentBulletType;
-    private int        numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
+    public BulletType currentBulletType;
+    private int numberOfBulletTypes = System.Enum.GetValues(typeof(BulletType)).Length;
     #endregion
-
     #region Reload Powerup Variables
-    public float  reloadBoostTimer        = 0.0f;
-    public float  maxReloadBoostTimer     = 10.0f;
-    private float reloadBoost             = 1.0f;
-    public bool   reloadBoostTimerRunning = false;
-    private float originalReloadBoost     = 1.0f;
+    public float reloadBoostTimer = 0.0f;
+    public float maxReloadBoostTimer = 10.0f;
+    private float reloadBoost = 1.0f;
+    public bool reloadBoostTimerRunning = false;
+    private float originalReloadBoost = 1.0f;
     #endregion
-
     #region Movement Speed Powerup Variables
-    public  float speedBoostTimer;
-    public  float maxSpeedBoostTimer     = 6.0f;
-    private float oneSpeedCharge         = 2.0f;
-    public  bool  speedBoostTimerRunning = false;
-    public  bool  isFrozen               = false;
+    public float speedBoostTimer;
+    public float maxSpeedBoostTimer = 6.0f;
+    private float oneSpeedCharge = 2.0f;
+    public bool speedBoostTimerRunning = false;
+    public bool isFrozen = false;
 
     private float timeLeftOnCharge;
     private float movementForce;
@@ -62,37 +58,35 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private float originalMovementMultiplier = 1.0f;
     private float originalRotateMultiplier = 8.0f;
     #endregion
-
     #region Public Reference Variables
-    public Animator   fireAnimation;
-    public Camera     tankCamera;
+    public Animator fireAnimation;
+    public Camera tankCamera;
     public GameObject tankBody;
     public GameObject tankHead;
     #endregion
-
     #region Private Reference Variables
-    private Vector3       headPosition;
-    private Vector3       bodyPosition;
-    private Quaternion    headRotation;
-    private Quaternion    bodyRotation;
-    private Tank          tank;
-    private Player        player;
+    private Vector3 headPosition;
+    private Vector3 bodyPosition;
+    private Quaternion headRotation;
+    private Quaternion bodyRotation;
+    private Tank tank;
+    private Player player;
     private FireMechanism fireMechanism;
     #endregion
     #endregion
-    void         Start                 ()
+    void Start()
     {
         //playerState = states.Stationary;
-        tank               = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
-        player             = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-        fireMechanism      = GetComponentInChildren<FireMechanism>();
-        movementForce      = tank.speedMovement;
+        tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
+        player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
+        fireMechanism = GetComponentInChildren<FireMechanism>();
+        movementForce = tank.speedMovement;
         movementMultiplier = originalMovementMultiplier;
-        rotateMultiplier   = originalRotateMultiplier;
-        rotateSpeed        = tank.speedRotation;
-        player.photonView  = this.gameObject.GetComponent<PhotonView>();
+        rotateMultiplier = originalRotateMultiplier;
+        rotateSpeed = tank.speedRotation;
+        player.photonView = this.gameObject.GetComponent<PhotonView>();
     }
-    void         Update                ()
+    void Update()
     {
         if (!photonView.IsMine)
         {
@@ -116,7 +110,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             ManagePowerups();
         }
     }
-    private void ManagePowerups        ()
+    private void ManagePowerups()
     {
         if (Input.GetKeyDown(KeyBindings.switchBulletType)) // Cycle through bullets
         {
@@ -186,7 +180,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-    private void MovePlayer            ()
+    private void MovePlayer()
     {
         // Move play forwards and backwards,
         if (Input.GetKey(KeyBindings.forwardKey))
@@ -207,7 +201,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
     }
-    private void FireBullet            ()
+    private void FireBullet()
     {
         if (Input.GetMouseButtonDown(KeyBindings.clickIndex) && UIManager.firingIsEnabled && readyToFire)
         {
@@ -226,7 +220,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             HandleBullets();
         }
     }
-    private void HandleBullets         ()
+    private void HandleBullets()
     {
         if (!readyToFire && currentBulletType != BulletType.Normal) // If just fired, check if any bullets are left
         {
@@ -263,9 +257,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     }
                     break;
             }
-        }       
+        }
     }
-    private void ManageReloadProcess   ()
+    private void ManageReloadProcess()
     {
         if (!readyToFire)
         {
@@ -287,11 +281,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             return;
         else if (!speedBoostTimerRunning)
         {
-            if(!isFrozen) // Allow a charge to be used
+            if (!isFrozen) // Allow a charge to be used
             {
                 SendSpeedToggleMessage();
             }
-            else if(isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
+            else if (isFrozen && (speedBoostTimer >= oneSpeedCharge)) // Burn a charge to break out of freeze
             {
                 isFrozen = false;
                 SendSpeedToggleMessage();
@@ -300,7 +294,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-    public void  OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
         {
@@ -317,7 +311,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             headRotation = (Quaternion)stream.ReceiveNext();
         }
     }
-    public void  LagAdjust             ()
+    public void LagAdjust()
     {
         #region CalculateLag
 
@@ -398,7 +392,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     #region Powerups
-
     #region Speed Logic
     public void FreezeTank(bool frozen)
     {
@@ -411,7 +404,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             SendSpeedPowerUpExpiredMessage();
             speedBoostTimer += oneSpeedCharge;
             timeLeftOnCharge = oneSpeedCharge;
-            if(speedBoostTimer >= maxSpeedBoostTimer)
+            if (speedBoostTimer >= maxSpeedBoostTimer)
             {
                 speedBoostTimer = maxSpeedBoostTimer;
             }
@@ -425,7 +418,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             movementMultiplier = newMovementMultiplier;
             rotateMultiplier = newRotateMultiplier;
 
-            if(!isFreezePowerup)
+            if (!isFreezePowerup)
                 speedBoostTimerRunning = true;
 
             FreezeTank(isFreezePowerup);
@@ -445,7 +438,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
     public void SetSpeedBoostOff()
     {
-        if(photonView.IsMine)
+        if (photonView.IsMine)
         {
             movementMultiplier = originalMovementMultiplier;
             rotateMultiplier = originalRotateMultiplier;
@@ -455,12 +448,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     #endregion
-
     public void SetHealthBoost(float damage)
     {
         if (photonView.IsMine)
         {
-            if(damage > 0.0f)
+            if (damage > 0.0f)
             {
                 if (invulnerable) // Set invulnerable to false don't take damage for that hit
                 {
@@ -472,17 +464,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                     tank.damageTaken(damage);
                     tank.tankHit = true;
                 }
-                    
+
             }
             else if (damage < 0.0f) // Let health boost pass through
-            {   
+            {
                 tank.damageTaken(damage);
             }
-          
-        }
-            
-    }
 
+        }
+
+    }
     #region Reload Logic
 
     public void SetReloadBoostOn(float newReloadBoost)
@@ -516,48 +507,42 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     }
 
     #endregion
-
     public void SetShieldBoostOn()
     {
         if (photonView.IsMine)
         {
             invulnerable = true;
         }
-            
+
     }
     #endregion
-
     #region Collect Bullets
     public void CollectFreezeBullets()
     {
         if (photonView.IsMine)
         {
-                numOfFreezeBullets = maxNumOfFreezeBullets;
+            numOfFreezeBullets = maxNumOfFreezeBullets;
         }
 
     }
-
     public void CollectDynamiteBullets()
     {
         if (photonView.IsMine)
         {
-                numOfDynamiteBullets = maxNumOfDynamiteBullets;
+            numOfDynamiteBullets = maxNumOfDynamiteBullets;
         }
-            
-    }
 
+    }
     public void CollectLaserBullets()
     {
         if (photonView.IsMine)
         {
-                numOfLaserBullets = maxNumOfLaserBullets;
+            numOfLaserBullets = maxNumOfLaserBullets;
         }
-            
+
     }
     #endregion
-
     #region Messages
-
     #region Send BulletSwitch Messages
     private void SendBulletSwitchMessage()
     {
@@ -573,9 +558,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
     #endregion
-
     #region Reload Powerup Messages
     public void SendReloadPowerUpExpiredMessage()
     {
@@ -591,7 +574,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
     public void SendReloadToggleMessage()
     {
         // Send message to any listeners
@@ -606,9 +588,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
     #endregion
-
     #region Speed Powerup Messages
     public void SendSpeedPowerUpExpiredMessage()
     {
@@ -624,7 +604,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             }
         }
     }
-
     private void SendSpeedToggleMessage()
     {
         // Send message to any listeners
@@ -640,10 +619,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
     #endregion
-
     #endregion
 
-    private IEnumerator DelayFire     ()
+    private IEnumerator DelayFire()
     {
         yield return new WaitForSeconds(0.3f);
         fireMechanism.FireBullet(currentBulletType);

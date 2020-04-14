@@ -25,7 +25,7 @@ public class PowerUp : MonoBehaviour
 
     private   Vector3              powerUpOffset             = new Vector3(0.0f, -20.0f, 0.0f);
 
-    private   List<string>         nameFilter                = new List<string>() { "Bullets", "Bullet", "(Clone)(UnityEngine.GameObject)", "(Clone)", "PowerUp", "PU" };
+    private   List<string>         nameFilter                = new List<string>() { "Bullets", "Bullet", "(Clone)", "(UnityEngine.GameObject)", "PowerUp", "PU" };
                                                             // Keeps a list of words to remove from the object name
 
     protected PlayerController     playerBrain;             // Keeps a reference to the player that collected

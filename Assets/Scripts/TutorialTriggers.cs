@@ -15,14 +15,12 @@ public class TutorialTriggers : MonoBehaviour
     {
         if (other.tag == "PlayerGO" && this.gameObject.name == "Trigger (1)")
         {
-            UIManager.tutorialStep4 = false;
-            UIManager.tutorialStep5 = true;
+            UIManager.tutorialSteps[4] = true;
             Destroy(this.gameObject);
         }
         if (other.tag == "Bullet"   && this.gameObject.name == "Trigger (2)")
         {
-            UIManager.tutorialStep5 = false;
-            UIManager.tutorialStep6 = true;
+            UIManager.tutorialSteps[5] = true;
             Destroy(this.gameObject);
         }
     }
