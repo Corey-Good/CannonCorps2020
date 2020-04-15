@@ -19,6 +19,7 @@ public class FfaManager : MonoBehaviour
     private PhotonView tankPhotonView;
     public RectTransform panel;
     bool firstCall = true;
+    GameObject tankObject;
     #endregion
 
     void Awake()
@@ -56,6 +57,13 @@ public class FfaManager : MonoBehaviour
             firstCall = false;
             Debug.Log("FFA health = 0: Tank Model" + tank.tankModel);
         }
+
+        if(MapNet.FixTankPosition)
+        {
+            MapNet.FixTankPosition = false;
+            tank.healthCurrent = 0f;
+            
+        }
     }
 
     // Spawn the player at a random spawnpoint in the map
@@ -63,7 +71,7 @@ public class FfaManager : MonoBehaviour
     {
         tank.healthCurrent = tank.healthMax;
         int spawnPoint = Random.Range(0, spawnlocations.Length - 1);
-        GameObject tankObject = PhotonNetwork.Instantiate(tank.tankModel, 
+        tankObject = PhotonNetwork.Instantiate(tank.tankModel, 
             spawnlocations[spawnPoint].transform.position, 
             spawnlocations[spawnPoint].transform.rotation);
         tankPhotonView = tankObject.GetComponent<PhotonView>();

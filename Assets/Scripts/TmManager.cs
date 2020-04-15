@@ -86,6 +86,12 @@ public class TmManager : MonoBehaviour
             UpdateTeamScores(player.teamCode, 10);
         }
 
+        if (MapNet.FixTankPosition)
+        {
+            tank.healthCurrent = 0f;
+            MapNet.FixTankPosition = false;
+        }
+
         //if (Input.GetKeyDown(KeyCode.T))
         //{
         //    player.ScoreCurrent += 10;

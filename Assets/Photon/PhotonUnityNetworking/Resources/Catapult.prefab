@@ -155,6 +155,7 @@ Transform:
   - {fileID: 3906053016248768272}
   - {fileID: 2177514302449444841}
   - {fileID: 2177514302569143387}
+  - {fileID: 4363696684661919979}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -219,6 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   readyToFire: 1
+  invulnerable: 0
   numOfFreezeBullets: 0
   numOfDynamiteBullets: 0
   numOfLaserBullets: 0
@@ -226,10 +228,17 @@ MonoBehaviour:
   maxNumOfDynamiteBullets: 5
   maxNumOfLaserBullets: 15
   currentBulletType: 0
+  reloadBoostTimer: 0
+  maxReloadBoostTimer: 10
+  reloadBoostTimerRunning: 0
+  speedBoostTimer: 0
+  maxSpeedBoostTimer: 6
+  speedBoostTimerRunning: 0
+  isFrozen: 0
   fireAnimation: {fileID: 2177514303465030681}
   tankCamera: {fileID: 2177514302449444839}
   tankBody: {fileID: 6867105607875887944}
-  tankHead: {fileID: 4942006708219695288}
+  tankHead: {fileID: 7191061516149419515}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,7 +355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a766b6b10b97a4f9571188287e9ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shieldBoostOn: 0
 --- !u!1 &4942006708219695288
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,6 +594,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &7191061516149419515
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4363696684661919979}
+  m_Layer: 0
+  m_Name: FakeTankHead
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4363696684661919979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7191061516149419515}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2177514303472233465}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3910165621736195919
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -616,22 +654,22 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
@@ -651,7 +689,7 @@ PrefabInstance:
     - target: {fileID: 5105257522059346094, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 5105257522059346093, guid: f02cfd86085a34746b77d0a046be105b,
         type: 3}

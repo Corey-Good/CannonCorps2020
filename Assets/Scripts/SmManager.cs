@@ -83,6 +83,13 @@ public class SmManager : MonoBehaviour
 
             }
         }
+
+        if (MapNet.FixTankPosition)
+        {
+            tank.healthCurrent = 0f;
+            MapNet.FixTankPosition = false;
+        }
+
     }
 
     // Spawn the player at a random spawnpoint in the map
