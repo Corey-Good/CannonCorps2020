@@ -336,7 +336,18 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             stream.SendNext(tankBody.transform.position);
             stream.SendNext(tankBody.transform.rotation);
             stream.SendNext(tankHead.transform.position);
-            stream.SendNext(tankHead.transform.rotation);
+            
+            if (tank.tankModel == "catapult")
+            {                
+                stream.SendNext(tankBody.transform.rotation);
+                Debug.Log("Is this even working?");
+            }
+            else
+            {
+                
+                stream.SendNext(tankHead.transform.rotation);
+            }
+            
 
 
         }
@@ -415,7 +426,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (headRotationLag.magnitude > 5.0f)
         {
-            tankHead.transform.rotation = bodyRotation;
+            tankHead.transform.rotation = headRotation;
         }
         else if (headRotationLag.magnitude < 0.11f)
         {
@@ -423,7 +434,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            Quaternion.RotateTowards(tankHead.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
+            Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
         }
 
         #endregion AdjustHeadRotation
