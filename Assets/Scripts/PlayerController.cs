@@ -207,14 +207,29 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             transform.position += -transform.forward * Time.deltaTime * movementForce * movementMultiplier;
         }
 
-        if (Input.GetKey(KeyBindings.rightKey))
+        if(tank.tankModel == "catapult")
         {
-            transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+            if (KeyBindings.XisInverted)
+            {
+                transform.Rotate(0f, Input.GetAxis("Mouse X") * -300 * Time.deltaTime, 0f);
+            }
+            else
+            {
+                transform.Rotate(0f, Input.GetAxis("Mouse X") * 300 * Time.deltaTime, 0f);
+            }
         }
-        else if (Input.GetKey(KeyBindings.leftKey))
+        else
         {
-            transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+            if (Input.GetKey(KeyBindings.rightKey))
+            {
+                transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+            }
+            else if (Input.GetKey(KeyBindings.leftKey))
+            {
+                transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+            }
         }
+
     }
 
     private void FireBullet()
@@ -318,10 +333,20 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (stream.IsWriting)
         {
+
             stream.SendNext(tankBody.transform.position);
             stream.SendNext(tankBody.transform.rotation);
             stream.SendNext(tankHead.transform.position);
-            stream.SendNext(tankHead.transform.rotation);
+            
+            if (tank.tankModel == "catapult")
+            {
+                stream.SendNext(tankBody.transform.rotation);
+            }
+            else
+            {
+                stream.SendNext(tankHead.transform.rotation);
+            }
+
         }
         else
         {

@@ -238,7 +238,7 @@ MonoBehaviour:
   fireAnimation: {fileID: 2177514303465030681}
   tankCamera: {fileID: 2177514302449444839}
   tankBody: {fileID: 6867105607875887944}
-  tankHead: {fileID: 6867105607875887944}
+  tankHead: {fileID: 4942006708219695288}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0
