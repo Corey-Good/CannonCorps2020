@@ -218,17 +218,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 transform.Rotate(0f, Input.GetAxis("Mouse X") * 300 * Time.deltaTime, 0f);
             }
         }
-        else
+        
+        if (Input.GetKey(KeyBindings.rightKey))
         {
-            if (Input.GetKey(KeyBindings.rightKey))
-            {
-                transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
-            }
-            else if (Input.GetKey(KeyBindings.leftKey))
-            {
-                transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
-            }
+            transform.Rotate(Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
         }
+        else if (Input.GetKey(KeyBindings.leftKey))
+        {
+            transform.Rotate(-Vector3.up * rotateSpeed * rotateMultiplier * Time.deltaTime);
+        }
+        
 
     }
 
@@ -337,15 +336,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             stream.SendNext(tankBody.transform.position);
             stream.SendNext(tankBody.transform.rotation);
             stream.SendNext(tankHead.transform.position);
-            
-            if (tank.tankModel == "catapult")
-            {
-                stream.SendNext(tankBody.transform.rotation);
-            }
-            else
-            {
-                stream.SendNext(tankHead.transform.rotation);
-            }
+            stream.SendNext(tankHead.transform.rotation);
+
 
         }
         else
@@ -423,7 +415,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
         if (headRotationLag.magnitude > 5.0f)
         {
-            tankHead.transform.rotation = headRotation;
+            tankHead.transform.rotation = bodyRotation;
         }
         else if (headRotationLag.magnitude < 0.11f)
         {
@@ -431,7 +423,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            Quaternion.RotateTowards(tankHead.transform.rotation, headRotation, lagAdjustSpeed * Time.deltaTime);
+            Quaternion.RotateTowards(tankHead.transform.rotation, bodyRotation, lagAdjustSpeed * Time.deltaTime);
         }
 
         #endregion AdjustHeadRotation
