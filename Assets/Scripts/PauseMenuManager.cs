@@ -4,31 +4,21 @@
 /* Last Modified Date: 4/11/2020                                        */
 /* Modified By:        J. Calas                                         */
 /************************************************************************/
-
 #region Libraries
-
 using UnityEngine;
-
 #endregion
-
 public class PauseMenuManager : MonoBehaviour
 {
     #region Variables
-
     public  GameObject           pauseMenu;
     public  GameObject           optionsMenu;
     public  GameObject           controlsMenu;
     public  GameObject           infoMenu;
-
     private Player               player;
-
     public  static bool          gameIsPaused     = false;
     public  static bool          playerQuit       = false;
-
     public  static RectTransform transitionPanel;
-
     #endregion
-
     private void Awake()
     {
         player     = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
@@ -82,5 +72,6 @@ public class PauseMenuManager : MonoBehaviour
         playerQuit       = true;
         gameIsPaused     = false;
         player.leaveGame = true;
+        UIManager.cameraIsEnabled = UIManager.movementIsEnabled = UIManager.firingIsEnabled = true;
     }
 }

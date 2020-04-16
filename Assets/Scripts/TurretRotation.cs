@@ -1,11 +1,15 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
-/* Date Created:       02/14/2020                                       */
-/* Last Modified Date: 02/26/2020                                       */
-/* Modified By:        M. Agamalian                                     */
+/* Date Created:       2/14/2020                                        */
+/* Last Modified Date: 4/12/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
 
+#region Libraries
+
 using UnityEngine;
+
+#endregion
 
 public class TurretRotation : MonoBehaviour
 {
@@ -14,7 +18,7 @@ public class TurretRotation : MonoBehaviour
     // Every frame, sync the turrent rotation to the movement of the mouse
     private void Update()
     {
-        if (!PauseMenuManager.gameIsPaused && TutorialPrompts.CameraIsEnabled)
+        if (!PauseMenuManager.gameIsPaused && UIManager.cameraIsEnabled)
         {
             if (KeyBindings.XisInverted)
             {

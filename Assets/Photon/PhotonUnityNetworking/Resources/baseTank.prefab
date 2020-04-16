@@ -471,6 +471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   readyToFire: 1
   invulnerable: 0
+  powerupAcquired: 0
   numOfFreezeBullets: 0
   numOfDynamiteBullets: 0
   numOfLaserBullets: 0

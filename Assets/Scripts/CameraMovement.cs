@@ -1,12 +1,16 @@
 ﻿/************************************************************************/
 /* Author:             Jaben Calas                                      */
 /* Date Created:       1/27/2020                                        */
-/* Last Modified Date: 3/6/2020                                        */
-/* Modified By:        Corey Good                                     */
+/* Last Modified Date: 4/12/2020                                        */
+/* Modified By:        J. Calas                                         */
 /************************************************************************/
+
+#region Libraries
 
 using Photon.Pun;
 using UnityEngine;
+
+#endregion
 
 public class CameraMovement : MonoBehaviourPun
 {
@@ -68,7 +72,7 @@ public class CameraMovement : MonoBehaviourPun
         }
 
         // Set the new target position height based on mouse input
-        if (!PauseMenuManager.gameIsPaused && TutorialPrompts.CameraIsEnabled)
+        if (!PauseMenuManager.gameIsPaused && UIManager.cameraIsEnabled)
         {
             target.transform.position =
                 new Vector3(target.transform.position.x,
