@@ -5,13 +5,18 @@ using UnityEngine;
 public class MapNet : MonoBehaviour
 {
     public static bool FixTankPosition = false;
-    public static Vector3 Location;
+    public int count = 0;
 
-    private void OnCollisionEnter(Collision collisionInfo)
+    private void OnCollisionStay(Collision collisionInfo)
     {
-        //collisionInfo.gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 1, 1) * 250, ForceMode.Impulse);
-        FixTankPosition = true;
-        Location = collisionInfo.gameObject.transform.position;
+        Debug.Log(collisionInfo.gameObject.tag);
+        if(collisionInfo.gameObject.tag == "PlayerGO")
+            count++;
+        if(count > 3)
+        {
+            FixTankPosition = true;
+            count = 0;
+        }      
 
     }
 

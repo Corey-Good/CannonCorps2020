@@ -10,6 +10,7 @@ public class MinePowerUp : PowerUp
     private PhotonView photonView;
     [Tooltip("Value must not exceed 200!")]
     public float speed = 130f;
+    private float dropRate = 0f;
 
     protected override void Start()
     {
@@ -23,6 +24,8 @@ public class MinePowerUp : PowerUp
     private void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
+        dropRate += 0.06f * Time.deltaTime;
+        transform.position += -transform.up * (dropRate);
     }
 
     protected override void PowerUpPayload()          // Checklist item 1

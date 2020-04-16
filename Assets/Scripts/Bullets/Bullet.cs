@@ -7,6 +7,7 @@
 using Photon.Pun;
 using UnityEngine;
 
+
 public class Bullet : MonoBehaviour
 {
     public LayerMask m_TankMask;                        // Used to filter what the explosion affects, this should be set to "Players".
@@ -22,6 +23,7 @@ public class Bullet : MonoBehaviour
     public GameObject bullet;
     [Tooltip("Value must not exceed 200!")]
     public float speed = 150f;
+    private float dropRate = 0f;
 
     private void Start()
     {
@@ -34,6 +36,8 @@ public class Bullet : MonoBehaviour
     private void Update()
     {
         transform.position += transform.forward * speed * Time.deltaTime;
+        dropRate += 0.06f * Time.deltaTime;
+        transform.position += -transform.up * (dropRate);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -44,23 +48,9 @@ public class Bullet : MonoBehaviour
             // Update the player's score
             player.ScoreCurrent += 10;
             player.gotPoints = true;
-
-            // Show the points to the player
-            //UIManager.ShowPoints();
-
-            // Add points to the player's team score
-            if (player.gameState == Player.GameState.TB)
-            {
-                //TmManager.UpdateTeamScores(player.teamCode, 10);
-            }
         }
-        else
-        {
-            // Destroy the bullet if hits any other object
-            PhotonNetwork.Destroy(gameObject);
-
-            // Spawn in the particle system
-        }
+            
+        PhotonNetwork.Destroy(gameObject);      
         
     }
 }

@@ -107,7 +107,6 @@ MonoBehaviour:
   specialEffect: {fileID: 0}
   soundEffect: {fileID: 0}
   powerUpMeshRenderer: {fileID: 0}
-  speed: 250
 --- !u!114 &7146905025093389915
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ public class LaserPowerUp : PowerUp
     private Player player;
     private PhotonView photonView;
     [Tooltip("Value must not exceed 200!")]
-    public float speed = 250f;
+    private float speed = 300;
 
     protected override void Start()
     {

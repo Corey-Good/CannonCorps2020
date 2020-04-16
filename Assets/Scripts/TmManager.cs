@@ -91,15 +91,7 @@ public class TmManager : MonoBehaviour
             tank.healthCurrent = 0f;
             MapNet.FixTankPosition = false;
         }
-
-        //if (Input.GetKeyDown(KeyCode.T))
-        //{
-        //    player.ScoreCurrent += 10;
-        //}
     }
-
-    // Grab a random spawn point code
-
 
     // Spawn the player at a random spawnpoint in the map
     void SpawnPlayer()
