@@ -49,12 +49,12 @@ public class Tank : MonoBehaviour, ITakeDamage
         #region Max and Min and Position values
 
         float speedMovementMax = 30f,
-              speedMovementMin = 15f,
+              speedMovementMin = 20f,
 
               speedRotationMax = 12f,
-              speedRotationMin = 9f,
+              speedRotationMin = 8f,
 
-              healthCurrentMax = 100f,
+              healthCurrentMax = 120f,
               healthCurrentMin = 80f,
 
               //Max here refers to the shortest time
@@ -62,7 +62,7 @@ public class Tank : MonoBehaviour, ITakeDamage
               reloadTimeMin = 3f,
 
               bulletDamageMax = 10f,
-              bulletDamageMin = 30f,
+              bulletDamageMin = 50f,
 
               /*  How to Calculate Position
 
