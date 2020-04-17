@@ -27,6 +27,7 @@ public class TmManager : MonoBehaviour
     private PhotonView tankPhotonView;
     public RectTransform panel;
     bool firstCall = true;
+    public static bool addTeamPoints = false;
     #endregion
 
     void Awake()
@@ -80,10 +81,10 @@ public class TmManager : MonoBehaviour
             firstCall = false;
         }
 
-        if(player.gotPoints)
-        {
-            player.gotPoints = false;
+        if(addTeamPoints)
+        {            
             UpdateTeamScores(player.teamCode, 10);
+            addTeamPoints = false;
         }
 
         if (MapNet.FixTankPosition)

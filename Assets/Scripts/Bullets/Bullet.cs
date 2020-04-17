@@ -48,6 +48,10 @@ public class Bullet : MonoBehaviour
             // Update the player's score
             player.ScoreCurrent += 10;
             player.gotPoints = true;
+            if(player.gameState == Player.GameState.TB)
+            {
+                TmManager.addTeamPoints = true;
+            }
         }
             
         PhotonNetwork.Destroy(gameObject);      

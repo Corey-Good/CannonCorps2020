@@ -205,8 +205,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 5.066743, y: 4.46188, z: 10.270893}
-  m_Center: {x: 0.21956205, y: 2.2659423, z: 0.2977667}
+  m_Size: {x: 5.066743, y: 6.3412933, z: 10.270893}
+  m_Center: {x: 0.21956205, y: 3.205649, z: 0.2977667}
 --- !u!114 &2177514302624853051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   readyToFire: 1
   invulnerable: 0
+  powerupAcquired: 0
   numOfFreezeBullets: 0
   numOfDynamiteBullets: 0
   numOfLaserBullets: 0
@@ -237,8 +238,8 @@ MonoBehaviour:
   isFrozen: 0
   fireAnimation: {fileID: 2177514303465030681}
   tankCamera: {fileID: 2177514302449444839}
-  tankBody: {fileID: 6867105607875887944}
-  tankHead: {fileID: 4942006708219695288}
+  tankBody: {fileID: 2177514303472334809}
+  tankHead: {fileID: 2177514303472334809}
 --- !u!114 &2177514302624853052
 MonoBehaviour:
   m_ObjectHideFlags: 0

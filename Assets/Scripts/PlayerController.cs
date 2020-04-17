@@ -315,19 +315,9 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             stream.SendNext(tankBody.transform.position);
             stream.SendNext(tankBody.transform.rotation);
-            
-            
-            if (tank.tankModel == "catapult")
-            {                
-                stream.SendNext(new Vector3(tankBody.transform.position.x, tankHead.transform.position.y, tankBody.transform.position.z));
-                stream.SendNext(tankBody.transform.rotation);
-                Debug.Log("Is this even working?");
-            }
-            else
-            {
-                stream.SendNext(tankHead.transform.position);
-                stream.SendNext(tankHead.transform.rotation);
-            }
+            stream.SendNext(tankHead.transform.position);
+            stream.SendNext(tankHead.transform.rotation);
+
         }
         else
         {
