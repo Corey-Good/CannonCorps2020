@@ -34,7 +34,7 @@ public class TmManager : MonoBehaviour
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
-
+        player.leaveGame = false;
         // Load the UI scene on top of the curremt scene
         SceneManager.LoadScene(1, LoadSceneMode.Additive);
 

@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
 
     public bool leaveGame = false;
 
+    public bool fellThroughMap = false;
+
     public bool returning = false;
 
     public bool gotPoints = false;

@@ -328,9 +328,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
                 stream.SendNext(tankHead.transform.position);
                 stream.SendNext(tankHead.transform.rotation);
             }
-            
-
-
         }
         else
         {

@@ -160,6 +160,10 @@ public class UIManager : MonoBehaviourPunCallbacks
         {
             StartCoroutine(SwitchScene());
         }
+        if(player.fellThroughMap)
+        {
+            StartCoroutine(SwitchScene());
+        }
         if (tank.tankHit)
         {
             FlashHit();
@@ -435,41 +439,47 @@ public class UIManager : MonoBehaviourPunCallbacks
                 }
                 break;
         }
+
+        if (player.fellThroughMap)
+        {
+            gameOverText.text = "You fell through the map";
+            player.fellThroughMap = false;
+        }
     }
     private IEnumerator DisplayPowerupPrompts()
     {
         TurnPanelOn();
-        headingText.text = string.Format("Acquired [{0}] powerup!", powerupName.ToLower());
+        headingText.text = string.Format("Acquired {0} powerup!", powerupName.ToLower());
         switch (powerupName)
         {
             #region Active Powerups
             case "Reload":
-                subtitleText.text = string.Format("Press [{0}] to activate {1} boost!", AlphaFilter(KeyBindings.activateReloadBoost).ToLower(), powerupName.ToLower());
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateReloadBoost).ToLower(), powerupName.ToLower());
                 break;
             case "Speed":
-                subtitleText.text = string.Format("Press [{0}] to activate {1} boost!", AlphaFilter(KeyBindings.activateMovementBoost).ToLower(), powerupName.ToLower());
+                subtitleText.text = string.Format("Press {0} to activate {1} boost!", AlphaFilter(KeyBindings.activateMovementBoost).ToLower(), powerupName.ToLower());
                 break;
             #endregion
             #region Passive Powerups
             case "Health":
-                subtitleText.text = string.Format("[{0}] restored!", powerupName);
+                subtitleText.text = string.Format("{0} restored!", powerupName);
                 break;
             case "Shield":
-                subtitleText.text = string.Format("[{0}] activated!", powerupName);
+                subtitleText.text = string.Format("{0} activated!", powerupName);
                 break;
             #endregion
             #region Bullet Powerups
             case "Dynamite":
             case "Freeze":
             case "Laser":
-                subtitleText.text = string.Format("Press [{0}] to switch to {1} bullets!", AlphaFilter(KeyBindings.switchBulletType).ToLower(), powerupName.ToLower());
+                subtitleText.text = string.Format("Press {0} to switch to {1} bullets!", AlphaFilter(KeyBindings.switchBulletType).ToLower(), powerupName.ToLower());
                 break;
             #endregion
             default:
                 break;
         }
         playerController.powerupAcquired = false;
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(4);
         TurnPanelOff();
     }     // 
     private void DisplayTutorialPrompts()

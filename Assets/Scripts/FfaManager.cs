@@ -24,12 +24,12 @@ public class FfaManager : MonoBehaviour
 
     void Awake()
     {
-        
         PhotonNetwork.IsMessageQueueRunning = true;
         // Get access to the tank and player class
         tank = GameObject.FindGameObjectWithTag("TankClass").GetComponent<Tank>();
         player = GameObject.FindGameObjectWithTag("PlayerClass").GetComponent<Player>();
 
+        player.leaveGame = false;
         //Spawn the player at a random location
         SpawnPlayer();
 
@@ -49,18 +49,19 @@ public class FfaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(player.leaveGame);
         // Leave the game when the player dies
         if (tank.healthCurrent < 0.1f && firstCall)
         {
             // Triggers the leave function in UIManager
             player.leaveGame = true;
             firstCall = false;
-            Debug.Log("FFA health = 0: Tank Model" + tank.tankModel);
         }
 
         if(MapNet.FixTankPosition)
         {
             MapNet.FixTankPosition = false;
+            player.fellThroughMap = true;
             tank.healthCurrent = 0f;
             
         }
