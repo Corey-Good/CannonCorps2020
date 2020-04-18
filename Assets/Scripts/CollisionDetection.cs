@@ -26,6 +26,7 @@ public class CollisionDetection : MonoBehaviour
     {
         if (photonView.IsMine && collision.gameObject.tag == "Bullet")
         {
+            ProjectileDamange d = collision.gameObject.GetComponent<ProjectileDamange>();
             if (playerController.invulnerable)
             {
                 playerController.invulnerable = false;
@@ -33,7 +34,16 @@ public class CollisionDetection : MonoBehaviour
             }
             else
             {
-                tank.damageTaken(10f);
+                if(d != null)
+                {
+                    tank.damageTaken(d.GetDamage());
+                    Debug.Log("Doing " + d.GetDamage() + " damage");
+                }
+                else
+                {
+                    tank.damageTaken(10f);
+                }
+                
                 tank.tankHit = true;
             }
         }

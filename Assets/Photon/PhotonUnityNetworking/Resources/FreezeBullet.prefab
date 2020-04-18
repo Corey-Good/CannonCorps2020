@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -5492988223941295065}
   - component: {fileID: 6054451205431304159}
   - component: {fileID: -1323504931331907507}
+  - component: {fileID: 6445021160382004147}
   m_Layer: 0
   m_Name: FreezeBullet
   m_TagString: Bullet
@@ -153,3 +154,15 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &6445021160382004147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3910180448835655434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a65ff0df95c66479907d1dc3f1dc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -73,8 +73,8 @@ public class TmManager : MonoBehaviour
         }
 
         // End the game when one of the team reaches 100 points
-        if (((int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"] >= 100 ||
-             (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"] >= 100) &&
+        if (((int)PhotonNetwork.CurrentRoom.CustomProperties["RedScore"] >= 250 ||
+             (int)PhotonNetwork.CurrentRoom.CustomProperties["BlueScore"] >= 250) &&
                   firstCall)
         {
             player.leaveGame = true;

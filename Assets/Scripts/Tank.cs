@@ -61,8 +61,8 @@ public class Tank : MonoBehaviour, ITakeDamage
               reloadTimeMax = 1.25f,
               reloadTimeMin = 3f,
 
-              bulletDamageMax = 10f,
-              bulletDamageMin = 50f,
+              bulletDamageMax = 50f,
+              bulletDamageMin = 15f,
 
               /*  How to Calculate Position
 

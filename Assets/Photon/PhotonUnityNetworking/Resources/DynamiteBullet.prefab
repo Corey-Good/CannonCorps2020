@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3634666284489349539}
   - component: {fileID: 5570332842405487443}
   - component: {fileID: 8457147859971190976}
+  - component: {fileID: 9100941755941703968}
   m_Layer: 0
   m_Name: DynamiteBullet
   m_TagString: Untagged
@@ -152,3 +153,16 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &9100941755941703968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3634666284489349536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a65ff0df95c66479907d1dc3f1dc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
